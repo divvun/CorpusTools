@@ -8,14 +8,20 @@
       
       
       
+        <link rel="canonical" href="https://divvun.github.io/CorpusTools/reference/compile_cwb_para/">
+      
       
         <link rel="prev" href="../compile_cwb_mono/">
       
       
         <link rel="next" href="../convert_using_pandoc/">
       
+      
+        
+      
+      
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.8">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -23,11 +29,14 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ded33207.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
       
 
+
     
+    
+      
     
     
       
@@ -41,11 +50,10 @@
     
       <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
-    
     
     
   </head>
@@ -53,9 +61,6 @@
   
     <body dir="ltr">
   
-    
-    
-      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
@@ -82,11 +87,12 @@
     <a href="../.." title="CorpusTools documentation" class="md-header__button md-logo" aria-label="CorpusTools documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
@@ -106,29 +112,38 @@
     </div>
     
     
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
-      <label class="md-header__button md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
-      </label>
-      <div class="md-search" data-md-component="search" role="dialog">
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
         
         <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
       </nav>
       
     </form>
     <div class="md-search__output">
-      <div class="md-search__scrollwrap" data-md-scrollfix>
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
         <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
             Initializing search
@@ -139,16 +154,17 @@
     </div>
   </div>
 </div>
+      
     
     
       <div class="md-header__source">
-        <a href="https://github.com/giellalt/CorpusTools" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/divvun/CorpusTools" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
   </div>
   <div class="md-source__repository">
-    giellalt/CorpusTools
+    divvun/CorpusTools
   </div>
 </a>
       </div>
@@ -164,41 +180,54 @@
         
   
   
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../.." class="md-tabs__link">
+          
+  
+  
+  Home
 
-
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../.." class="md-tabs__link">
-        Home
-      </a>
-    </li>
+        </a>
+      </li>
+    
   
 
       
         
   
   
+  
     
-  
-
-
-  
   
   
     
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  Code reference
 
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../" class="md-tabs__link md-tabs__link--active">
-        Code reference
-      </a>
-    </li>
+        </a>
+      </li>
+    
   
 
+    
   
 
       
@@ -224,6 +253,7 @@
                   <div class="md-sidebar__inner">
                     
 
+
   
 
 
@@ -232,20 +262,20 @@
     <a href="../.." title="CorpusTools documentation" class="md-nav__button md-logo" aria-label="CorpusTools documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
     CorpusTools documentation
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/giellalt/CorpusTools" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/divvun/CorpusTools" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
   </div>
   <div class="md-source__repository">
-    giellalt/CorpusTools
+    divvun/CorpusTools
   </div>
 </a>
     </div>
@@ -254,768 +284,1492 @@
     
       
       
-      
-
+  
   
   
   
     
+    
+    
+    
+      
+      
+    
+    
     <li class="md-nav__item md-nav__item--nested">
       
-      
-      
-      
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
-      
-      
-      
-        <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
-          Home
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_1">
-          <span class="md-nav__icon md-icon"></span>
-          Home
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
           
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Home
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../.." class="md-nav__link">
-        Overview
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../howitworks/" class="md-nav__link">
-        How it works
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How it works
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../docsdocs/" class="md-nav__link">
-        Meta documentation
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Meta documentation
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../corpus-work/" class="md-nav__link">
-        Corpus work
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Corpus work
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     
+    
+    
+    
+      
+      
+    
+    
     <li class="md-nav__item md-nav__item--nested">
       
-      
-      
-      
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_5" >
-      
-      
-      
-        <label class="md-nav__link" for="__nav_1_5" id="__nav_1_5_label" tabindex="0">
-          Scripts
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_5_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_1_5">
-          <span class="md-nav__icon md-icon"></span>
-          Scripts
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_5" >
+        
           
+          <label class="md-nav__link" for="__nav_1_5" id="__nav_1_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scripts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Scripts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/" class="md-nav__link">
-        Overview
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/add_files_to_corpus/" class="md-nav__link">
-        add_files_to_corpus
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    add_files_to_corpus
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/analyse_corpus/" class="md-nav__link">
-        analyse_corpus
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    analyse_corpus
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/ccat/" class="md-nav__link">
-        ccat
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ccat
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/clean_prestable/" class="md-nav__link">
-        clean_prestable
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clean_prestable
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/clean_prestable/" class="md-nav__link">
-        clean_prestable
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clean_prestable
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/compile_cwb_mono/" class="md-nav__link">
-        compile_cwb_mono
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    compile_cwb_mono
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/convert2xml/" class="md-nav__link">
-        convert2xml
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    convert2xml
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/dupefinder/" class="md-nav__link">
-        dupefinder
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    dupefinder
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/duperemover/" class="md-nav__link">
-        duperemover
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    duperemover
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/epubchooser/" class="md-nav__link">
-        epubchooser
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    epubchooser
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/html_cleaner/" class="md-nav__link">
-        html_cleaner
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    html_cleaner
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/korp_mono/" class="md-nav__link">
-        korp_mono
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    korp_mono
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/make_training_corpus/" class="md-nav__link">
-        make_training_corpus
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    make_training_corpus
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/move_corpus_file/" class="md-nav__link">
-        move_corpus_file
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    move_corpus_file
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/normalise_corpus_names/" class="md-nav__link">
-        normalise_corpus_names
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    normalise_corpus_names
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/paracheck/" class="md-nav__link">
-        paracheck
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    paracheck
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/parallelize/" class="md-nav__link">
-        parallelize
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    parallelize
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../../scripts/pick_parallel_docs/" class="md-nav__link">
-        pick_parallel_docs
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/remove_corpus_file/" class="md-nav__link">
-        remove_corpus_file
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    remove_corpus_file
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/reparallelize/" class="md-nav__link">
-        reparallelize
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    reparallelize
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/saami_crawler/" class="md-nav__link">
-        saami_crawler
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    saami_crawler
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../scripts/pytextcat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    pytextcat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/tmx2html/" class="md-nav__link">
-        tmx2html
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tmx2html
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/update_metadata/" class="md-nav__link">
-        update_metadata
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    update_metadata
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
     
       
       
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
       
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Code reference
+  
 
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Code reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
   
   
     
   
   
+  
+    
+    
+    
+    
+      
+      
+    
     
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
-      
-      
-      
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
-      
-      
-      
-        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
-          Code reference
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
-        <label class="md-nav__title" for="__nav_2">
-          <span class="md-nav__icon md-icon"></span>
-          Code reference
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
           
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
             
-              
   
   
+  <span class="md-ellipsis">
     
   
+    corpustools
   
+
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
-      
-      
-      
-      
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
-      
-      
-      
-        <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
-          corpustools
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
-        <label class="md-nav__title" for="__nav_2_1">
-          <span class="md-nav__icon md-icon"></span>
-          corpustools
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    corpustools
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../" class="md-nav__link">
-        Index
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Index
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../_version/" class="md-nav__link">
-        _version
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    _version
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../adder/" class="md-nav__link">
-        adder
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    adder
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../analyser/" class="md-nav__link">
-        analyser
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    analyser
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../argparse_version/" class="md-nav__link">
-        argparse_version
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    argparse_version
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../avvirconverter/" class="md-nav__link">
-        avvirconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    avvirconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../basicconverter/" class="md-nav__link">
-        basicconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    basicconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../bibel_no_aligner/" class="md-nav__link">
-        bibel_no_aligner
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    bibel_no_aligner
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../bibel_no_crawler/" class="md-nav__link">
-        bibel_no_crawler
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    bibel_no_crawler
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../biblexmlconverter/" class="md-nav__link">
-        biblexmlconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    biblexmlconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../ccat/" class="md-nav__link">
-        ccat
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ccat
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../ces2homegrown/" class="md-nav__link">
-        ces2homegrown
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ces2homegrown
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../check_para_consistency/" class="md-nav__link">
-        check_para_consistency
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    check_para_consistency
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../clean_prestable/" class="md-nav__link">
-        clean_prestable
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clean_prestable
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../common_arg_ncpus/" class="md-nav__link">
-        common_arg_ncpus
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    common_arg_ncpus
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../compare_tmx_goldstandard/" class="md-nav__link">
-        compare_tmx_goldstandard
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    compare_tmx_goldstandard
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../compile_cwb_mono/" class="md-nav__link">
-        compile_cwb_mono
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    compile_cwb_mono
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
     
+  
   
   
     <li class="md-nav__item md-nav__item--active">
@@ -1025,12 +1779,38 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          compile_cwb_para
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    compile_cwb_para
+  
+
+    
+  </span>
+  
+  
+
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        compile_cwb_para
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    compile_cwb_para
+  
+
+    
+  </span>
+  
+  
+
       </a>
       
         
@@ -1048,7 +1828,11 @@
       
         <li class="md-nav__item">
   <a href="#corpustools.compile_cwb_para" class="md-nav__link">
-    corpustools.compile_cwb_para
+    <span class="md-ellipsis">
+      
+        compile_cwb_para
+      
+    </span>
   </a>
   
 </li>
@@ -1060,1437 +1844,3073 @@
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../convert_using_pandoc/" class="md-nav__link">
-        convert_using_pandoc
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    convert_using_pandoc
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../convert_using_soffice/" class="md-nav__link">
-        convert_using_soffice
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    convert_using_soffice
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../converter/" class="md-nav__link">
-        converter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    converter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../convertermanager/" class="md-nav__link">
-        convertermanager
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    convertermanager
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../corpuspath/" class="md-nav__link">
-        corpuspath
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    corpuspath
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../corpusxmlfile/" class="md-nav__link">
-        corpusxmlfile
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    corpusxmlfile
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../counter/" class="md-nav__link">
-        counter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    counter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../crawler/" class="md-nav__link">
-        crawler
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    crawler
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../debug_corpus/" class="md-nav__link">
-        debug_corpus
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    debug_corpus
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../decode/" class="md-nav__link">
-        decode
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    decode
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../docconverter/" class="md-nav__link">
-        docconverter
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
   
   
   
     <li class="md-nav__item">
       <a href="../documentfixer/" class="md-nav__link">
-        documentfixer
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    documentfixer
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../dropbox_adder/" class="md-nav__link">
-        dropbox_adder
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    dropbox_adder
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../dupe_finder/" class="md-nav__link">
-        dupe_finder
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    dupe_finder
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../epubchooser/" class="md-nav__link">
-        epubchooser
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    epubchooser
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../epubconverter/" class="md-nav__link">
-        epubconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    epubconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
-      <a href="../errormarkup/" class="md-nav__link">
-        errormarkup
+      <a href="../error_annotated_converter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    error_annotated_converter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../error_annotated_sentence/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    error_annotated_sentence
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../error_types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    error_types
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../finder/" class="md-nav__link">
-        finder
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    finder
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../generate_anchor_list/" class="md-nav__link">
-        generate_anchor_list
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    generate_anchor_list
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../html_cleaner/" class="md-nav__link">
-        html_cleaner
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    html_cleaner
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../htmlcontentconverter/" class="md-nav__link">
-        htmlcontentconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    htmlcontentconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../htmlconverter/" class="md-nav__link">
-        htmlconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    htmlconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../iso_ir_197/" class="md-nav__link">
-        iso_ir_197
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    iso_ir_197
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../iso_ir_209/" class="md-nav__link">
-        iso_ir_209
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    iso_ir_209
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../korp_config_templates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    korp_config_templates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../korp_mono/" class="md-nav__link">
-        korp_mono
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    korp_mono
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../korp_para/" class="md-nav__link">
-        korp_para
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    korp_para
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../languagedetector/" class="md-nav__link">
-        languagedetector
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    languagedetector
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../macsami/" class="md-nav__link">
-        macsami
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    macsami
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../mari/" class="md-nav__link">
-        mari
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    mari
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../modes/" class="md-nav__link">
-        modes
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modes
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../move_files/" class="md-nav__link">
-        move_files
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    move_files
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../namechanger/" class="md-nav__link">
-        namechanger
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    namechanger
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../normalise_filenames/" class="md-nav__link">
-        normalise_filenames
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    normalise_filenames
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../nrk_no_crawler/" class="md-nav__link">
-        nrk_no_crawler
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    nrk_no_crawler
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nrk_no_page/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    nrk_no_page
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ocrconverter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ocrconverter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../one-off-functions/" class="md-nav__link">
-        one-off-functions
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    one-off-functions
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../orthographies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    orthographies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../packagetmx/" class="md-nav__link">
-        packagetmx
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    packagetmx
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../parallelize/" class="md-nav__link">
-        parallelize
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    parallelize
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../pdfconverter/" class="md-nav__link">
-        pdfconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    pdfconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../pick_parallel_docs/" class="md-nav__link">
-        pick_parallel_docs
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
   
   
   
     <li class="md-nav__item">
       <a href="../pick_samediggi_se_docs/" class="md-nav__link">
-        pick_samediggi_se_docs
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    pick_samediggi_se_docs
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../pick_titles/" class="md-nav__link">
-        pick_titles
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    pick_titles
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../plaintextconverter/" class="md-nav__link">
-        plaintextconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    plaintextconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../realign/" class="md-nav__link">
-        realign
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    realign
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../saami_crawler/" class="md-nav__link">
-        saami_crawler
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    saami_crawler
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../samas_crawler/" class="md-nav__link">
-        samas_crawler
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    samas_crawler
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../samediggi_fi_crawler/" class="md-nav__link">
-        samediggi_fi_crawler
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    samediggi_fi_crawler
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../samediggi_no_crawler/" class="md-nav__link">
-        samediggi_no_crawler
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    samediggi_no_crawler
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samediggi_no_links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    samediggi_no_links
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samediggi_no_page/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    samediggi_no_page
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../sentencedivider/" class="md-nav__link">
-        sentencedivider
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    sentencedivider
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../svgconverter/" class="md-nav__link">
-        svgconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    svgconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     
+    
+    
+    
+      
+      
+    
+    
     <li class="md-nav__item md-nav__item--nested">
       
-      
-      
-      
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_68" >
-      
-      
-      
-        <label class="md-nav__link" for="__nav_2_1_68" id="__nav_2_1_68_label" tabindex="0">
-          test
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_68_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_2_1_68">
-          <span class="md-nav__icon md-icon"></span>
-          test
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_74" >
+        
           
+          <label class="md-nav__link" for="__nav_2_1_74" id="__nav_2_1_74_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_74_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_74">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    test
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/" class="md-nav__link">
-        Index
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Index
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_adder/" class="md-nav__link">
-        test_adder
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_adder
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_analyser/" class="md-nav__link">
-        test_analyser
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_analyser
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_avvirconverter/" class="md-nav__link">
-        test_avvirconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_avvirconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_biblexmlconverter/" class="md-nav__link">
-        test_biblexmlconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_biblexmlconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_ccat/" class="md-nav__link">
-        test_ccat
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_ccat
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_compare_tmx_goldstandard/" class="md-nav__link">
-        test_compare_tmx_goldstandard
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_compare_tmx_goldstandard
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_converter/" class="md-nav__link">
-        test_converter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_converter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_corpuspath/" class="md-nav__link">
-        test_corpuspath
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_corpuspath
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_corpusxmlfile/" class="md-nav__link">
-        test_corpusxmlfile
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_corpusxmlfile
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_decode/" class="md-nav__link">
-        test_decode
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_decode
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_docconverter/" class="md-nav__link">
-        test_docconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_docconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_documentfixer/" class="md-nav__link">
-        test_documentfixer
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_documentfixer
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_docxconverter/" class="md-nav__link">
-        test_docxconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_docxconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_epubchooser/" class="md-nav__link">
-        test_epubchooser
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_epubchooser
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_epubconverter/" class="md-nav__link">
-        test_epubconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_epubconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
-      <a href="../test/test_errormarkup/" class="md-nav__link">
-        test_errormarkup
+      <a href="../test/test_error_annotated_sentence/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_error_annotated_sentence
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test/test_error_types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_error_types
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_htmlcontentconverter/" class="md-nav__link">
-        test_htmlcontentconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_htmlcontentconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_htmlconverter/" class="md-nav__link">
-        test_htmlconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_htmlconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_lang_guessing/" class="md-nav__link">
-        test_lang_guessing
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_lang_guessing
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_languagedetector/" class="md-nav__link">
-        test_languagedetector
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_languagedetector
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_namechanger/" class="md-nav__link">
-        test_namechanger
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_namechanger
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_parallelize/" class="md-nav__link">
-        test_parallelize
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_parallelize
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_pdfconverter/" class="md-nav__link">
-        test_pdfconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_pdfconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../test/test_pick_parallel_docs/" class="md-nav__link">
-        test_pick_parallel_docs
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_plaintextconverter/" class="md-nav__link">
-        test_plaintextconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_plaintextconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_rtfconverter/" class="md-nav__link">
-        test_rtfconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_rtfconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_samediggi_no_crawler/" class="md-nav__link">
-        test_samediggi_no_crawler
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_samediggi_no_crawler
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_sentencedivider/" class="md-nav__link">
-        test_sentencedivider
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_sentencedivider
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_svgconverter/" class="md-nav__link">
-        test_svgconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_svgconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_text_cat/" class="md-nav__link">
-        test_text_cat
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_text_cat
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_trainingcorpusmaker/" class="md-nav__link">
-        test_trainingcorpusmaker
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_trainingcorpusmaker
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_typosfile/" class="md-nav__link">
-        test_typosfile
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_typosfile
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_util/" class="md-nav__link">
-        test_util
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_util
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_xhtml2corpus/" class="md-nav__link">
-        test_xhtml2corpus
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_xhtml2corpus
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_xslmaker/" class="md-nav__link">
-        test_xslmaker
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_xslmaker
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_xslsetter/" class="md-nav__link">
-        test_xslsetter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_xslsetter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/xmltester/" class="md-nav__link">
-        xmltester
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xmltester
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../text_cat/" class="md-nav__link">
-        text_cat
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    text_cat
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../tmx/" class="md-nav__link">
-        tmx
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tmx
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tmx_cat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tmx_cat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tmx_switch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tmx_switch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../trainingcorpusmaker/" class="md-nav__link">
-        trainingcorpusmaker
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    trainingcorpusmaker
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../typosfile/" class="md-nav__link">
-        typosfile
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    typosfile
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../update_metadata/" class="md-nav__link">
-        update_metadata
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    update_metadata
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../usxconverter/" class="md-nav__link">
-        usxconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    usxconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../util/" class="md-nav__link">
-        util
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    util
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../versioncontrol/" class="md-nav__link">
-        versioncontrol
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    versioncontrol
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../winsami2/" class="md-nav__link">
-        winsami2
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    winsami2
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../xmlconverter/" class="md-nav__link">
-        xmlconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xmlconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../xslmaker/" class="md-nav__link">
-        xslmaker
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xslmaker
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../xslsetter/" class="md-nav__link">
-        xslsetter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xslsetter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -2521,7 +4941,11 @@
       
         <li class="md-nav__item">
   <a href="#corpustools.compile_cwb_para" class="md-nav__link">
-    corpustools.compile_cwb_para
+    <span class="md-ellipsis">
+      
+        compile_cwb_para
+      
+    </span>
   </a>
   
 </li>
@@ -2536,9 +4960,11 @@
           
           
             <div class="md-content" data-md-component="content">
+              
               <article class="md-content__inner md-typeset">
                 
                   
+
 
   
   
@@ -2549,14 +4975,23 @@
 <div class="doc doc-object doc-module">
 
 
+
 <a id="corpustools.compile_cwb_para"></a>
-  <div class="doc doc-contents first">
-  
-      <p>Compile and build data/ and registry/ folders for parallel corpora.</p>
+    <div class="doc doc-contents first">
 
-  
+        <p>Compile and build data/ and registry/ folders for parallel corpora.</p>
 
-  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
 
 
 
@@ -2570,9 +5005,16 @@
 
   </div>
 
-  </div>
+    </div>
 
 </div>
+
+
+
+
+
+
+
 
 
 
@@ -2583,12 +5025,14 @@
             </div>
           
           
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
         
           <button type="button" class="md-top md-icon" data-md-component="top" hidden>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
-            Back to top
-          </button>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
         
       </main>
       
@@ -2615,10 +5059,14 @@
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.top"], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.51198bba.min.js"></script>
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.top"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>

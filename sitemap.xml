@@ -1,728 +1,615 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/corpus-work/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/docsdocs/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/howitworks/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/SUMMARY/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/_version/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/adder/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/analyser/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/argparse_version/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/avvirconverter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/basicconverter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/bibel_no_aligner/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/bibel_no_crawler/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/biblexmlconverter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/ccat/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/ces2homegrown/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/check_para_consistency/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/clean_prestable/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/common_arg_ncpus/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/compare_tmx_goldstandard/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/compile_cwb_mono/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/compile_cwb_para/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/convert_using_pandoc/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/convert_using_soffice/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/converter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/convertermanager/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/corpuspath/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/corpusxmlfile/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/counter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/crawler/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/debug_corpus/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/decode/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/documentfixer/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/dropbox_adder/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/dupe_finder/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/epubchooser/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/epubconverter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/error_annotated_converter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/error_annotated_sentence/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/error_types/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/finder/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/generate_anchor_list/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/html_cleaner/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/htmlcontentconverter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/htmlconverter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/iso_ir_197/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/iso_ir_209/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/korp_config_templates/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/korp_mono/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/korp_para/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/languagedetector/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/macsami/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/mari/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/modes/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/move_files/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/namechanger/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/normalise_filenames/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/nrk_no_crawler/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/nrk_no_page/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/ocrconverter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/one-off-functions/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/orthographies/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/packagetmx/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/parallelize/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/pdfconverter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/pick_samediggi_se_docs/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/pick_titles/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/plaintextconverter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/realign/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/saami_crawler/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/samas_crawler/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/samediggi_fi_crawler/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/samediggi_no_crawler/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/samediggi_no_links/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/samediggi_no_page/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/sentencedivider/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/svgconverter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/text_cat/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/tmx/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/tmx_cat/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/tmx_switch/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/trainingcorpusmaker/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/typosfile/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/update_metadata/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/usxconverter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/util/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/versioncontrol/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/winsami2/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/xmlconverter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/xslmaker/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/xslsetter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_adder/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_analyser/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_avvirconverter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_biblexmlconverter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_ccat/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_compare_tmx_goldstandard/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_converter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_corpuspath/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_corpusxmlfile/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_decode/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_docconverter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_documentfixer/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_docxconverter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_epubchooser/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_epubconverter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_error_annotated_sentence/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_error_types/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_htmlcontentconverter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_htmlconverter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_lang_guessing/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_languagedetector/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_namechanger/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_parallelize/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_pdfconverter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_plaintextconverter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_rtfconverter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_samediggi_no_crawler/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_sentencedivider/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_svgconverter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_text_cat/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_trainingcorpusmaker/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_typosfile/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_util/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_xhtml2corpus/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_xslmaker/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/test_xslsetter/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/reference/test/xmltester/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/scripts/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/scripts/add_files_to_corpus/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/scripts/analyse_corpus/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/scripts/ccat/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/scripts/clean_prestable/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/scripts/compile_cwb_mono/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/scripts/convert2xml/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/scripts/dupefinder/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/scripts/duperemover/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/scripts/epubchooser/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/scripts/html_cleaner/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/scripts/korp_mono/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/scripts/make_training_corpus/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/scripts/move_corpus_file/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
     <url>
-         <loc>None</loc>
-         <lastmod>2023-08-31</lastmod>
-         <changefreq>daily</changefreq>
+         <loc>https://divvun.github.io/CorpusTools/scripts/normalise_corpus_names/</loc>
+         <lastmod>2026-02-13</lastmod>
+    </url>
+    <url>
+         <loc>https://divvun.github.io/CorpusTools/scripts/paracheck/</loc>
+         <lastmod>2026-02-13</lastmod>
+    </url>
+    <url>
+         <loc>https://divvun.github.io/CorpusTools/scripts/parallelize/</loc>
+         <lastmod>2026-02-13</lastmod>
+    </url>
+    <url>
+         <loc>https://divvun.github.io/CorpusTools/scripts/pytextcat/</loc>
+         <lastmod>2026-02-13</lastmod>
+    </url>
+    <url>
+         <loc>https://divvun.github.io/CorpusTools/scripts/remove_corpus_file/</loc>
+         <lastmod>2026-02-13</lastmod>
+    </url>
+    <url>
+         <loc>https://divvun.github.io/CorpusTools/scripts/reparallelize/</loc>
+         <lastmod>2026-02-13</lastmod>
+    </url>
+    <url>
+         <loc>https://divvun.github.io/CorpusTools/scripts/saami_crawler/</loc>
+         <lastmod>2026-02-13</lastmod>
+    </url>
+    <url>
+         <loc>https://divvun.github.io/CorpusTools/scripts/tmx2html/</loc>
+         <lastmod>2026-02-13</lastmod>
+    </url>
+    <url>
+         <loc>https://divvun.github.io/CorpusTools/scripts/update_metadata/</loc>
+         <lastmod>2026-02-13</lastmod>
     </url>
 </urlset>

@@ -8,14 +8,20 @@
       
       
       
+        <link rel="canonical" href="https://divvun.github.io/CorpusTools/reference/corpuspath/">
+      
       
         <link rel="prev" href="../convertermanager/">
       
       
         <link rel="next" href="../corpusxmlfile/">
       
+      
+        
+      
+      
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.8">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -23,11 +29,14 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ded33207.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
       
 
+
     
+    
+      
     
     
       
@@ -41,11 +50,10 @@
     
       <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
-    
     
     
   </head>
@@ -53,9 +61,6 @@
   
     <body dir="ltr">
   
-    
-    
-      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
@@ -82,11 +87,12 @@
     <a href="../.." title="CorpusTools documentation" class="md-header__button md-logo" aria-label="CorpusTools documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
@@ -106,29 +112,38 @@
     </div>
     
     
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
-      <label class="md-header__button md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
-      </label>
-      <div class="md-search" data-md-component="search" role="dialog">
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
         
         <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
       </nav>
       
     </form>
     <div class="md-search__output">
-      <div class="md-search__scrollwrap" data-md-scrollfix>
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
         <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
             Initializing search
@@ -139,16 +154,17 @@
     </div>
   </div>
 </div>
+      
     
     
       <div class="md-header__source">
-        <a href="https://github.com/giellalt/CorpusTools" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/divvun/CorpusTools" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
   </div>
   <div class="md-source__repository">
-    giellalt/CorpusTools
+    divvun/CorpusTools
   </div>
 </a>
       </div>
@@ -164,41 +180,54 @@
         
   
   
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../.." class="md-tabs__link">
+          
+  
+  
+  Home
 
-
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../.." class="md-tabs__link">
-        Home
-      </a>
-    </li>
+        </a>
+      </li>
+    
   
 
       
         
   
   
+  
     
-  
-
-
-  
   
   
     
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  Code reference
 
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../" class="md-tabs__link md-tabs__link--active">
-        Code reference
-      </a>
-    </li>
+        </a>
+      </li>
+    
   
 
+    
   
 
       
@@ -224,6 +253,7 @@
                   <div class="md-sidebar__inner">
                     
 
+
   
 
 
@@ -232,20 +262,20 @@
     <a href="../.." title="CorpusTools documentation" class="md-nav__button md-logo" aria-label="CorpusTools documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
     CorpusTools documentation
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/giellalt/CorpusTools" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/divvun/CorpusTools" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
   </div>
   <div class="md-source__repository">
-    giellalt/CorpusTools
+    divvun/CorpusTools
   </div>
 </a>
     </div>
@@ -254,838 +284,1632 @@
     
       
       
-      
-
+  
   
   
   
     
+    
+    
+    
+      
+      
+    
+    
     <li class="md-nav__item md-nav__item--nested">
       
-      
-      
-      
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
-      
-      
-      
-        <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
-          Home
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_1">
-          <span class="md-nav__icon md-icon"></span>
-          Home
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
           
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Home
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../.." class="md-nav__link">
-        Overview
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../howitworks/" class="md-nav__link">
-        How it works
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How it works
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../docsdocs/" class="md-nav__link">
-        Meta documentation
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Meta documentation
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../corpus-work/" class="md-nav__link">
-        Corpus work
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Corpus work
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     
+    
+    
+    
+      
+      
+    
+    
     <li class="md-nav__item md-nav__item--nested">
       
-      
-      
-      
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_5" >
-      
-      
-      
-        <label class="md-nav__link" for="__nav_1_5" id="__nav_1_5_label" tabindex="0">
-          Scripts
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_5_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_1_5">
-          <span class="md-nav__icon md-icon"></span>
-          Scripts
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_5" >
+        
           
+          <label class="md-nav__link" for="__nav_1_5" id="__nav_1_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scripts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Scripts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/" class="md-nav__link">
-        Overview
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/add_files_to_corpus/" class="md-nav__link">
-        add_files_to_corpus
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    add_files_to_corpus
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/analyse_corpus/" class="md-nav__link">
-        analyse_corpus
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    analyse_corpus
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/ccat/" class="md-nav__link">
-        ccat
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ccat
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/clean_prestable/" class="md-nav__link">
-        clean_prestable
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clean_prestable
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/clean_prestable/" class="md-nav__link">
-        clean_prestable
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clean_prestable
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/compile_cwb_mono/" class="md-nav__link">
-        compile_cwb_mono
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    compile_cwb_mono
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/convert2xml/" class="md-nav__link">
-        convert2xml
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    convert2xml
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/dupefinder/" class="md-nav__link">
-        dupefinder
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    dupefinder
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/duperemover/" class="md-nav__link">
-        duperemover
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    duperemover
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/epubchooser/" class="md-nav__link">
-        epubchooser
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    epubchooser
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/html_cleaner/" class="md-nav__link">
-        html_cleaner
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    html_cleaner
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/korp_mono/" class="md-nav__link">
-        korp_mono
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    korp_mono
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/make_training_corpus/" class="md-nav__link">
-        make_training_corpus
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    make_training_corpus
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/move_corpus_file/" class="md-nav__link">
-        move_corpus_file
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    move_corpus_file
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/normalise_corpus_names/" class="md-nav__link">
-        normalise_corpus_names
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    normalise_corpus_names
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/paracheck/" class="md-nav__link">
-        paracheck
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    paracheck
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/parallelize/" class="md-nav__link">
-        parallelize
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    parallelize
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../../scripts/pick_parallel_docs/" class="md-nav__link">
-        pick_parallel_docs
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/remove_corpus_file/" class="md-nav__link">
-        remove_corpus_file
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    remove_corpus_file
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/reparallelize/" class="md-nav__link">
-        reparallelize
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    reparallelize
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/saami_crawler/" class="md-nav__link">
-        saami_crawler
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    saami_crawler
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../scripts/pytextcat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    pytextcat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/tmx2html/" class="md-nav__link">
-        tmx2html
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tmx2html
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../scripts/update_metadata/" class="md-nav__link">
-        update_metadata
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    update_metadata
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
     
       
       
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
       
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Code reference
+  
 
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Code reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
   
   
     
   
   
+  
+    
+    
+    
+    
+      
+      
+    
     
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
-      
-      
-      
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
-      
-      
-      
-        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
-          Code reference
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
-        <label class="md-nav__title" for="__nav_2">
-          <span class="md-nav__icon md-icon"></span>
-          Code reference
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
           
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
             
-              
   
   
+  <span class="md-ellipsis">
     
   
+    corpustools
   
+
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
-      
-      
-      
-      
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
-      
-      
-      
-        <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
-          corpustools
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
-        <label class="md-nav__title" for="__nav_2_1">
-          <span class="md-nav__icon md-icon"></span>
-          corpustools
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    corpustools
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../" class="md-nav__link">
-        Index
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Index
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../_version/" class="md-nav__link">
-        _version
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    _version
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../adder/" class="md-nav__link">
-        adder
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    adder
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../analyser/" class="md-nav__link">
-        analyser
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    analyser
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../argparse_version/" class="md-nav__link">
-        argparse_version
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    argparse_version
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../avvirconverter/" class="md-nav__link">
-        avvirconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    avvirconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../basicconverter/" class="md-nav__link">
-        basicconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    basicconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../bibel_no_aligner/" class="md-nav__link">
-        bibel_no_aligner
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    bibel_no_aligner
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../bibel_no_crawler/" class="md-nav__link">
-        bibel_no_crawler
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    bibel_no_crawler
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../biblexmlconverter/" class="md-nav__link">
-        biblexmlconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    biblexmlconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../ccat/" class="md-nav__link">
-        ccat
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ccat
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../ces2homegrown/" class="md-nav__link">
-        ces2homegrown
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ces2homegrown
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../check_para_consistency/" class="md-nav__link">
-        check_para_consistency
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    check_para_consistency
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../clean_prestable/" class="md-nav__link">
-        clean_prestable
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clean_prestable
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../common_arg_ncpus/" class="md-nav__link">
-        common_arg_ncpus
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    common_arg_ncpus
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../compare_tmx_goldstandard/" class="md-nav__link">
-        compare_tmx_goldstandard
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    compare_tmx_goldstandard
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../compile_cwb_mono/" class="md-nav__link">
-        compile_cwb_mono
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    compile_cwb_mono
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../compile_cwb_para/" class="md-nav__link">
-        compile_cwb_para
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    compile_cwb_para
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../convert_using_pandoc/" class="md-nav__link">
-        convert_using_pandoc
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    convert_using_pandoc
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../convert_using_soffice/" class="md-nav__link">
-        convert_using_soffice
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    convert_using_soffice
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../converter/" class="md-nav__link">
-        converter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    converter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../convertermanager/" class="md-nav__link">
-        convertermanager
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    convertermanager
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
   
     
+  
   
   
     <li class="md-nav__item md-nav__item--active">
@@ -1095,12 +1919,38 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          corpuspath
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    corpuspath
+  
+
+    
+  </span>
+  
+  
+
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        corpuspath
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    corpuspath
+  
+
+    
+  </span>
+  
+  
+
       </a>
       
         
@@ -1118,14 +1968,22 @@
       
         <li class="md-nav__item">
   <a href="#corpustools.corpuspath" class="md-nav__link">
-    corpustools.corpuspath
+    <span class="md-ellipsis">
+      
+        corpuspath
+      
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath" class="md-nav__link">
-    CorpusPath
+    <span class="md-ellipsis">
+      
+        CorpusPath
+      
+    </span>
   </a>
   
     <nav class="md-nav" aria-label="CorpusPath">
@@ -1133,105 +1991,198 @@
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.analysed" class="md-nav__link">
-    analysed
+    <span class="md-ellipsis">
+      
+        analysed
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.converted" class="md-nav__link">
-    converted
+    <span class="md-ellipsis">
+      
+        converted
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.korp_mono" class="md-nav__link">
-    korp_mono
+    <span class="md-ellipsis">
+      
+        korp_mono
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.log" class="md-nav__link">
-    log
+    <span class="md-ellipsis">
+      
+        log
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.orig" class="md-nav__link">
-    orig
+    <span class="md-ellipsis">
+      
+        orig
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.tca2_input" class="md-nav__link">
-    tca2_input
+    <span class="md-ellipsis">
+      
+        tca2_input
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.tca2_output" class="md-nav__link">
-    tca2_output
+    <span class="md-ellipsis">
+      
+        tca2_output
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.xsl" class="md-nav__link">
-    xsl
+    <span class="md-ellipsis">
+      
+        xsl
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#corpustools.corpuspath.CorpusPath.__getstate__" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        __getstate__
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.__post_init__" class="md-nav__link">
-    __post_init__()
+    <span class="md-ellipsis">
+      
+        __post_init__
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#corpustools.corpuspath.CorpusPath.__setstate__" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        __setstate__
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.crop_to_bytes" class="md-nav__link">
-    crop_to_bytes()
+    <span class="md-ellipsis">
+      
+        crop_to_bytes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#corpustools.corpuspath.CorpusPath.is_convertable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        is_convertable
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.korp_tmx" class="md-nav__link">
-    korp_tmx()
+    <span class="md-ellipsis">
+      
+        korp_tmx
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.name" class="md-nav__link">
-    name()
+    <span class="md-ellipsis">
+      
+        name
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.parallel" class="md-nav__link">
-    parallel()
+    <span class="md-ellipsis">
+      
+        parallel
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.parallels" class="md-nav__link">
-    parallels()
+    <span class="md-ellipsis">
+      
+        parallels
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.tmx" class="md-nav__link">
-    tmx()
+    <span class="md-ellipsis">
+      
+        tmx
+      
+    </span>
   </a>
   
 </li>
@@ -1243,14 +2194,22 @@
       
         <li class="md-nav__item">
   <a href="#corpustools.corpuspath.collect_files" class="md-nav__link">
-    collect_files()
+    <span class="md-ellipsis">
+      
+        collect_files
+      
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#corpustools.corpuspath.make_corpus_path" class="md-nav__link">
-    make_corpus_path()
+    <span class="md-ellipsis">
+      
+        make_corpus_path
+      
+    </span>
   </a>
   
 </li>
@@ -1262,1367 +2221,2933 @@
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../corpusxmlfile/" class="md-nav__link">
-        corpusxmlfile
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    corpusxmlfile
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../counter/" class="md-nav__link">
-        counter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    counter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../crawler/" class="md-nav__link">
-        crawler
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    crawler
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../debug_corpus/" class="md-nav__link">
-        debug_corpus
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    debug_corpus
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../decode/" class="md-nav__link">
-        decode
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    decode
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../docconverter/" class="md-nav__link">
-        docconverter
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
   
   
   
     <li class="md-nav__item">
       <a href="../documentfixer/" class="md-nav__link">
-        documentfixer
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    documentfixer
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../dropbox_adder/" class="md-nav__link">
-        dropbox_adder
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    dropbox_adder
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../dupe_finder/" class="md-nav__link">
-        dupe_finder
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    dupe_finder
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../epubchooser/" class="md-nav__link">
-        epubchooser
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    epubchooser
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../epubconverter/" class="md-nav__link">
-        epubconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    epubconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
-      <a href="../errormarkup/" class="md-nav__link">
-        errormarkup
+      <a href="../error_annotated_converter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    error_annotated_converter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../error_annotated_sentence/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    error_annotated_sentence
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../error_types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    error_types
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../finder/" class="md-nav__link">
-        finder
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    finder
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../generate_anchor_list/" class="md-nav__link">
-        generate_anchor_list
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    generate_anchor_list
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../html_cleaner/" class="md-nav__link">
-        html_cleaner
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    html_cleaner
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../htmlcontentconverter/" class="md-nav__link">
-        htmlcontentconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    htmlcontentconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../htmlconverter/" class="md-nav__link">
-        htmlconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    htmlconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../iso_ir_197/" class="md-nav__link">
-        iso_ir_197
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    iso_ir_197
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../iso_ir_209/" class="md-nav__link">
-        iso_ir_209
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    iso_ir_209
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../korp_config_templates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    korp_config_templates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../korp_mono/" class="md-nav__link">
-        korp_mono
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    korp_mono
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../korp_para/" class="md-nav__link">
-        korp_para
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    korp_para
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../languagedetector/" class="md-nav__link">
-        languagedetector
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    languagedetector
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../macsami/" class="md-nav__link">
-        macsami
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    macsami
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../mari/" class="md-nav__link">
-        mari
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    mari
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../modes/" class="md-nav__link">
-        modes
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modes
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../move_files/" class="md-nav__link">
-        move_files
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    move_files
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../namechanger/" class="md-nav__link">
-        namechanger
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    namechanger
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../normalise_filenames/" class="md-nav__link">
-        normalise_filenames
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    normalise_filenames
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../nrk_no_crawler/" class="md-nav__link">
-        nrk_no_crawler
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    nrk_no_crawler
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nrk_no_page/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    nrk_no_page
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ocrconverter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ocrconverter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../one-off-functions/" class="md-nav__link">
-        one-off-functions
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    one-off-functions
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../orthographies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    orthographies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../packagetmx/" class="md-nav__link">
-        packagetmx
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    packagetmx
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../parallelize/" class="md-nav__link">
-        parallelize
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    parallelize
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../pdfconverter/" class="md-nav__link">
-        pdfconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    pdfconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../pick_parallel_docs/" class="md-nav__link">
-        pick_parallel_docs
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
   
   
   
     <li class="md-nav__item">
       <a href="../pick_samediggi_se_docs/" class="md-nav__link">
-        pick_samediggi_se_docs
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    pick_samediggi_se_docs
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../pick_titles/" class="md-nav__link">
-        pick_titles
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    pick_titles
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../plaintextconverter/" class="md-nav__link">
-        plaintextconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    plaintextconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../realign/" class="md-nav__link">
-        realign
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    realign
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../saami_crawler/" class="md-nav__link">
-        saami_crawler
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    saami_crawler
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../samas_crawler/" class="md-nav__link">
-        samas_crawler
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    samas_crawler
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../samediggi_fi_crawler/" class="md-nav__link">
-        samediggi_fi_crawler
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    samediggi_fi_crawler
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../samediggi_no_crawler/" class="md-nav__link">
-        samediggi_no_crawler
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    samediggi_no_crawler
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samediggi_no_links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    samediggi_no_links
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samediggi_no_page/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    samediggi_no_page
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../sentencedivider/" class="md-nav__link">
-        sentencedivider
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    sentencedivider
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../svgconverter/" class="md-nav__link">
-        svgconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    svgconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     
+    
+    
+    
+      
+      
+    
+    
     <li class="md-nav__item md-nav__item--nested">
       
-      
-      
-      
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_68" >
-      
-      
-      
-        <label class="md-nav__link" for="__nav_2_1_68" id="__nav_2_1_68_label" tabindex="0">
-          test
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_68_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_2_1_68">
-          <span class="md-nav__icon md-icon"></span>
-          test
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_74" >
+        
           
+          <label class="md-nav__link" for="__nav_2_1_74" id="__nav_2_1_74_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_74_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_74">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    test
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/" class="md-nav__link">
-        Index
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Index
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_adder/" class="md-nav__link">
-        test_adder
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_adder
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_analyser/" class="md-nav__link">
-        test_analyser
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_analyser
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_avvirconverter/" class="md-nav__link">
-        test_avvirconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_avvirconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_biblexmlconverter/" class="md-nav__link">
-        test_biblexmlconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_biblexmlconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_ccat/" class="md-nav__link">
-        test_ccat
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_ccat
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_compare_tmx_goldstandard/" class="md-nav__link">
-        test_compare_tmx_goldstandard
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_compare_tmx_goldstandard
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_converter/" class="md-nav__link">
-        test_converter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_converter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_corpuspath/" class="md-nav__link">
-        test_corpuspath
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_corpuspath
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_corpusxmlfile/" class="md-nav__link">
-        test_corpusxmlfile
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_corpusxmlfile
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_decode/" class="md-nav__link">
-        test_decode
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_decode
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_docconverter/" class="md-nav__link">
-        test_docconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_docconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_documentfixer/" class="md-nav__link">
-        test_documentfixer
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_documentfixer
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_docxconverter/" class="md-nav__link">
-        test_docxconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_docxconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_epubchooser/" class="md-nav__link">
-        test_epubchooser
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_epubchooser
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_epubconverter/" class="md-nav__link">
-        test_epubconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_epubconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
-      <a href="../test/test_errormarkup/" class="md-nav__link">
-        test_errormarkup
+      <a href="../test/test_error_annotated_sentence/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_error_annotated_sentence
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test/test_error_types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_error_types
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_htmlcontentconverter/" class="md-nav__link">
-        test_htmlcontentconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_htmlcontentconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_htmlconverter/" class="md-nav__link">
-        test_htmlconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_htmlconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_lang_guessing/" class="md-nav__link">
-        test_lang_guessing
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_lang_guessing
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_languagedetector/" class="md-nav__link">
-        test_languagedetector
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_languagedetector
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_namechanger/" class="md-nav__link">
-        test_namechanger
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_namechanger
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_parallelize/" class="md-nav__link">
-        test_parallelize
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_parallelize
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_pdfconverter/" class="md-nav__link">
-        test_pdfconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_pdfconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../test/test_pick_parallel_docs/" class="md-nav__link">
-        test_pick_parallel_docs
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_plaintextconverter/" class="md-nav__link">
-        test_plaintextconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_plaintextconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_rtfconverter/" class="md-nav__link">
-        test_rtfconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_rtfconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_samediggi_no_crawler/" class="md-nav__link">
-        test_samediggi_no_crawler
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_samediggi_no_crawler
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_sentencedivider/" class="md-nav__link">
-        test_sentencedivider
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_sentencedivider
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_svgconverter/" class="md-nav__link">
-        test_svgconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_svgconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_text_cat/" class="md-nav__link">
-        test_text_cat
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_text_cat
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_trainingcorpusmaker/" class="md-nav__link">
-        test_trainingcorpusmaker
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_trainingcorpusmaker
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_typosfile/" class="md-nav__link">
-        test_typosfile
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_typosfile
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_util/" class="md-nav__link">
-        test_util
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_util
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_xhtml2corpus/" class="md-nav__link">
-        test_xhtml2corpus
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_xhtml2corpus
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_xslmaker/" class="md-nav__link">
-        test_xslmaker
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_xslmaker
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/test_xslsetter/" class="md-nav__link">
-        test_xslsetter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    test_xslsetter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../test/xmltester/" class="md-nav__link">
-        xmltester
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xmltester
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../text_cat/" class="md-nav__link">
-        text_cat
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    text_cat
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../tmx/" class="md-nav__link">
-        tmx
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tmx
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tmx_cat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tmx_cat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tmx_switch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tmx_switch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../trainingcorpusmaker/" class="md-nav__link">
-        trainingcorpusmaker
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    trainingcorpusmaker
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../typosfile/" class="md-nav__link">
-        typosfile
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    typosfile
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../update_metadata/" class="md-nav__link">
-        update_metadata
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    update_metadata
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../usxconverter/" class="md-nav__link">
-        usxconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    usxconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../util/" class="md-nav__link">
-        util
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    util
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../versioncontrol/" class="md-nav__link">
-        versioncontrol
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    versioncontrol
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../winsami2/" class="md-nav__link">
-        winsami2
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    winsami2
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../xmlconverter/" class="md-nav__link">
-        xmlconverter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xmlconverter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../xslmaker/" class="md-nav__link">
-        xslmaker
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xslmaker
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../xslsetter/" class="md-nav__link">
-        xslsetter
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xslsetter
+  
+
+    
+  </span>
+  
+  
+
       </a>
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -2653,14 +5178,22 @@
       
         <li class="md-nav__item">
   <a href="#corpustools.corpuspath" class="md-nav__link">
-    corpustools.corpuspath
+    <span class="md-ellipsis">
+      
+        corpuspath
+      
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath" class="md-nav__link">
-    CorpusPath
+    <span class="md-ellipsis">
+      
+        CorpusPath
+      
+    </span>
   </a>
   
     <nav class="md-nav" aria-label="CorpusPath">
@@ -2668,105 +5201,198 @@
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.analysed" class="md-nav__link">
-    analysed
+    <span class="md-ellipsis">
+      
+        analysed
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.converted" class="md-nav__link">
-    converted
+    <span class="md-ellipsis">
+      
+        converted
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.korp_mono" class="md-nav__link">
-    korp_mono
+    <span class="md-ellipsis">
+      
+        korp_mono
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.log" class="md-nav__link">
-    log
+    <span class="md-ellipsis">
+      
+        log
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.orig" class="md-nav__link">
-    orig
+    <span class="md-ellipsis">
+      
+        orig
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.tca2_input" class="md-nav__link">
-    tca2_input
+    <span class="md-ellipsis">
+      
+        tca2_input
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.tca2_output" class="md-nav__link">
-    tca2_output
+    <span class="md-ellipsis">
+      
+        tca2_output
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.xsl" class="md-nav__link">
-    xsl
+    <span class="md-ellipsis">
+      
+        xsl
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#corpustools.corpuspath.CorpusPath.__getstate__" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        __getstate__
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.__post_init__" class="md-nav__link">
-    __post_init__()
+    <span class="md-ellipsis">
+      
+        __post_init__
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#corpustools.corpuspath.CorpusPath.__setstate__" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        __setstate__
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.crop_to_bytes" class="md-nav__link">
-    crop_to_bytes()
+    <span class="md-ellipsis">
+      
+        crop_to_bytes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#corpustools.corpuspath.CorpusPath.is_convertable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        is_convertable
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.korp_tmx" class="md-nav__link">
-    korp_tmx()
+    <span class="md-ellipsis">
+      
+        korp_tmx
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.name" class="md-nav__link">
-    name()
+    <span class="md-ellipsis">
+      
+        name
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.parallel" class="md-nav__link">
-    parallel()
+    <span class="md-ellipsis">
+      
+        parallel
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.parallels" class="md-nav__link">
-    parallels()
+    <span class="md-ellipsis">
+      
+        parallels
+      
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#corpustools.corpuspath.CorpusPath.tmx" class="md-nav__link">
-    tmx()
+    <span class="md-ellipsis">
+      
+        tmx
+      
+    </span>
   </a>
   
 </li>
@@ -2778,14 +5404,22 @@
       
         <li class="md-nav__item">
   <a href="#corpustools.corpuspath.collect_files" class="md-nav__link">
-    collect_files()
+    <span class="md-ellipsis">
+      
+        collect_files
+      
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#corpustools.corpuspath.make_corpus_path" class="md-nav__link">
-    make_corpus_path()
+    <span class="md-ellipsis">
+      
+        make_corpus_path
+      
+    </span>
   </a>
   
 </li>
@@ -2800,9 +5434,11 @@
           
           
             <div class="md-content" data-md-component="content">
+              
               <article class="md-content__inner md-typeset">
                 
                   
+
 
   
   
@@ -2813,14 +5449,23 @@
 <div class="doc doc-object doc-module">
 
 
+
 <a id="corpustools.corpuspath"></a>
-  <div class="doc doc-contents first">
-  
-      <p>This file contains classes to handle corpus filenames.</p>
+    <div class="doc doc-contents first">
 
-  
+        <p>This file contains classes to handle corpus filenames.</p>
 
-  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
 
 
 
@@ -2834,9 +5479,9 @@
 
 
 <h2 id="corpustools.corpuspath.CorpusPath" class="doc doc-heading">
-        <code>CorpusPath</code>
+            <code>CorpusPath</code>
 
-  
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
   </span>
@@ -2844,21 +5489,22 @@
 </h2>
 
 
-  <div class="doc doc-contents ">
-
-  
-      <p>Map filenames in a corpus.</p>
+    <div class="doc doc-contents ">
 
 
-        <details class="quote">
-          <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/corpuspath.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 84</span>
-<span class="normal"> 85</span>
-<span class="normal"> 86</span>
-<span class="normal"> 87</span>
-<span class="normal"> 88</span>
-<span class="normal"> 89</span>
-<span class="normal"> 90</span>
+
+        <p>Map filenames in a corpus.</p>
+
+
+
+
+
+
+
+
+              <details class="mkdocstrings-source">
+                <summary>Source code in <code>corpustools/corpuspath.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 90</span>
 <span class="normal"> 91</span>
 <span class="normal"> 92</span>
 <span class="normal"> 93</span>
@@ -3033,8 +5679,67 @@
 <span class="normal">262</span>
 <span class="normal">263</span>
 <span class="normal">264</span>
-<span class="normal">265</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">CorpusPath</span><span class="p">:</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span>
+<span class="normal">291</span>
+<span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span>
+<span class="normal">296</span>
+<span class="normal">297</span>
+<span class="normal">298</span>
+<span class="normal">299</span>
+<span class="normal">300</span>
+<span class="normal">301</span>
+<span class="normal">302</span>
+<span class="normal">303</span>
+<span class="normal">304</span>
+<span class="normal">305</span>
+<span class="normal">306</span>
+<span class="normal">307</span>
+<span class="normal">308</span>
+<span class="normal">309</span>
+<span class="normal">310</span>
+<span class="normal">311</span>
+<span class="normal">312</span>
+<span class="normal">313</span>
+<span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CorpusPath</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Map filenames in a corpus.&quot;&quot;&quot;</span>
 
     <span class="n">root</span><span class="p">:</span> <span class="n">Path</span>
@@ -3042,34 +5747,46 @@
     <span class="n">filepath</span><span class="p">:</span> <span class="n">Path</span>
     <span class="n">dirsuffix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialise the metadata attribute.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">xslsetter</span><span class="o">.</span><span class="n">MetadataHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xsl</span><span class="p">,</span> <span class="n">create</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
+        <span class="c1"># If we do not have access to the -orig part of the corpus</span>
+        <span class="c1"># at least read the parallel info from the converted doc</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">xsl</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">converted</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">conv_xml</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">converted</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">para_info</span> <span class="ow">in</span> <span class="n">conv_xml</span><span class="o">.</span><span class="n">iter</span><span class="p">(</span><span class="s2">&quot;parallel_text&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">set_parallel_text</span><span class="p">(</span>
+                    <span class="n">language</span><span class="o">=</span><span class="n">para_info</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span>
+                        <span class="s2">&quot;{http://www.w3.org/XML/1998/namespace}lang&quot;</span>
+                    <span class="p">],</span>
+                    <span class="n">location</span><span class="o">=</span><span class="n">para_info</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;location&quot;</span><span class="p">],</span>
+                <span class="p">)</span>
+
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">orig_corpus_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">orig_corpus_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus_dir</span><span class="p">()</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">converted_corpus_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">converted_corpus_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus_dir</span><span class="p">(</span><span class="n">module</span><span class="o">=</span><span class="s2">&quot;trigger_no_orig&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">orig</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">orig</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the path of the original file.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">orig_corpus_dir</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">filepath</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">xsl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">xsl</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the path of the metadata file.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">orig</span><span class="o">.</span><span class="n">with_name</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">orig</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.xsl&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the path of the log file.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">orig</span><span class="o">.</span><span class="n">with_name</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">orig</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.log&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">corpus_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">corpus_lang</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">corpus_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">corpus_lang</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
         <span class="n">this_lang</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lang</span> <span class="k">if</span> <span class="n">corpus_lang</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">corpus_lang</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;corpus-</span><span class="si">{</span><span class="n">this_lang</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -3077,14 +5794,14 @@
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;-&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">dirsuffix</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">dirsuffix</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">module</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">corpus_lang</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">target_lang</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">filepath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">suffix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="p">):</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a path based on the module and extension.</span>
 
 <span class="sd">        Args:</span>
@@ -3095,8 +5812,8 @@
 <span class="sd">            filepath (str): path to the file</span>
 <span class="sd">            suffix (str): file suffix</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">this_module</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="n">module</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">module</span>
-        <span class="n">this_target_lang</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="n">target_lang</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">target_lang</span>
+        <span class="n">this_module</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">module</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">module</span>
+        <span class="n">this_target_lang</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">target_lang</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">target_lang</span>
         <span class="n">this_filepath</span> <span class="o">=</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">filepath</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="kc">None</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="n">filepath</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">suffix</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="kc">None</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="n">suffix</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -3109,7 +5826,7 @@
         <span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">converted</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">converted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the path to the converted file.&quot;&quot;&quot;</span>
         <span class="n">module</span> <span class="o">=</span> <span class="s2">&quot;converted&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">&quot;conversion_status&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;correct&quot;</span><span class="p">:</span>
@@ -3120,16 +5837,16 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">(</span><span class="n">module</span><span class="o">=</span><span class="n">module</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;.xml&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">analysed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">analysed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the path to analysed file.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">(</span><span class="n">module</span><span class="o">=</span><span class="s2">&quot;analysed&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;.xml&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">korp_mono</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">korp_mono</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the path to analysed file.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">(</span><span class="n">module</span><span class="o">=</span><span class="s2">&quot;korp_mono&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;.xml&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">korp_tmx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_language</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">korp_tmx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_language</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the path to korp processed tmx file.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">(</span>
             <span class="n">module</span><span class="o">=</span><span class="s2">&quot;korp_tmx&quot;</span><span class="p">,</span>
@@ -3137,24 +5854,28 @@
             <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;.tmx&quot;</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">parallel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">language</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parallel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">language</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if there is a parallel for language.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            language (str): language of the parallel file.</span>
+<span class="sd">            language: language of the parallel file.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            (pathlib.Path): path to the parallel file if it exist, else None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get_parallel_texts</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">language</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">(</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">(</span>
                 <span class="n">corpus_lang</span><span class="o">=</span><span class="n">language</span><span class="p">,</span>
                 <span class="n">filepath</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="o">.</span><span class="n">with_name</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get_parallel_texts</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">language</span><span class="p">)</span>
                 <span class="p">),</span>
             <span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get_parallel_texts</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">language</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="k">else</span> <span class="kc">None</span>
+        <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">parallels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parallels</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return paths to all parallel files.</span>
 
 <span class="sd">        Yields:</span>
@@ -3164,7 +5885,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">parallel</span><span class="p">(</span><span class="n">language</span><span class="p">)</span> <span class="k">for</span> <span class="n">language</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get_parallel_texts</span><span class="p">()</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">tmx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_language</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">tmx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_language</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Name of the tmx file.</span>
 
 <span class="sd">        Args:</span>
@@ -3180,7 +5901,7 @@
         <span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">tca2_input</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">tca2_input</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the name of the tca2 input file.</span>
 
 <span class="sd">        Returns:</span>
@@ -3192,7 +5913,7 @@
         <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/tmp&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">origfilename</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">lang</span><span class="si">}</span><span class="s2">.sent&quot;</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">tca2_output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">tca2_output</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the name of the tca2 output file.</span>
 
 <span class="sd">        Returns:</span>
@@ -3203,11 +5924,11 @@
         <span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">tmp_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">tmp_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">converted_corpus_dir</span> <span class="o">/</span> <span class="s2">&quot;tmp&quot;</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="o">.</span><span class="n">name</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">crop_to_bytes</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">max_bytes</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">crop_to_bytes</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">max_bytes</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Ensure `name` is less than `max_bytes` bytes.</span>
 
 <span class="sd">        Do not split name in the middle of a wide byte.</span>
@@ -3215,12 +5936,49 @@
         <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">max_bytes</span><span class="p">:</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">name</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the dictionary of state of this object, for pickle.&quot;&quot;&quot;</span>
+        <span class="c1"># note the .copy(), to not alter the instance dictionary</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="c1"># The .metadata attribute contains an lxml.ElementTree, which cannot</span>
+        <span class="c1"># be picked. But, we can just restore it using __post_init__.</span>
+        <span class="k">del</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">d</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the state of the object, after deserializing with pickle.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+        <span class="c1"># restore self.metadata, using self.__post_init__</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__post_init__</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_convertable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">goldstandard</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add file for conversion.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            xsl_file (str): path to a metadata file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span>
+        <span class="n">conversion_status</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">&quot;conversion_status&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">conversion_status</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No conversion_status set in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">orig</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">conversion_status</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;standard&quot;</span><span class="p">,</span> <span class="s2">&quot;ocr&quot;</span><span class="p">]</span>
+            <span class="ow">and</span> <span class="ow">not</span> <span class="n">goldstandard</span>
+        <span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
+            <span class="n">conversion_status</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;correct&quot;</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="n">goldstandard</span>
+        <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
+              </details>
 
-  
 
-  <div class="doc doc-children">
+
+<div class="doc doc-children">
 
 
 
@@ -3233,8 +5991,8 @@
 
 
 <h3 id="corpustools.corpuspath.CorpusPath.analysed" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">analysed</span></code>
-  
+            <code class="highlight language-python"><span class="n">analysed</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
   </span>
@@ -3242,10 +6000,11 @@
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
-      <p>Return the path to analysed file.</p>
-  </div>
+    <div class="doc doc-contents ">
+
+        <p>Return the path to analysed file.</p>
+
+    </div>
 
 </div>
 
@@ -3254,8 +6013,8 @@
 
 
 <h3 id="corpustools.corpuspath.CorpusPath.converted" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">converted</span></code>
-  
+            <code class="highlight language-python"><span class="n">converted</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
   </span>
@@ -3263,10 +6022,11 @@
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
-      <p>Return the path to the converted file.</p>
-  </div>
+    <div class="doc doc-contents ">
+
+        <p>Return the path to the converted file.</p>
+
+    </div>
 
 </div>
 
@@ -3275,8 +6035,8 @@
 
 
 <h3 id="corpustools.corpuspath.CorpusPath.korp_mono" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">korp_mono</span></code>
-  
+            <code class="highlight language-python"><span class="n">korp_mono</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
   </span>
@@ -3284,10 +6044,11 @@
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
-      <p>Return the path to analysed file.</p>
-  </div>
+    <div class="doc doc-contents ">
+
+        <p>Return the path to analysed file.</p>
+
+    </div>
 
 </div>
 
@@ -3296,8 +6057,8 @@
 
 
 <h3 id="corpustools.corpuspath.CorpusPath.log" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">log</span></code>
-  
+            <code class="highlight language-python"><span class="n">log</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
   </span>
@@ -3305,10 +6066,11 @@
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
-      <p>Return the path of the log file.</p>
-  </div>
+    <div class="doc doc-contents ">
+
+        <p>Return the path of the log file.</p>
+
+    </div>
 
 </div>
 
@@ -3317,8 +6079,8 @@
 
 
 <h3 id="corpustools.corpuspath.CorpusPath.orig" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">orig</span></code>
-  
+            <code class="highlight language-python"><span class="n">orig</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
   </span>
@@ -3326,10 +6088,11 @@
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
-      <p>Return the path of the original file.</p>
-  </div>
+    <div class="doc doc-contents ">
+
+        <p>Return the path of the original file.</p>
+
+    </div>
 
 </div>
 
@@ -3338,8 +6101,8 @@
 
 
 <h3 id="corpustools.corpuspath.CorpusPath.tca2_input" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">tca2_input</span></code>
-  
+            <code class="highlight language-python"><span class="n">tca2_input</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
   </span>
@@ -3347,28 +6110,34 @@
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
-      <p>Compute the name of the tca2 input file.</p>
+    <div class="doc doc-contents ">
 
-  <p><strong>Returns:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
+        <p>Compute the name of the tca2 input file.</p>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
         <tr>
-          <td>
-                <code>pathlib.<span title="pathlib.Path">Path</span></code>
-          </td>
-          <td><p>the name of the tca2 input file</p></td>
+          <th>Type</th>
+          <th>Description</th>
         </tr>
-    </tbody>
-  </table>
-  </div>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="pathlib.Path">Path</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>the name of the tca2 input file</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+    </div>
 
 </div>
 
@@ -3377,8 +6146,8 @@
 
 
 <h3 id="corpustools.corpuspath.CorpusPath.tca2_output" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">tca2_output</span></code>
-  
+            <code class="highlight language-python"><span class="n">tca2_output</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
   </span>
@@ -3386,28 +6155,34 @@
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
-      <p>Compute the name of the tca2 output file.</p>
+    <div class="doc doc-contents ">
 
-  <p><strong>Returns:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
+        <p>Compute the name of the tca2 output file.</p>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
         <tr>
-          <td>
-                <code>pathlib.<span title="pathlib.Path">Path</span></code>
-          </td>
-          <td><p>the name of the tca2 output file</p></td>
+          <th>Type</th>
+          <th>Description</th>
         </tr>
-    </tbody>
-  </table>
-  </div>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="pathlib.Path">Path</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>the name of the tca2 output file</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+    </div>
 
 </div>
 
@@ -3416,8 +6191,8 @@
 
 
 <h3 id="corpustools.corpuspath.CorpusPath.xsl" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">xsl</span></code>
-  
+            <code class="highlight language-python"><span class="n">xsl</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
   </span>
@@ -3425,49 +6200,148 @@
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
-      <p>Return the path of the metadata file.</p>
-  </div>
+    <div class="doc doc-contents ">
+
+        <p>Return the path of the metadata file.</p>
+
+    </div>
 
 </div>
+
 
 
 
 <div class="doc doc-object doc-function">
 
 
-
-<h3 id="corpustools.corpuspath.CorpusPath.__post_init__" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">__post_init__</span><span class="p">()</span></code>
+<h3 id="corpustools.corpuspath.CorpusPath.__getstate__" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">__getstate__</span><span class="p">()</span></code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
-      <p>Initialise the metadata attribute.</p>
+    <div class="doc doc-contents ">
 
-      <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/corpuspath.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">93</span>
-<span class="normal">94</span>
-<span class="normal">95</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialise the metadata attribute.&quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">xslsetter</span><span class="o">.</span><span class="n">MetadataHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xsl</span><span class="p">,</span> <span class="n">create</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <p>Return the dictionary of state of this object, for pickle.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>corpustools/corpuspath.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">289</span>
+<span class="normal">290</span>
+<span class="normal">291</span>
+<span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span>
+<span class="normal">296</span>
+<span class="normal">297</span>
+<span class="normal">298</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the dictionary of state of this object, for pickle.&quot;&quot;&quot;</span>
+    <span class="c1"># note the .copy(), to not alter the instance dictionary</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="c1"># The .metadata attribute contains an lxml.ElementTree, which cannot</span>
+    <span class="c1"># be picked. But, we can just restore it using __post_init__.</span>
+    <span class="k">del</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">d</span>
 </code></pre></div></td></tr></table></div>
-      </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
 <div class="doc doc-object doc-function">
 
 
+<h3 id="corpustools.corpuspath.CorpusPath.__post_init__" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">__post_init__</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Initialise the metadata attribute.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>corpustools/corpuspath.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialise the metadata attribute.&quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">xslsetter</span><span class="o">.</span><span class="n">MetadataHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xsl</span><span class="p">,</span> <span class="n">create</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># If we do not have access to the -orig part of the corpus</span>
+    <span class="c1"># at least read the parallel info from the converted doc</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">xsl</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">converted</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">conv_xml</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">converted</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">para_info</span> <span class="ow">in</span> <span class="n">conv_xml</span><span class="o">.</span><span class="n">iter</span><span class="p">(</span><span class="s2">&quot;parallel_text&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">set_parallel_text</span><span class="p">(</span>
+                <span class="n">language</span><span class="o">=</span><span class="n">para_info</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span>
+                    <span class="s2">&quot;{http://www.w3.org/XML/1998/namespace}lang&quot;</span>
+                <span class="p">],</span>
+                <span class="n">location</span><span class="o">=</span><span class="n">para_info</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;location&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="corpustools.corpuspath.CorpusPath.__setstate__" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">__setstate__</span><span class="p">(</span><span class="n">state</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Set the state of the object, after deserializing with pickle.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>corpustools/corpuspath.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">300</span>
+<span class="normal">301</span>
+<span class="normal">302</span>
+<span class="normal">303</span>
+<span class="normal">304</span>
+<span class="normal">305</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the state of the object, after deserializing with pickle.&quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+    <span class="c1"># restore self.metadata, using self.__post_init__</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">__post_init__</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
 
 <h3 id="corpustools.corpuspath.CorpusPath.crop_to_bytes" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">crop_to_bytes</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">max_bytes</span><span class="p">)</span></code>
-  
+            <code class="highlight language-python"><span class="n">crop_to_bytes</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">max_bytes</span><span class="p">)</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
   </span>
@@ -3475,23 +6349,24 @@
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
-      <p>Ensure <code>name</code> is less than <code>max_bytes</code> bytes.</p>
+    <div class="doc doc-contents ">
+
+        <p>Ensure <code>name</code> is less than <code>max_bytes</code> bytes.</p>
 <p>Do not split name in the middle of a wide byte.</p>
 
-      <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/corpuspath.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">257</span>
-<span class="normal">258</span>
-<span class="normal">259</span>
-<span class="normal">260</span>
-<span class="normal">261</span>
-<span class="normal">262</span>
-<span class="normal">263</span>
-<span class="normal">264</span>
-<span class="normal">265</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
-<span class="k">def</span> <span class="nf">crop_to_bytes</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">max_bytes</span><span class="p">):</span>
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>corpustools/corpuspath.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">crop_to_bytes</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">max_bytes</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Ensure `name` is less than `max_bytes` bytes.</span>
 
 <span class="sd">    Do not split name in the middle of a wide byte.</span>
@@ -3500,34 +6375,122 @@
         <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">name</span>
 </code></pre></div></td></tr></table></div>
-      </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
 <div class="doc doc-object doc-function">
 
 
-
-<h3 id="corpustools.corpuspath.CorpusPath.korp_tmx" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">korp_tmx</span><span class="p">(</span><span class="n">target_language</span><span class="p">)</span></code>
+<h3 id="corpustools.corpuspath.CorpusPath.is_convertable" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">is_convertable</span><span class="p">(</span><span class="n">goldstandard</span><span class="p">)</span></code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
-      <p>Return the path to korp processed tmx file.</p>
+    <div class="doc doc-contents ">
 
-      <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/corpuspath.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">180</span>
-<span class="normal">181</span>
-<span class="normal">182</span>
-<span class="normal">183</span>
-<span class="normal">184</span>
-<span class="normal">185</span>
-<span class="normal">186</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">korp_tmx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_language</span><span class="p">):</span>
+        <p>Add file for conversion.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>xsl_file</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>path to a metadata file</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>corpustools/corpuspath.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">307</span>
+<span class="normal">308</span>
+<span class="normal">309</span>
+<span class="normal">310</span>
+<span class="normal">311</span>
+<span class="normal">312</span>
+<span class="normal">313</span>
+<span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">is_convertable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">goldstandard</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add file for conversion.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        xsl_file (str): path to a metadata file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span>
+    <span class="n">conversion_status</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">&quot;conversion_status&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">conversion_status</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No conversion_status set in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">orig</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">conversion_status</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;standard&quot;</span><span class="p">,</span> <span class="s2">&quot;ocr&quot;</span><span class="p">]</span>
+        <span class="ow">and</span> <span class="ow">not</span> <span class="n">goldstandard</span>
+    <span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
+        <span class="n">conversion_status</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;correct&quot;</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="n">goldstandard</span>
+    <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="corpustools.corpuspath.CorpusPath.korp_tmx" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">korp_tmx</span><span class="p">(</span><span class="n">target_language</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Return the path to korp processed tmx file.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>corpustools/corpuspath.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">korp_tmx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_language</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the path to korp processed tmx file.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">(</span>
         <span class="n">module</span><span class="o">=</span><span class="s2">&quot;korp_tmx&quot;</span><span class="p">,</span>
@@ -3535,111 +6498,124 @@
         <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;.tmx&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-      </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="corpustools.corpuspath.CorpusPath.name" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">name</span><span class="p">(</span><span class="n">module</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">corpus_lang</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target_lang</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filepath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">name</span><span class="p">(</span><span class="n">module</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">corpus_lang</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target_lang</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filepath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
-      <p>Returns a path based on the module and extension.</p>
+    <div class="doc doc-contents ">
 
-  <p><strong>Parameters:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Default</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td><code>module</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td><p>string containing some corpus module</p></td>
-          <td>
-                <code>None</code>
-          </td>
-        </tr>
-        <tr>
-          <td><code>corpus_lang</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td><p>corpus language, as a three letter language code</p></td>
-          <td>
-                <code>None</code>
-          </td>
-        </tr>
-        <tr>
-          <td><code>target_lang</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td><p>string containing the target language of a tmx
-file</p></td>
-          <td>
-                <code>None</code>
-          </td>
-        </tr>
-        <tr>
-          <td><code>filepath</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td><p>path to the file</p></td>
-          <td>
-                <code>None</code>
-          </td>
-        </tr>
-        <tr>
-          <td><code>suffix</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td><p>file suffix</p></td>
-          <td>
-                <code>None</code>
-          </td>
-        </tr>
-    </tbody>
-  </table>
+        <p>Returns a path based on the module and extension.</p>
 
-      <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/corpuspath.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">128</span>
-<span class="normal">129</span>
-<span class="normal">130</span>
-<span class="normal">131</span>
-<span class="normal">132</span>
-<span class="normal">133</span>
-<span class="normal">134</span>
-<span class="normal">135</span>
-<span class="normal">136</span>
-<span class="normal">137</span>
-<span class="normal">138</span>
-<span class="normal">139</span>
-<span class="normal">140</span>
-<span class="normal">141</span>
-<span class="normal">142</span>
-<span class="normal">143</span>
-<span class="normal">144</span>
-<span class="normal">145</span>
-<span class="normal">146</span>
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>module</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>string containing some corpus module</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>corpus_lang</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>corpus language, as a three letter language code</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>target_lang</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>string containing the target language of a tmx
+file</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>filepath</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>path to the file</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>suffix</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>file suffix</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>corpustools/corpuspath.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">146</span>
 <span class="normal">147</span>
 <span class="normal">148</span>
 <span class="normal">149</span>
@@ -3650,14 +6626,32 @@ file</p></td>
 <span class="normal">154</span>
 <span class="normal">155</span>
 <span class="normal">156</span>
-<span class="normal">157</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">name</span><span class="p">(</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">module</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">corpus_lang</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">target_lang</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">filepath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">suffix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-<span class="p">):</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a path based on the module and extension.</span>
 
 <span class="sd">    Args:</span>
@@ -3668,8 +6662,8 @@ file</p></td>
 <span class="sd">        filepath (str): path to the file</span>
 <span class="sd">        suffix (str): file suffix</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">this_module</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="n">module</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">module</span>
-    <span class="n">this_target_lang</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="n">target_lang</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">target_lang</span>
+    <span class="n">this_module</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">module</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">module</span>
+    <span class="n">this_target_lang</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">target_lang</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">target_lang</span>
     <span class="n">this_filepath</span> <span class="o">=</span> <span class="p">(</span>
         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">filepath</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="kc">None</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="n">filepath</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">suffix</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="kc">None</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="n">suffix</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -3681,222 +6675,91 @@ file</p></td>
         <span class="o">/</span> <span class="n">this_filepath</span>
     <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-      </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
 <div class="doc doc-object doc-function">
-
 
 
 <h3 id="corpustools.corpuspath.CorpusPath.parallel" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">parallel</span><span class="p">(</span><span class="n">language</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">parallel</span><span class="p">(</span><span class="n">language</span><span class="p">)</span></code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
-      <p>Check if there is a parallel for language.</p>
+    <div class="doc doc-contents ">
 
-  <p><strong>Parameters:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Default</th>
-      </tr>
-    </thead>
-    <tbody>
+        <p>Check if there is a parallel for language.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
         <tr>
-          <td><code>language</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td><p>language of the parallel file.</p></td>
-          <td>
-              <em>required</em>
-          </td>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
         </tr>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>language</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>language of the parallel file.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-  <p><strong>Returns:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
         <tr>
-          <td>
-                <code>pathlib.<span title="pathlib.Path">Path</span></code>
-          </td>
-          <td><p>path to the parallel file if it exist, else None</p></td>
+          <th>Type</th>
+          <th>Description</th>
         </tr>
-    </tbody>
-  </table>
-
-      <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/corpuspath.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">188</span>
-<span class="normal">189</span>
-<span class="normal">190</span>
-<span class="normal">191</span>
-<span class="normal">192</span>
-<span class="normal">193</span>
-<span class="normal">194</span>
-<span class="normal">195</span>
-<span class="normal">196</span>
-<span class="normal">197</span>
-<span class="normal">198</span>
-<span class="normal">199</span>
-<span class="normal">200</span>
-<span class="normal">201</span>
-<span class="normal">202</span>
-<span class="normal">203</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">parallel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">language</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if there is a parallel for language.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        language (str): language of the parallel file.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        (pathlib.Path): path to the parallel file if it exist, else None</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get_parallel_texts</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">language</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">(</span>
-            <span class="n">corpus_lang</span><span class="o">=</span><span class="n">language</span><span class="p">,</span>
-            <span class="n">filepath</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="o">.</span><span class="n">with_name</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get_parallel_texts</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">language</span><span class="p">)</span>
-            <span class="p">),</span>
-        <span class="p">)</span>
-</code></pre></div></td></tr></table></div>
-      </details>
-  </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="pathlib.Path">Path</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>path to the parallel file if it exist, else None</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
 
-
-<h3 id="corpustools.corpuspath.CorpusPath.parallels" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">parallels</span><span class="p">()</span></code>
-
-</h3>
-
-
-  <div class="doc doc-contents ">
-  
-      <p>Return paths to all parallel files.</p>
-
-  <p><strong>Yields:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td>
-                <code>str</code>
-          </td>
-          <td><p>path to the orig path of a parallel file.</p></td>
-        </tr>
-    </tbody>
-  </table>
-
-      <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/corpuspath.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">205</span>
-<span class="normal">206</span>
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>corpustools/corpuspath.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">206</span>
 <span class="normal">207</span>
 <span class="normal">208</span>
 <span class="normal">209</span>
 <span class="normal">210</span>
 <span class="normal">211</span>
 <span class="normal">212</span>
-<span class="normal">213</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">parallels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return paths to all parallel files.</span>
-
-<span class="sd">    Yields:</span>
-<span class="sd">        (str): path to the orig path of a parallel file.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="p">(</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">parallel</span><span class="p">(</span><span class="n">language</span><span class="p">)</span> <span class="k">for</span> <span class="n">language</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get_parallel_texts</span><span class="p">()</span>
-    <span class="p">)</span>
-</code></pre></div></td></tr></table></div>
-      </details>
-  </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-
-<h3 id="corpustools.corpuspath.CorpusPath.tmx" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">tmx</span><span class="p">(</span><span class="n">target_language</span><span class="p">)</span></code>
-
-</h3>
-
-
-  <div class="doc doc-contents ">
-  
-      <p>Name of the tmx file.</p>
-
-  <p><strong>Parameters:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Default</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td><code>target_language</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td><p>language of the parallel</p></td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-  <p><strong>Returns:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td>
-                <code>str</code>
-          </td>
-          <td><p>path to the tmx file</p></td>
-        </tr>
-    </tbody>
-  </table>
-
-      <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/corpuspath.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">215</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
 <span class="normal">216</span>
 <span class="normal">217</span>
 <span class="normal">218</span>
@@ -3906,10 +6769,178 @@ file</p></td>
 <span class="normal">222</span>
 <span class="normal">223</span>
 <span class="normal">224</span>
-<span class="normal">225</span>
-<span class="normal">226</span>
-<span class="normal">227</span>
-<span class="normal">228</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">tmx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_language</span><span class="p">):</span>
+<span class="normal">225</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">parallel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">language</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if there is a parallel for language.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        language: language of the parallel file.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        (pathlib.Path): path to the parallel file if it exist, else None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">(</span>
+            <span class="n">corpus_lang</span><span class="o">=</span><span class="n">language</span><span class="p">,</span>
+            <span class="n">filepath</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="o">.</span><span class="n">with_name</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get_parallel_texts</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">language</span><span class="p">)</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get_parallel_texts</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">language</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">else</span> <span class="kc">None</span>
+    <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="corpustools.corpuspath.CorpusPath.parallels" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">parallels</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Return paths to all parallel files.</p>
+
+
+    <p><span class="doc-section-title">Yields:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>path to the orig path of a parallel file.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>corpustools/corpuspath.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">parallels</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return paths to all parallel files.</span>
+
+<span class="sd">    Yields:</span>
+<span class="sd">        (str): path to the orig path of a parallel file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parallel</span><span class="p">(</span><span class="n">language</span><span class="p">)</span> <span class="k">for</span> <span class="n">language</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get_parallel_texts</span><span class="p">()</span>
+    <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="corpustools.corpuspath.CorpusPath.tmx" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">tmx</span><span class="p">(</span><span class="n">target_language</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Name of the tmx file.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>target_language</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>language of the parallel</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>path to the tmx file</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>corpustools/corpuspath.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">tmx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_language</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Name of the tmx file.</span>
 
 <span class="sd">    Args:</span>
@@ -3924,8 +6955,8 @@ file</p></td>
         <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;.tmx&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-      </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
@@ -3933,7 +6964,7 @@ file</p></td>
 
   </div>
 
-  </div>
+    </div>
 
 </div>
 
@@ -3941,28 +6972,28 @@ file</p></td>
 <div class="doc doc-object doc-function">
 
 
-
 <h2 id="corpustools.corpuspath.collect_files" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">collect_files</span><span class="p">(</span><span class="n">entities</span><span class="p">,</span> <span class="n">suffix</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">collect_files</span><span class="p">(</span><span class="n">entities</span><span class="p">,</span> <span class="n">suffix</span><span class="p">)</span></code>
 
 </h2>
 
 
-  <div class="doc doc-contents ">
-  
-      <p>Collect files with the specified suffix.</p>
+    <div class="doc doc-contents ">
 
-      <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/corpuspath.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">268</span>
-<span class="normal">269</span>
-<span class="normal">270</span>
-<span class="normal">271</span>
-<span class="normal">272</span>
-<span class="normal">273</span>
-<span class="normal">274</span>
-<span class="normal">275</span>
-<span class="normal">276</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">collect_files</span><span class="p">(</span><span class="n">entities</span><span class="p">,</span> <span class="n">suffix</span><span class="p">):</span>
+        <p>Collect files with the specified suffix.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>corpustools/corpuspath.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">328</span>
+<span class="normal">329</span>
+<span class="normal">330</span>
+<span class="normal">331</span>
+<span class="normal">332</span>
+<span class="normal">333</span>
+<span class="normal">334</span>
+<span class="normal">335</span>
+<span class="normal">336</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">collect_files</span><span class="p">(</span><span class="n">entities</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">suffix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Collect files with the specified suffix.&quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
         <span class="n">entity_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
@@ -3972,72 +7003,110 @@ file</p></td>
             <span class="k">for</span> <span class="n">file_</span> <span class="ow">in</span> <span class="n">entity_path</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;*</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">):</span>
                 <span class="k">yield</span> <span class="n">file_</span>
 </code></pre></div></td></tr></table></div>
-      </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
 <div class="doc doc-object doc-function">
 
 
-
 <h2 id="corpustools.corpuspath.make_corpus_path" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">make_corpus_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">make_corpus_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span></code>
 
 </h2>
 
 
-  <div class="doc doc-contents ">
+    <div class="doc doc-contents ">
+
+        <p>Returns a CorpusPath from a given path</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>path</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>a path to a corpus file</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="CorpusPath
+
+
   
-      <p>Returns a CorpusPath from a given path</p>
+      dataclass
+   (corpustools.corpuspath.CorpusPath)" href="#corpustools.corpuspath.CorpusPath">CorpusPath</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A CorpusPath object</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-  <p><strong>Parameters:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Default</th>
-      </tr>
-    </thead>
-    <tbody>
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
         <tr>
-          <td><code>path</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td><p>a path to a corpus file</p></td>
-          <td>
-              <em>required</em>
-          </td>
+          <th>Type</th>
+          <th>Description</th>
         </tr>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="ValueError">ValueError</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>the path is not part of a corpus.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-  <p><strong>Raises:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td>
-                <code>ValueError</code>
-          </td>
-          <td><p>the path is not part of a corpus.</p></td>
-        </tr>
-    </tbody>
-  </table>
 
-      <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/corpuspath.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">45</span>
-<span class="normal">46</span>
-<span class="normal">47</span>
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>corpustools/corpuspath.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">47</span>
 <span class="normal">48</span>
 <span class="normal">49</span>
 <span class="normal">50</span>
@@ -4071,17 +7140,27 @@ file</p></td>
 <span class="normal">78</span>
 <span class="normal">79</span>
 <span class="normal">80</span>
-<span class="normal">81</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">make_corpus_path</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">make_corpus_path</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;CorpusPath&quot;</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a CorpusPath from a given path</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        path (str): a path to a corpus file</span>
+<span class="sd">        path: a path to a corpus file</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A CorpusPath object</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        ValueError: the path is not part of a corpus.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">fix_filepath</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fix_filepath</span><span class="p">(</span><span class="n">filepath</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fix the filepath to be relative to the corpus root.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">MODULES</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">filepath</span><span class="o">.</span><span class="n">as_posix</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">module</span><span class="p">):</span>
                 <span class="n">mod_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">))</span>
@@ -4109,8 +7188,8 @@ file</p></td>
         <span class="n">filepath</span><span class="o">=</span><span class="n">fix_filepath</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">corpus_dict</span><span class="p">[</span><span class="s2">&quot;corpusfile&quot;</span><span class="p">])),</span>
     <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-      </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
@@ -4118,9 +7197,16 @@ file</p></td>
 
   </div>
 
-  </div>
+    </div>
 
 </div>
+
+
+
+
+
+
+
 
 
 
@@ -4131,12 +7217,14 @@ file</p></td>
             </div>
           
           
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
         
           <button type="button" class="md-top md-icon" data-md-component="top" hidden>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
-            Back to top
-          </button>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
         
       </main>
       
@@ -4163,10 +7251,14 @@ file</p></td>
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.top"], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.51198bba.min.js"></script>
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.top"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>
