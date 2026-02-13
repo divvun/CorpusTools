@@ -39,7 +39,6 @@ nav:
           - normalise_corpus_names: scripts/normalise_corpus_names.md
           - paracheck: scripts/paracheck.md
           - parallelize: scripts/parallelize.md
-          - pick_parallel_docs: scripts/pick_parallel_docs.md
           - remove_corpus_file: scripts/remove_corpus_file.md
           - reparallelize: scripts/reparallelize.md
           - saami_crawler: scripts/saami_crawler.md
