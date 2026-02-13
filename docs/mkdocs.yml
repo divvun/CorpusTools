@@ -1,4 +1,5 @@
 site_name: CorpusTools documentation
+site_url: "https://divvun.github.io/CorpusTools/"
 repo_name: "divvun/CorpusTools"
 repo_url: "https://github.com/divvun/CorpusTools"
 theme:
