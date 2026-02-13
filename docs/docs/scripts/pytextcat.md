@@ -1,4 +1,4 @@
-# text_cat
+# pytextcat
 
 Language detection and text categorization based on n-gram models. This tool
 implements the "N-Gram-Based Text Categorization" algorithm by Cavnar and
@@ -10,7 +10,7 @@ training data.
 ## Basic usage
 
 ```text
-text_cat [options] <subcommand>
+pytextcat [options] <subcommand>
 ```
 
 ## Subcommands
@@ -22,7 +22,7 @@ Classify input text and determine which language it is written in.
 #### Usage
 
 ```text
-text_cat proc [options] [model_dir]
+pytextcat proc [options] [model_dir]
 ```
 
 #### Arguments
@@ -35,7 +35,7 @@ text_cat proc [options] [model_dir]
 
 - `-l, --langs LANGS` - Comma-separated list of languages to classify between
   - By default, uses all languages found in `model_dir`
-  - Example: `text_cat proc -l sme,nob,sma`
+  - Example: `pytextcat proc -l sme,nob,sma`
 
 - `-u DROP_RATIO` - Threshold for filtering character model results (default:
   1.1)
@@ -49,19 +49,19 @@ text_cat proc [options] [model_dir]
 Classify a single text:
 
 ```sh
-echo "Boadát go" | text_cat proc
+echo "Boadát go" | pytextcat proc
 ```
 
 Classify multiple lines, one per line:
 
 ```sh
-cat myfile.txt | text_cat proc -s
+cat myfile.txt | pytextcat proc -s
 ```
 
 Classify using only specific languages:
 
 ```sh
-echo "Dette er norsk" | text_cat proc -l nob,swe,dan
+echo "Dette er norsk" | pytextcat proc -l nob,swe,dan
 ```
 
 ### complm - Compile character model
@@ -75,7 +75,7 @@ classifier in language detection.
 #### Usage
 
 ```text
-text_cat complm [options] < input_text > output_model
+pytextcat complm [options] < input_text > output_model
 ```
 
 #### Input
@@ -106,19 +106,19 @@ The compiler:
 Compile a model from a text file:
 
 ```sh
-text_cat complm < corpus.txt > mylangs.lm
+pytextcat complm < corpus.txt > mylangs.lm
 ```
 
 Compile from a gzipped file:
 
 ```sh
-gunzip -c corpus.txt.gz | text_cat complm > mylangs.lm
+gunzip -c corpus.txt.gz | pytextcat complm > mylangs.lm
 ```
 
 Compile with verbose output:
 
 ```sh
-text_cat complm -V < corpus.txt > mylangs.lm 2>compile.log
+pytextcat complm -V < corpus.txt > mylangs.lm 2>compile.log
 ```
 
 ### compwm - Compile word model
@@ -132,7 +132,7 @@ uncertain.
 #### Usage
 
 ```text
-text_cat compwm [options] < input_text > output_model
+pytextcat compwm [options] < input_text > output_model
 ```
 
 #### Input
@@ -171,18 +171,18 @@ The compiler:
 Compile a model from a text file:
 
 ```sh
-text_cat compwm < corpus.txt > mylangs.wm
+pytextcat compwm < corpus.txt > mylangs.wm
 ```
 
 Filter and compile from a large corpus:
 
 ```sh
-cat large_corpus.txt | head -1000000 | text_cat compwm > mylangs.wm
+cat large_corpus.txt | head -1000000 | pytextcat compwm > mylangs.wm
 ```
 
 Compile with verbose output:
 ```sh
-text_cat compwm -V < corpus.txt > mylangs.wm 2>compile.log
+pytextcat compwm -V < corpus.txt > mylangs.wm 2>compile.log
 ```
 
 ### compdir - Compile models from directory
@@ -196,7 +196,7 @@ directory.
 #### Usage
 
 ```text
-text_cat compdir [options] <corpus_directory> <output_directory>
+pytextcat compdir [options] <corpus_directory> <output_directory>
 ```
 
 #### Arguments
@@ -235,7 +235,7 @@ Files should be named like:
 Compile models from a corpus directory with verbose output:
 
 ```sh
-text_cat compdir -V /path/to/corpus /path/to/models
+pytextcat compdir -V /path/to/corpus /path/to/models
 ```
 
 ## Model file formats
