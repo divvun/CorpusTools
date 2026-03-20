@@ -466,21 +466,18 @@ def make_digest(bytestring: bytes) -> str:
 
 
 def lang_resource_dirs(lang: str) -> list[Path]:
-    """Get the path to the language resources.
+    """Return the list of directories to search for language model resources.
 
     Args:
         lang: the language that modes is asked to serve.
 
     Returns:
-        A path to the zpipe file.
+        A list of Paths, the directories.
     """
     return [
-        prefix / "share" / "giella" / lang
-        for prefix in [
-            Path().home() / ".local",
-            Path("/usr/local"),
-            Path("/usr"),
-        ]
+        Path.home() / ".local/share/giella" / lang,
+        Path("/usr/local/share/giella") / lang,
+        Path("/usr/share/giella") / lang,
     ]
 
 

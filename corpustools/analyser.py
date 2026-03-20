@@ -21,7 +21,6 @@
 import argparse
 import os
 import sys
-from functools import lru_cache
 from pathlib import Path
 
 from lxml import etree
@@ -71,7 +70,7 @@ def dependency_analysis(path: corpuspath.CorpusPath, analysed_text: str) -> None
 
     body = etree.SubElement(parent, "body")
     dependency = etree.SubElement(body, "dependency")
-    dependency.text = str(etree.CDATA(analysed_text))
+    dependency.text = etree.CDATA(analysed_text)
 
     with util.ignored(OSError):
         os.makedirs(os.path.dirname(path.analysed))
@@ -93,8 +92,7 @@ LANGUAGES = {
 }
 
 
-@lru_cache(maxsize=None)
-def valid_path(lang: str) -> Path:
+def find_analyzer_zpipe(lang: str) -> Path | None:
     """Check if resources needed by modes exists.
 
     Args:
@@ -102,9 +100,6 @@ def valid_path(lang: str) -> Path:
 
     Returns:
         A path to the zpipe file.
-
-    Raises:
-        utils.ArgumentError: if no resources are found.
     """
     archive_name = f"{LANGUAGES.get(lang, lang)}.zpipe"
     for lang_dir in lang_resource_dirs(lang):
@@ -112,19 +107,16 @@ def valid_path(lang: str) -> Path:
         if full_path.exists():
             return full_path
 
-    raise (util.ArgumentError(f"ERROR: found no resources for {lang}"))
 
-
-def analyse(xml_path: corpuspath.CorpusPath) -> None:
+def analyse(xml_path: corpuspath.CorpusPath, analyzer_zpipe_path: Path) -> None:
     """Analyse a file."""
-    zpipe_path = valid_path(xml_path.lang)
     variant_name = get_modename(xml_path)
 
     try:
         dependency_analysis(
             xml_path,
             analysed_text=run_external_command(
-                command=f"divvun-checker -a {zpipe_path} -n {variant_name}".split(),
+                command=f"divvun-checker -a {analyzer_zpipe_path} -n {variant_name}".split(),
                 instring=ccatter(xml_path),
             ),
         )
@@ -133,25 +125,21 @@ def analyse(xml_path: corpuspath.CorpusPath) -> None:
         print("The error was:", str(error), file=sys.stderr)
 
 
-def analyse_in_parallel(file_list: list[corpuspath.CorpusPath], pool_size: int):
-    """Analyse file in parallel."""
+def analyse_in_parallel(
+    file_list: list[corpuspath.CorpusPath],
+    pool_size: int,
+    analyzer_zpipe_path: Path,
+):
     print(f"Parallel analysis of {len(file_list)} files with {pool_size} workers")
-    # Here we know that we are looking at the .converted file,
-    enhanced_file_list: list[tuple[corpuspath.CorpusPath, int]] = [
-        (file, os.path.getsize(file.converted)) for file in file_list
-    ]
-
-    # sort the file list by size, smallest first
-    enhanced_file_list.sort(key=lambda entry: entry[1])
-
-    # and turn the list of 2-tuples [[a, b, c, d], [1, 2, 3, 4]] back to
-    # two lists: [a, b, c, d] and [1, 2, 3, 4]
-    corpus_paths, file_sizes = zip(*enhanced_file_list, strict=True)
+    files_with_sizes = [(file, file.converted.stat().st_size) for file in file_list]
+    files_with_sizes.sort(key=lambda item: item[1])
+    files, sizes = zip(*files_with_sizes)
     util.run_in_parallel(
         function=analyse,
         max_workers=pool_size,
-        file_list=list(corpus_paths),
-        file_sizes=list(file_sizes),
+        file_list=list(files),
+        file_sizes=list(sizes),
+        analyzer_zpipe_path=analyzer_zpipe_path,
     )
 
 
@@ -212,6 +200,20 @@ def main():
         path for path in corpuspath_paths if not path.metadata.get_variable("ocr")
     ]
 
+    if not analysable_paths:
+        sys.exit("No files to analyze")
+
+    lang = analysable_paths[0].lang
+    analyzer_path = find_analyzer_zpipe(lang)
+    if analyzer_path is None:
+        search_paths = ", ".join(str(p) for p in lang_resource_dirs(lang))
+        archive_name = f"{LANGUAGES.get(lang, lang)}.zpipe"
+        sys.exit(
+            "Missing language models to do analysis.\n"
+            f"file '{archive_name}' not found (searched {search_paths})"
+        )
+    print(f"Found analyzer: {analyzer_path}")
+
     if args.skip_existing:
         non_skipped_files = [
             analysable_path
@@ -232,7 +234,7 @@ def main():
         if args.serial:
             analyse_serially(analysable_paths)
         else:
-            analyse_in_parallel(analysable_paths, args.ncpus)
+            analyse_in_parallel(analysable_paths, args.ncpus, analyzer_path)
     except util.ArgumentError as error:
         print(f"Cannot do analysis\n{str(error)}", file=sys.stderr)
         raise SystemExit(1) from error
