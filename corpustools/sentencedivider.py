@@ -67,7 +67,7 @@ def tokenise(text: str, lang: str) -> str:
 
 
 def make_sentences(tokenised_output: str) -> Iterator[str]:
-    """Turn ccat output into cleaned up sentences.
+    """Turn tokenised output into cleaned up sentences.
 
     Args:
         tokenised_output (str): plain text output of ccat.
