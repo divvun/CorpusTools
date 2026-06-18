@@ -566,17 +566,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
         )
         pdftohtmloutput = self.extract_text(command.split())
 
-        return self.pdftohtml2intermediate(self.remove_control_chars(pdftohtmloutput))
-
-    def remove_control_chars(self, text: str) -> str:
-        """Remove control characters from a string.
-
-        Args:
-            text: the string to be modified
-        Returns:
-            the modified string
-        """
-        return CONTROL_CHAR_RE.sub("", text)
+        return self.pdftohtml2intermediate(pdftohtmloutput)
 
     @staticmethod
     def possibly_add_to_body(body, this_p):
