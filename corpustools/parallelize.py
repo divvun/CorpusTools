@@ -33,6 +33,7 @@ from corpustools import (
     corpuspath,
     generate_anchor_list,
     sentencedivider,
+    util,
 )
 
 HERE = os.path.dirname(__file__)
@@ -142,15 +143,24 @@ def get_dictionary(lang1: str, lang2: str) -> str:
 def get_filepair(
     orig_path: corpuspath.CorpusPath, para_lang: str
 ) -> tuple[corpuspath.CorpusPath, corpuspath.CorpusPath]:
+    print(f"Processing {orig_path.orig} with language {para_lang}...")
     if is_translated_from_lang2(orig_path, para_lang):
         para_path = orig_path
+        source_parallel = para_path.parallel(para_path.lang)
+        if source_parallel is None:
+            print(orig_path.orig, "is translated from", para_lang, "but has no parallel file in", orig_path.lang)
+            raise TypeError()
         source_path = corpuspath.make_corpus_path(
-            para_path.parallel(para_path.lang).as_posix()
+            source_parallel.as_posix()
         )
     else:
         source_path = orig_path
+        para_parallel = source_path.parallel(para_lang)
+        if para_parallel is None:
+            print(orig_path.orig, "is not translated from", para_lang, "and has no parallel file in", orig_path.lang)   
+            raise TypeError
         para_path = corpuspath.make_corpus_path(
-            source_path.parallel(para_lang).as_posix()
+            para_parallel.as_posix()
         )
 
     return para_path, source_path
