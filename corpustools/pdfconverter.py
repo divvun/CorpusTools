@@ -27,6 +27,7 @@ from corpustools import basicconverter, util, xslsetter
 
 LETTER_AT_START = re.compile(r"[^\W\d_].*", re.UNICODE)
 LETTER_HYPHEN_AT_END = re.compile(r".*[^\W\d_]-$", re.UNICODE)
+CONTROL_CHAR_RE = re.compile(r"[\x00-\x1F\x7F-\x9F]")
 
 
 def styles(page_style):
@@ -503,8 +504,9 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
         Returns:
             (str): containing the modified version of the document.
         """
-        remove_re = re.compile(f"[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F{extra}]")
-        content, _ = remove_re.subn("", content)
+        content, _ = CONTROL_CHAR_RE.subn("", content)
+        if extra:
+            content = re.sub(f"[{re.escape(extra)}]", "", content)
 
         # Microsoft Word PDF's have Latin-1 file names in links; we
         # don't actually need any link attributes:
@@ -563,7 +565,18 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
             f"-wbt {self.metadata.get_variable('word_break_threshold')} {self.orig}"
         )
         pdftohtmloutput = self.extract_text(command.split())
-        return self.pdftohtml2intermediate(pdftohtmloutput)
+
+        return self.pdftohtml2intermediate(self.remove_control_chars(pdftohtmloutput))
+
+    def remove_control_chars(self, text: str) -> str:
+        """Remove control characters from a string.
+
+        Args:
+            text: the string to be modified
+        Returns:
+            the modified string
+        """
+        return CONTROL_CHAR_RE.sub("", text)
 
     @staticmethod
     def possibly_add_to_body(body, this_p):
