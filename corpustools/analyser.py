@@ -91,6 +91,7 @@ LANGUAGES = {
     "swe": "sv",
     "nob": "nb",
     "nno": "nn",
+    "fao": "fo",
 }
 
 
