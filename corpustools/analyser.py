@@ -21,7 +21,9 @@
 import argparse
 import os
 import sys
+from functools import partial
 from pathlib import Path
+from typing import Callable
 
 from lxml import etree
 
@@ -135,13 +137,15 @@ def analyse_in_parallel(
     print(f"Parallel analysis of {len(file_list)} files with {pool_size} workers")
     files_with_sizes = [(file, file.converted.stat().st_size) for file in file_list]
     files_with_sizes.sort(key=lambda item: item[1])
-    files, sizes = zip(*files_with_sizes)
+    files, sizes = zip(*files_with_sizes, strict=True)
+    analyse_one: Callable[[corpuspath.CorpusPath], None] = partial(
+        analyse, analyzer_zpipe_path=analyzer_zpipe_path
+    )
     util.run_in_parallel(
-        function=analyse,
+        function=analyse_one,
         max_workers=pool_size,
         file_list=list(files),
         file_sizes=list(sizes),
-        analyzer_zpipe_path=analyzer_zpipe_path,
     )
 
 
