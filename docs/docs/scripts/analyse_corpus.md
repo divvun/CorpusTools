@@ -20,7 +20,7 @@ Configure the language, use at least these to options `--prefix=$HOME/.local
 --enable-tokenisers`
 
 ```sh
-./configure --prefix=$HOME/.local --enable-tokenisers # add your own flags to taste
+./configure --prefix=$HOME/.local --enable-analyser-tool --enable-tokenisers # add your own flags to taste
 make install
 ```
 
@@ -46,26 +46,22 @@ The complete help text from the program:
 ```sh
 usage: analyse_corpus [-h] [--version] [--ncpus NCPUS] [--skip-existing]
                       [--serial]
-                      [-k {xfst,hfst,hfst_thirties,hfst_eighties,hfst_no_korp,trace-smegram-dev,trace-smegram}]
                       converted_entities [converted_entities ...]
 
 Analyse files in parallel.
 
 positional arguments:
-  converted_entities    converted files or director(y|ies) where the converted
-                        files exist
+  converted_entities  converted files or director(y|ies) where the converted
+                      files exist
 
 options:
-  -h, --help            show this help message and exit
-  --version             show program's version number and exit
-  --ncpus NCPUS         The number of cpus to use. If unspecified, defaults to
-                        using as many cpus as it can. Choose between 1-12,
-                        some (3), half (6), most (9) or all (12).
-  --skip-existing       Skip analysis of files thar are already analysed (that
-                        already exist in the analysed/ folder
-  --serial              When this argument is used files will be analysed one
-                        by one.Using --serial takes priority over --ncpus
-  -k {xfst,hfst,hfst_thirties,hfst_eighties,hfst_no_korp,trace-smegram-dev,trace-smegram}, --modename {xfst,hfst,hfst_thirties,hfst_eighties,hfst_no_korp,trace-smegram-dev,trace-smegram}
-                        You can set the analyser pipeline explicitely if you
-                        want.
+  -h, --help          show this help message and exit
+  --version           show program's version number and exit
+  --ncpus NCPUS       The number of cpus to use. If unspecified, defaults to
+                      using as many cpus as it can. Choose between 1-12, some
+                      (3), half (6), most (9) or all (12).
+  --skip-existing     Skip analysis of files that already are analysed (==
+                      already exist in the analysed/ folder)
+  --serial            When this argument is used files will be analysed one by
+                      one. Using --serial takes priority over --ncpus
 ```
