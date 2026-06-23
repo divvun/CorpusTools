@@ -144,7 +144,8 @@ def analyse_in_parallel(
     )
 
 
-def analyse_serially(file_list: list[corpuspath.CorpusPath]):
+def analyse_serially(file_list: list[corpuspath.CorpusPath],
+    analyzer_zpipe_path: Path,):
     """Analyse files one by one."""
     print(f"Starting the analysis of {len(file_list)} files")
 
@@ -158,7 +159,7 @@ def analyse_serially(file_list: list[corpuspath.CorpusPath]):
             f"Analysing {xml_file.converted} [{fileno} of {len(file_list)}]"
         )
         util.print_frame("*" * 79)
-        analyse(xml_file)
+        analyse(xml_file, analyzer_zpipe_path)
 
 
 def parse_options():
@@ -233,7 +234,7 @@ def main():
 
     try:
         if args.serial:
-            analyse_serially(analysable_paths)
+            analyse_serially(analysable_paths, analyzer_path)
         else:
             analyse_in_parallel(analysable_paths, args.ncpus, analyzer_path)
     except util.ArgumentError as error:
