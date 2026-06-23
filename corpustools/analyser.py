@@ -117,7 +117,8 @@ def analyse(xml_path: corpuspath.CorpusPath, analyzer_zpipe_path: Path) -> None:
         dependency_analysis(
             xml_path,
             analysed_text=run_external_command(
-                command=f"divvun-checker -a {analyzer_zpipe_path} -n {variant_name}".split(),
+                command=f"divvun-checker -a {analyzer_zpipe_path} "
+                f"-n {variant_name}".split(),
                 instring=ccatter(xml_path),
             ),
         )
@@ -144,8 +145,10 @@ def analyse_in_parallel(
     )
 
 
-def analyse_serially(file_list: list[corpuspath.CorpusPath],
-    analyzer_zpipe_path: Path,):
+def analyse_serially(
+    file_list: list[corpuspath.CorpusPath],
+    analyzer_zpipe_path: Path,
+):
     """Analyse files one by one."""
     print(f"Starting the analysis of {len(file_list)} files")
 
