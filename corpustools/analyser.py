@@ -190,6 +190,10 @@ def parse_options():
         "Using --serial takes priority over --ncpus",
     )
     parser.add_argument(
+        "--zpipe",
+        help="Use this specific .zpipe file",
+    )
+    parser.add_argument(
         "converted_entities",
         nargs="+",
         help="converted files or director(y|ies) where the converted files exist",
@@ -214,7 +218,13 @@ def main():
         sys.exit("No files to analyse")
 
     lang = analysable_paths[0].lang
-    analyser_path = find_analyser_zpipe(lang)
+    if args.zpipe is not None:
+        analyser_path = args.zpipe
+        if not Path(analyser_path).exists():
+            sys.exit(f"Given --zpipe path ({analyser_path}) does not exist")
+    else:
+        analyser_path = find_analyser_zpipe(lang)
+
     if analyser_path is None:
         search_paths = ", ".join(str(p) for p in lang_resource_dirs(lang))
         archive_name = f"{LANGUAGES.get(lang, lang)}.zpipe"
