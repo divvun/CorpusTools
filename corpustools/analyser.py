@@ -106,6 +106,7 @@ def find_analyzer_zpipe(lang: str) -> Path | None:
         full_path = lang_dir / archive_name
         if full_path.exists():
             return full_path
+    return None
 
 
 def analyse(xml_path: corpuspath.CorpusPath, analyzer_zpipe_path: Path) -> None:
