@@ -95,7 +95,7 @@ LANGUAGES = {
 }
 
 
-def find_analyzer_zpipe(lang: str) -> Path | None:
+def find_analyser_zpipe(lang: str) -> Path | None:
     """Check if resources needed by modes exists.
 
     Args:
@@ -112,7 +112,7 @@ def find_analyzer_zpipe(lang: str) -> Path | None:
     return None
 
 
-def analyse(xml_path: corpuspath.CorpusPath, analyzer_zpipe_path: Path) -> None:
+def analyse(xml_path: corpuspath.CorpusPath, analyser_zpipe_path: Path) -> None:
     """Analyse a file."""
     variant_name = get_modename(xml_path)
 
@@ -120,7 +120,7 @@ def analyse(xml_path: corpuspath.CorpusPath, analyzer_zpipe_path: Path) -> None:
         dependency_analysis(
             xml_path,
             analysed_text=run_external_command(
-                command=f"divvun-checker -a {analyzer_zpipe_path} "
+                command=f"divvun-checker -a {analyser_zpipe_path} "
                 f"-n {variant_name}".split(),
                 instring=ccatter(xml_path),
             ),
@@ -133,14 +133,14 @@ def analyse(xml_path: corpuspath.CorpusPath, analyzer_zpipe_path: Path) -> None:
 def analyse_in_parallel(
     file_list: list[corpuspath.CorpusPath],
     pool_size: int,
-    analyzer_zpipe_path: Path,
+    analyser_zpipe_path: Path,
 ):
     print(f"Parallel analysis of {len(file_list)} files with {pool_size} workers")
     files_with_sizes = [(file, file.converted.stat().st_size) for file in file_list]
     files_with_sizes.sort(key=lambda item: item[1])
     files, sizes = zip(*files_with_sizes, strict=True)
     analyse_one: Callable[[corpuspath.CorpusPath], None] = partial(
-        analyse, analyzer_zpipe_path=analyzer_zpipe_path
+        analyse, analyser_zpipe_path=analyser_zpipe_path
     )
     util.run_in_parallel(
         function=analyse_one,
@@ -152,7 +152,7 @@ def analyse_in_parallel(
 
 def analyse_serially(
     file_list: list[corpuspath.CorpusPath],
-    analyzer_zpipe_path: Path,
+    analyser_zpipe_path: Path,
 ):
     """Analyse files one by one."""
     print(f"Starting the analysis of {len(file_list)} files")
@@ -167,7 +167,7 @@ def analyse_serially(
             f"Analysing {xml_file.converted} [{fileno} of {len(file_list)}]"
         )
         util.print_frame("*" * 79)
-        analyse(xml_file, analyzer_zpipe_path)
+        analyse(xml_file, analyser_zpipe_path)
 
 
 def parse_options():
@@ -211,18 +211,18 @@ def main():
     ]
 
     if not analysable_paths:
-        sys.exit("No files to analyze")
+        sys.exit("No files to analyse")
 
     lang = analysable_paths[0].lang
-    analyzer_path = find_analyzer_zpipe(lang)
-    if analyzer_path is None:
+    analyser_path = find_analyser_zpipe(lang)
+    if analyser_path is None:
         search_paths = ", ".join(str(p) for p in lang_resource_dirs(lang))
         archive_name = f"{LANGUAGES.get(lang, lang)}.zpipe"
         sys.exit(
             "Missing language models to do analysis.\n"
             f"file '{archive_name}' not found (searched {search_paths})"
         )
-    print(f"Found analyzer: {analyzer_path}")
+    print(f"Found analyser: {analyser_path}")
 
     if args.skip_existing:
         non_skipped_files = [
@@ -242,9 +242,9 @@ def main():
 
     try:
         if args.serial:
-            analyse_serially(analysable_paths, analyzer_path)
+            analyse_serially(analysable_paths, analyser_path)
         else:
-            analyse_in_parallel(analysable_paths, args.ncpus, analyzer_path)
+            analyse_in_parallel(analysable_paths, args.ncpus, analyser_path)
     except util.ArgumentError as error:
         print(f"Cannot do analysis\n{str(error)}", file=sys.stderr)
         raise SystemExit(1) from error
