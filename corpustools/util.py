@@ -497,7 +497,7 @@ def run_external_command(command: list[str], instring: str) -> str:
     runner = ExternalCommandRunner()
     runner.run(command, to_stdin=instring.encode("utf8"))
 
-    if runner.stderr:
+    if runner.stderr and not runner.stdout:
         raise UserWarning(f"{' '.join(command)} failed:\n{runner.stderr}")
 
     return runner.stdout.decode("utf8")
