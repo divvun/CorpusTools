@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "corpustools"
-version = "2.5.3"
+version = "2.5.4"
 description = "Manage giellalt corpora"
 authors = [
     "Børre Gaup <albbas@gmail.com>",

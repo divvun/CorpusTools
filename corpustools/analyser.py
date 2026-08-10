@@ -23,6 +23,7 @@ import os
 import sys
 from functools import partial
 from pathlib import Path
+from subprocess import PIPE, run
 from typing import Callable
 
 from lxml import etree
@@ -30,7 +31,7 @@ from lxml import etree
 from corpustools import argparse_version, corpuspath, util
 from corpustools.ccat import ccatter
 from corpustools.common_arg_ncpus import NCpus
-from corpustools.util import lang_resource_dirs, run_external_command
+from corpustools.util import lang_resource_dirs
 
 
 def get_modename(path: corpuspath.CorpusPath) -> str:
@@ -115,18 +116,32 @@ def find_analyser_zpipe(lang: str) -> Path | None:
 def analyse(xml_path: corpuspath.CorpusPath, analyser_zpipe_path: Path) -> None:
     """Analyse a file."""
     variant_name = get_modename(xml_path)
+    
+    analysis_result = run(
+        f"divvun-checker -a {analyser_zpipe_path} -n {variant_name}".split(),
+        input=ccatter(xml_path),
+        text=True,
+        stdout=PIPE,
+        stderr=PIPE,
+        check=False,
+    )
+    if analysis_result.stderr and not analysis_result.stdout:
+        raise UserWarning(
+            f"divvun-checker failed for {xml_path.analysed}: {analysis_result.stderr}"
+        )
+
+    if analysis_result.stderr:
+        print(
+            f"divvun-checker produced warnings for {xml_path.analysed}: "
+            f"{analysis_result.stderr}",
+            file=sys.stderr,
+        )
+        xml_path.log.write_text(analysis_result.stderr, encoding="utf-8")
 
     try:
-        dependency_analysis(
-            xml_path,
-            analysed_text=run_external_command(
-                command=f"divvun-checker -a {analyser_zpipe_path} "
-                f"-n {variant_name}".split(),
-                instring=ccatter(xml_path),
-            ),
-        )
-    except (etree.XMLSyntaxError, UserWarning) as error:
-        print("Can not parse", xml_path, file=sys.stderr)
+        dependency_analysis(xml_path, analysed_text=analysis_result.stdout)
+    except etree.XMLSyntaxError as error:
+        print(f"Can not parse {xml_path.converted}", file=sys.stderr)
         print("The error was:", str(error), file=sys.stderr)
 
 
