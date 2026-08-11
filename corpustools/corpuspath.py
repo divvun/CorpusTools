@@ -133,7 +133,7 @@ class CorpusPath:
     @property
     def log(self) -> Path:
         """Return the path of the log file."""
-        return self.orig.with_name(f"{self.orig.name}.log")
+        return self.converted.with_name(f"{self.converted.name}.log")
 
     def corpus_dir(self, module=None, corpus_lang=None) -> Path:
         this_lang = self.lang if corpus_lang is None else corpus_lang
