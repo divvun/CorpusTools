@@ -116,7 +116,7 @@ def find_analyser_zpipe(lang: str) -> Path | None:
 def analyse(xml_path: corpuspath.CorpusPath, analyser_zpipe_path: Path) -> None:
     """Analyse a file."""
     variant_name = get_modename(xml_path)
-    
+
     analysis_result = run(
         f"divvun-checker -a {analyser_zpipe_path} -n {variant_name}".split(),
         input=ccatter(xml_path),
@@ -132,8 +132,9 @@ def analyse(xml_path: corpuspath.CorpusPath, analyser_zpipe_path: Path) -> None:
 
     if analysis_result.stderr:
         print(
-            f"divvun-checker produced warnings for {xml_path.analysed}: "
-            f"{analysis_result.stderr}",
+            f"divvun-checker produced {len(analysis_result.stderr.splitlines())} "
+            f"lines of warnings to {xml_path.log}",
+
             file=sys.stderr,
         )
         xml_path.log.write_text(analysis_result.stderr, encoding="utf-8")
