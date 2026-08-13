@@ -428,7 +428,7 @@ def run_in_parallel(
                     n_failed += 1
 
                 msg = msg_format.format(
-                    filename=filename,
+                    filename=filename.converted,
                     file_number=i,
                     nfiles=nfiles,
                     bytes_processed=human_readable_filesize(completed_bytes),

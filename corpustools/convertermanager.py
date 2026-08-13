@@ -108,17 +108,17 @@ class ConverterManager:
                 filename = futures[future]
                 if exc is not None:
                     failed.append(filename)
-                    print(f"[{i}/{nfiles} FAILED: {filename}")
+                    print(f"[{i}/{nfiles} FAILED: {filename.orig}")
                     print(exc)
                 else:
-                    print(f"[{i}/{nfiles}] done: {filename}")
+                    print(f"[{i}/{nfiles}] done: {filename.converted}")
 
         n_ok = nfiles - len(failed)
         print(f"all done converting. {n_ok} files converted ok, {len(failed)} failed")
         if failed:
             print("the files that failed to convert are:")
             for filename in failed:
-                print(filename)
+                print(filename.orig)
 
     def convert_serially(self):
         """Convert the files in one process."""
