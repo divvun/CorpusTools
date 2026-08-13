@@ -114,7 +114,16 @@ def find_analyser_zpipe(lang: str) -> Path | None:
 
 
 def analyse(xml_path: corpuspath.CorpusPath, analyser_zpipe_path: Path) -> None:
-    """Analyse a file."""
+    """Analyse a file.
+    
+    
+    Args:
+        xml_path: The path to the file to analyse.
+        analyser_zpipe_path: The path to the zpipe file to use for analysis.
+    
+    Raises:
+        UserWarning: If the analysis fails.
+    """
     variant_name = get_modename(xml_path)
 
     analysis_result = run(
@@ -183,7 +192,10 @@ def analyse_serially(
             f"Analysing {xml_file.converted} [{fileno} of {len(file_list)}]"
         )
         util.print_frame("*" * 79)
-        analyse(xml_file, analyser_zpipe_path)
+        try:
+            analyse(xml_file, analyser_zpipe_path)
+        except UserWarning as error:
+            print(f"Analysis failed: {error}", file=sys.stderr)
 
 
 def parse_options():
