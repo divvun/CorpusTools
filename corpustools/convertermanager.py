@@ -20,7 +20,7 @@
 import argparse
 import logging
 import os
-from concurrent.futures import ProcessPoolExecutor, as_completed
+from concurrent.futures import Future, ProcessPoolExecutor, as_completed
 from functools import partial
 from pathlib import Path
 from typing import Iterator
@@ -73,7 +73,7 @@ class ConverterManager:
         self.lazy_conversion = lazy_conversion
         self.write_intermediate = write_intermediate
         self.goldstandard = goldstandard
-        self.files = []
+        self.files: list[CorpusPath] = []
 
     def convert(self, orig_file: CorpusPath):
         """Convert file to corpus xml format.
@@ -92,12 +92,12 @@ class ConverterManager:
             LOGGER.warn("Could not convert %s\n%s", orig_file, error)
             raise
 
-    def convert_in_parallel(self, pool_size):
+    def convert_in_parallel(self, pool_size: int):
         """Convert files using the multiprocessing module."""
         nfiles = len(self.files)
-        futures = {}  # Future -> filename
+        futures: dict[Future[None], CorpusPath] = {}  # Future -> filename
         print(f"Starting parallel conversion with {pool_size} workers")
-        failed = []
+        failed: list[CorpusPath] = []
         with ProcessPoolExecutor(max_workers=pool_size) as pool:
             for file in self.files:
                 fut = pool.submit(partial(self.convert, file))
