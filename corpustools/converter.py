@@ -29,6 +29,7 @@ from lxml import etree
 
 from corpustools import (
     avvirconverter,
+    biblesfmconverter,
     biblexmlconverter,
     ccat,
     documentfixer,
@@ -149,6 +150,7 @@ class Converter:
             ".odt": htmlcontentconverter.convert2intermediate,
             ".pdf": htmlcontentconverter.convert2intermediate,
             ".rtf": htmlcontentconverter.convert2intermediate,
+            ".sfm": biblesfmconverter.convert2intermediate,
             ".svg": svgconverter.convert2intermediate,
             ".txt": plaintextconverter.convert2intermediate,
             ".tex": htmlcontentconverter.convert2intermediate,
