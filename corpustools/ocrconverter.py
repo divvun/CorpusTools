@@ -37,7 +37,7 @@ def to_tiff(path: Path) -> None:
 def to_alto_xml(path: Path) -> Iterable[str]:
     return (
         pytesseract.image_to_alto_xml(Image.open(image_file))
-        for image_file in Path("/tmp").glob(f"{path.stem}-*.tiff")
+        for image_file in sorted(Path("/tmp").glob(f"{path.stem}-*.tiff"))
     )
 
 
@@ -53,7 +53,7 @@ def to_plaintext(path: Path, language: str) -> Iterable[str]:
     """
     to_tiff(path)
 
-    for image_file in Path("/tmp").glob(f"{path.stem}-*.tif"):
+    for image_file in sorted(Path("/tmp").glob(f"{path.stem}-*.tif")):
         for paragraph in pytesseract.image_to_string(
             Image.open(image_file), lang=language
         ).split("\n\n"):
