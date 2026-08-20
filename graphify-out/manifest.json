@@ -354,10 +354,10 @@
     "semantic_hash": "ad99f06d885e49ecb5bd9c5cdd863e8c"
   },
   "corpustools/parallelize.py": {
-    "mtime": 1778228288.988138,
-    "seen": 1787262710.7831051,
-    "ast_hash": "f8207a49eb15d45e73d54cef1ba75863",
-    "semantic_hash": "f8207a49eb15d45e73d54cef1ba75863"
+    "mtime": 1787264096.1685178,
+    "seen": 1787264335.836662,
+    "ast_hash": "8c8f9b5f197f6bf4a774f84ce1ccf209",
+    "semantic_hash": ""
   },
   "corpustools/pdfconverter.py": {
     "mtime": 1781818793.6812842,
@@ -840,9 +840,9 @@
     "semantic_hash": "4c98590474599b0fa632003cb971ba06"
   },
   "pyproject.toml": {
-    "mtime": 1787262669.5391083,
-    "seen": 1787262710.7831502,
-    "ast_hash": "fddc4339d70651d1b38f56787ef2150c",
+    "mtime": 1787264321.6789272,
+    "seen": 1787264335.836712,
+    "ast_hash": "1ed446160fd3f56a57a29b893ce4e9d1",
     "semantic_hash": ""
   },
   ".github/workflows/docs.yml": {
