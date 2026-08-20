@@ -1,13 +1,18 @@
-# Graph Report - .  (2026-07-30)
+# Graph Report - CorpusTools  (2026-08-20)
 
 ## Corpus Check
-- 243 files · ~241,719 words
+- 177 files · ~250,380 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
 - 2621 nodes · 3747 edges · 263 communities (140 shown, 123 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 61 edges (avg confidence: 0.6)
 - Token cost: 0 input · 0 output
+
+## Graph Freshness
+- Built from commit: `fad899d1`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - TestDocumentFixer
@@ -554,8 +559,8 @@ Cohesion: 0.15
 Nodes (8): EpubPresenter, Class to present metadata and content. Attributes: path (str): path to the epub…, Get the all linear chapters of the epub book. Args: book (epub.Book): The epub…, Present omitted and present chapters., The chapter that are not excluded., Print the html that is left after omitting chapters., Format an html document and write xpaths at tags openings. This function…, Choose which chapters should be omitted from the epub file.
 
 ### Community 62 - "macsami py"
-Cohesion: 0.15
-Nodes (11): Codec, getregentry(), IncrementalDecoder, lookup(), Implement the interface for stateless encoders/decoders., Encode the object input. Args: instring (str): the string that should be…, Decode the object input. Args: instring (str): the string that should be…, Lookup the name of the encoding. Args: encoding (str): name of the encoding… (+3 more)
+Cohesion: 0.22
+Nodes (8): Codec, getregentry(), lookup(), Implement the interface for stateless encoders/decoders., Encode the object input. Args: instring (str): the string that should be…, Decode the object input. Args: instring (str): the string that should be…, Lookup the name of the encoding. Args: encoding (str): name of the encoding…, Get the info for this encoding.
 
 ### Community 63 - "PDFFontspecs"
 Cohesion: 0.13
@@ -570,8 +575,8 @@ Cohesion: 0.23
 Nodes (8): file_comp(), FileTrainer, folder_comp(), FolderTrainer, main(), parse_options(), Train the language guesser from a directory., Train the language guesser from a file.
 
 ### Community 66 - "winsami2 py"
-Cohesion: 0.15
-Nodes (11): Codec, getregentry(), IncrementalDecoder, lookup(), Implement the interface for stateless encoders/decoders., Encode the object instring. Args: instring (str): the string that should be…, Decode the object instring. Args: instring (str): the string that should be…, Lookup the name of the encoding. Args: encoding (str): name of the encoding… (+3 more)
+Cohesion: 0.12
+Nodes (14): Codec, getregentry(), IncrementalDecoder, IncrementalEncoder, lookup(), Implement the interface for stateless encoders/decoders., Encode the object instring. Args: instring (str): the string that should be…, Decode the object instring. Args: instring (str): the string that should be… (+6 more)
 
 ### Community 67 - "analyse corpus"
 Cohesion: 0.15
@@ -807,7 +812,7 @@ Nodes (4): Arne Sørlie, Isak Saba, Sámi Conference, Sámi National Anthem
 
 ### Community 135 - "IncrementalEncoder"
 Cohesion: 0.50
-Nodes (3): IncrementalEncoder, Implement an IncrementalEncoder., Encode instring. Args: instring (str): the string that should be encoded with…
+Nodes (3): IncrementalDecoder, Implement an IncrementalDecoder., Decode input. Args: instring (str): the string that should be decoded with this…
 
 ### Community 136 - "Timespan SQL Generation"
 Cohesion: 0.50
@@ -838,7 +843,7 @@ Cohesion: 0.67
 Nodes (3): Apertium Nightly Packages, Corpus Tools, pipx
 
 ## Knowledge Gaps
-- **91 isolated node(s):** `generate_tables.sh script`, `corpustools`, `MkDocs`, `GitHub Pages`, `Document Conversion` (+86 more)
+- **91 isolated node(s):** `corpustools`, `generate_tables.sh script`, `MkDocs`, `GitHub Pages`, `Document Conversion` (+86 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **123 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -846,14 +851,14 @@ Nodes (3): Apertium Nightly Packages, Corpus Tools, pipx
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `CorpusPath` connect `CorpusPath` to `XMLPrinter`, `ConverterManager`, `util py`, `ConversionError`, `parallelize py`, `make corpus path`, `Converter`, `sentencedivider py`, `convertermanager py`, `sanity check`, `analyser py`?**
-  _High betweenness centrality (0.088) - this node is a cross-community bridge._
+  _High betweenness centrality (0.092) - this node is a cross-community bridge._
 - **Why does `TestCcat` connect `TestCcat` to `TestCcatErrormarkup`, `test get lang`, `test get element language different`, `test process file language nob`, `test process two paragraphs`, `test process minus l sme`, `test foreign`, `test no foreign`, `test no foreign typos`, `test typos errordepth3`, `test typos errormorphsyn twice`, `test process file1`, `test process file2`, `test p`, `test p with span`, `test p with error`, `test p one word per`, `test p with span one`, `test p with error correction`, `test p with error filtering`, `test p with error filtering`, `test p with error filtering`, `test visit this p default`, `test visit this p title`, `test visit this p listitem`, `test visit this p allp`, `test process file default`, `test process file title set`, `test process file listitem set`, `test process file tablecell set`, `test process file allp set`, `test process file one word`, `test process file typos errorlex`, `test process file typos errorort`?**
   _High betweenness centrality (0.069) - this node is a cross-community bridge._
 - **Why does `TestDocumentFixer` connect `TestDocumentFixer` to `test fix newstags bold 1`, `test fix sms1`, `test fix sms2`, `test fix newstags bold 2`, `test fix sms3`, `test fix sms4`, `test fix sms5`, `test fix sms6`, `test fix newstags bold 3`, `test htmlconverter py`, `XMLTester`, `test fix newstags 4`?**
-  _High betweenness centrality (0.047) - this node is a cross-community bridge._
+  _High betweenness centrality (0.056) - this node is a cross-community bridge._
 - **Are the 8 inferred relationships involving `CorpusPath` (e.g. with `XMLPrinter` and `Converter`) actually correct?**
   _`CorpusPath` has 8 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `generate_tables.sh script`, `corpustools`, `MkDocs` to the rest of the system?**
+- **What connects `corpustools`, `generate_tables.sh script`, `MkDocs` to the rest of the system?**
   _91 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `TestDocumentFixer` be split into smaller, more focused modules?**
   _Cohesion score 0.028985507246376812 - nodes in this community are weakly interconnected._
