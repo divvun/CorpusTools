@@ -17,8 +17,6 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 """Sentence align a given file anew."""
-
-
 import argparse
 import logging
 from pathlib import Path
@@ -31,24 +29,24 @@ from corpustools import (
     tmx,
     util,
 )
+from corpustools.corpuspath import CorpusPath
 
 LOGGER = logging.getLogger(__name__)
 
 
-def print_filename(corpus_path):
+def print_filename(corpus_path: CorpusPath):
     """Print interesting filenames for doing sentence alignment.
 
     Args:
         corpus_path (corpuspath.make_corpus_path): filenames
     """
     print(
-        "\toriginal: {}\n\tmetatada: {}\n\tconverted: {}".format(
-            corpus_path.orig, corpus_path.xsl, corpus_path.converted
-        )
+        f"\toriginal: {corpus_path.orig}\n"
+        f"\tmetatada: {corpus_path.xsl}\n"f"\tconverted: {corpus_path.converted}"
     )
 
 
-def print_filenames(corpus_path1, corpus_path2):
+def print_filenames(corpus_path1: CorpusPath, corpus_path2: CorpusPath):
     """Print interesting filenames for doing sentence alignment.
 
     Args:
@@ -61,7 +59,7 @@ def print_filenames(corpus_path1, corpus_path2):
     print_filename(corpus_path2)
 
 
-def convert_and_copy(corpus_path1, corpus_path2):
+def convert_and_copy(corpus_path1: CorpusPath, corpus_path2: CorpusPath):
     """Reconvert and copy files to prestable/converted.
 
     Args:
@@ -122,7 +120,7 @@ def main():
 
     tmxhtml = Path(args.tmxhtml).resolve()
     path = tmxhtml.with_suffix("") if tmxhtml.suffix == ".html" else tmxhtml
-    source_path = corpuspath.make_corpus_path(path)
+    source_path = corpuspath.make_corpus_path(str(path))
 
     if not source_path.orig.exists():
         raise SystemExit(
@@ -135,7 +133,7 @@ def main():
     if parallel is None:
         raise SystemExit(f"Could not find parallel file of {source_path.orig}")
 
-    para_path = corpuspath.make_corpus_path(parallel)
+    para_path = corpuspath.make_corpus_path(str(parallel))
 
     print_filenames(source_path, para_path)
 

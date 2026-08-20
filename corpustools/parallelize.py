@@ -90,7 +90,7 @@ def parallelise_file(
     anchor_file: str | None = None,
 ):
     """Align sentences of two parallel files."""
-    anchor_word_list = AnchorWordList()
+    anchor_word_list: AnchorWordList = AnchorWordList()
     if anchor_file is not None:
         anchor_word_list.load_from_file(anchor_file)
 
@@ -134,20 +134,28 @@ def get_filepair(
         para_path = orig_path
         source_parallel = para_path.parallel(para_path.lang)
         if source_parallel is None:
-            print(orig_path.orig, "is translated from", para_lang, "but has no parallel file in", orig_path.lang)
+            print(
+                orig_path.orig,
+                "is translated from",
+                para_lang,
+                "but has no parallel file in",
+                orig_path.lang,
+            )
             raise TypeError()
-        source_path = corpuspath.make_corpus_path(
-            source_parallel.as_posix()
-        )
+        source_path = corpuspath.make_corpus_path(source_parallel.as_posix())
     else:
         source_path = orig_path
         para_parallel = source_path.parallel(para_lang)
         if para_parallel is None:
-            print(orig_path.orig, "is not translated from", para_lang, "and has no parallel file in", orig_path.lang)   
+            print(
+                orig_path.orig,
+                "is not translated from",
+                para_lang,
+                "and has no parallel file in",
+                orig_path.lang,
+            )
             raise TypeError
-        para_path = corpuspath.make_corpus_path(
-            para_parallel.as_posix()
-        )
+        para_path = corpuspath.make_corpus_path(para_parallel.as_posix())
 
     return para_path, source_path
 
