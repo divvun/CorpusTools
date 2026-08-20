@@ -955,7 +955,7 @@ typer = "^0.27.1"
 type = "git"
 url = "https://github.com/divvun/python_tca2.git"
 reference = "main"
-resolved_reference = "da5ce937458836ff4ea63a8bc39d0ddd855f29a2"
+resolved_reference = "a03bb3c8852f7aa3c1b127ab690d041f69cb4401"
 
 [[package]]
 name = "regex"
