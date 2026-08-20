@@ -23,10 +23,9 @@ import os
 from functools import lru_cache
 from pathlib import Path
 
-from lxml import etree
 from python_tca2.alignmentmodel import AlignmentModel
 from python_tca2.anchorwordlist import AnchorWordList
-from python_tca2.tmx import make_tmx
+from python_tca2.tmx import write_streaming_result
 
 from corpustools import (
     argparse_version,
@@ -103,24 +102,11 @@ def parallelise_file(
         anchor_word_list=anchor_word_list,
     )
 
-    aligned = aligner.suggest_without_gui()
-
-    aligned_sentences = aligned.non_empty_pairs()
-
-    tmx_result = make_tmx(
-        file1_name=source_lang_file.orig.name,
+    write_streaming_result(
+        file1_path=source_lang_file.tmx(para_lang_file.lang),
         language_pair=(source_lang_file.lang, para_lang_file.lang),
-        aligned_text_pairs=aligned_sentences,
+        alignments=aligner.iter_alignment_elements(),
     )
-    tmx_path = source_lang_file.tmx(para_lang_file.lang)
-    tmx_path.write_bytes(
-        etree.tostring(
-            tmx_result,
-            pretty_print=True,
-            encoding="utf-8",
-        )
-    )
-    print(f"TMX file created: {tmx_path}")
 
 
 def is_translated_from_lang2(path: corpuspath.CorpusPath, lang2: str) -> bool:
