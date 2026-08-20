@@ -73,7 +73,7 @@ def dependency_analysis(path: corpuspath.CorpusPath, analysed_text: str) -> None
 
     body = etree.SubElement(parent, "body")
     dependency = etree.SubElement(body, "dependency")
-    dependency.text = str(etree.CDATA(analysed_text))
+    dependency.text = etree.CDATA(analysed_text)
 
     with util.ignored(OSError):
         os.makedirs(os.path.dirname(path.analysed))
