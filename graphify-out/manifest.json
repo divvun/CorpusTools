@@ -354,9 +354,9 @@
     "semantic_hash": "ad99f06d885e49ecb5bd9c5cdd863e8c"
   },
   "corpustools/parallelize.py": {
-    "mtime": 1787264096.1685178,
-    "seen": 1787264335.836662,
-    "ast_hash": "8c8f9b5f197f6bf4a774f84ce1ccf209",
+    "mtime": 1787266132.499178,
+    "seen": 1787266460.807401,
+    "ast_hash": "43a7d858df0765a76ac6064fd65d5d94",
     "semantic_hash": ""
   },
   "corpustools/pdfconverter.py": {
@@ -384,10 +384,10 @@
     "semantic_hash": "4676f0c2a05489b43f2cba58ddbeff57"
   },
   "corpustools/realign.py": {
-    "mtime": 1767101888.7649229,
-    "seen": 1787262710.7831109,
-    "ast_hash": "52e2633dcf5bfa8f007239693404855c",
-    "semantic_hash": "52e2633dcf5bfa8f007239693404855c"
+    "mtime": 1787265449.7769096,
+    "seen": 1787266460.807404,
+    "ast_hash": "512dbda71c5a71b16526d300603befe8",
+    "semantic_hash": ""
   },
   "corpustools/saami_crawler.py": {
     "mtime": 1767101888.765495,
@@ -672,8 +672,8 @@
     "semantic_hash": "ee9be4cf5b5cf9622c5c23dcb59f3097"
   },
   "corpustools/tmx.py": {
-    "mtime": 1767101921.4441874,
-    "seen": 1787262710.783136,
+    "mtime": 1787266416.2328222,
+    "seen": 1787266460.807436,
     "ast_hash": "9ab7d2657ae0f9486e778dfd1a009dc4",
     "semantic_hash": "9ab7d2657ae0f9486e778dfd1a009dc4"
   },
