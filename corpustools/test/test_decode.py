@@ -69,7 +69,7 @@ class TestEncodingGuesser(unittest.TestCase):
     @parameterized.expand(
         [
             (index, example)
-            for index in decode.CTYPES.keys()
+            for index in test_input.keys()
             for example in test_input[index]
         ]
     )

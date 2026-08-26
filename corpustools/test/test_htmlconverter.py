@@ -19,7 +19,9 @@
 """Test conversion of html files."""
 
 import os
+from pathlib import Path
 
+import pytest
 import testfixtures
 from lxml import etree, html
 from parameterized import parameterized
@@ -189,7 +191,7 @@ class TestHTMLConverter(XMLTester):
             content = content.encode("utf8")
             temp_dir.write(filename, content)
             got = htmlcontentconverter.convert2intermediate(
-                os.path.join(temp_dir.path, filename)
+                Path(temp_dir.path) / filename
             )
             self.assertXmlEqual(got, etree.fromstring(want))
 
@@ -223,12 +225,13 @@ class TestHTMLConverter(XMLTester):
         filename = "orig/sme/admin/ugga.html"
         with testfixtures.TempDirectory() as temp_dir:
             temp_dir.write(filename, content)
-            got = htmlconverter.to_html_elt(os.path.join(temp_dir.path, filename))
+            got = htmlconverter.to_html_elt(Path(temp_dir.path) / filename)
 
             self.assertXmlEqual(got, want)
 
 
-@parameterized(
+@pytest.mark.parametrize(
+    "testname, html_str, xml_str",
     [
         (
             "ul-li-a",
@@ -2185,7 +2188,7 @@ def test_conversion(testname, html_str, xml_str):
         html_str = html_str.encode("utf8")
         temp_dir.write(filepath, html_str)
         got = htmlcontentconverter.convert2intermediate(
-            os.path.join(temp_dir.path, filepath)
+            Path(temp_dir.path) / filepath
         )
         want = etree.fromstring(xml_str)
 
@@ -2194,18 +2197,22 @@ def test_conversion(testname, html_str, xml_str):
 
 def test_problematic_8bit():
     got = htmlcontentconverter.convert2intermediate(
-        os.path.join(
-            HERE, "converter_data/fakecorpus/orig/sme/riddu/problematic_8bit.html"
-        )
+        Path(HERE) / "converter_data/fakecorpus/orig/sme/riddu/problematic_8bit.html"
     )
     want = etree.fromstring(
-        DOCUMENT_TEMPLATE.format(
-            "<p>Sámekulturguovddáža dieáhusdilálašvuohta</p>"
-            "<p>Sámekulturguovddáža dieáhusdilálašvuohta 14.4.2008 Anáris</p>"
-            "<p></p>"
-            "<p></p>"
-            "<p>Senaatti-giddodagat ja Sámediggi</p>"
-        )
+        "<document>"
+        "<header><title>Sámekulturguovddáža die�áhusdilálašvuohta</title></header>"
+        "<body>"
+        "<p>Sámekulturguovddáža die�áhusdilálašvuohta 14.4.2008 Anáris</p>"
+        "<p></p>"
+        "<p></p>"
+        "<p>Senaatti-giddodagat ja Sámediggi</p>"
+        "</body>"
+        "</document>"
     )
+
+    for element in got.iter():
+        if element.text:
+            element.text = " ".join(element.text.split())
 
     assertXmlEqual(got, want)

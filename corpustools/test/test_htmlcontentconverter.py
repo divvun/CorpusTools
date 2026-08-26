@@ -18,6 +18,7 @@
 #
 """Test conversion of html content."""
 
+import pytest
 from lxml import etree, html
 from parameterized import parameterized
 
@@ -277,7 +278,7 @@ def test_remove_unwanted_content():
     for tag, attribs in unwanted_classes_ids.items():
         for key, values in attribs.items():
             for value in values:
-                yield check_unwanted_classes_and_ids, tag, key, value
+                check_unwanted_classes_and_ids(tag, key, value)
 
 
 def check_unwanted_classes_and_ids(tag, key, value):
@@ -310,7 +311,8 @@ def check_unwanted_classes_and_ids(tag, key, value):
         )
 
 
-@parameterized(
+@pytest.mark.parametrize(
+    "unwanted_tag",
     [
         "address",
         "script",

@@ -24,7 +24,6 @@ from pathlib import Path
 
 import pytest
 from lxml import etree
-from parameterized import parameterized
 
 from corpustools import pdfconverter, xslsetter
 from corpustools.test import xmltester
@@ -32,7 +31,8 @@ from corpustools.test import xmltester
 HERE = os.path.dirname(__file__)
 
 
-@parameterized(
+@pytest.mark.parametrize(
+    "previous, current, wanted",
     [
         ("a-", "b", "a"),
         ("a-", "B", "a-"),

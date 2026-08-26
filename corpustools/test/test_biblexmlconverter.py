@@ -24,6 +24,7 @@ import os
 
 import lxml.doctestcompare
 import lxml.etree
+import pytest
 from testfixtures import TempDirectory
 
 from corpustools import biblexmlconverter
@@ -147,10 +148,10 @@ def assertXmlEqual(got, want):
         raise AssertionError(message)
 
 
-def test_conversion():
+@pytest.mark.parametrize("testname, bible_xml", TESTS.items())
+def test_conversion(testname, bible_xml):
     """Test conversion of bible xml elements."""
-    for testname, bible_xml in TESTS.items():
-        yield check_conversion, testname, bible_xml
+    check_conversion(testname, bible_xml)
 
 
 def check_conversion(testname, bible_xml):
