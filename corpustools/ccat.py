@@ -244,10 +244,10 @@ class XMLPrinter:
                 if child.tag != "correct":
                     text.extend(corrected for corrected in self.corrected_texts(child))
 
-        text.extend(
-            self.get_error_attributes(correct) for correct in element.xpath("./correct")
+        return "\n".join(
+            f"{''.join(text)}{self.get_error_attributes(correct)}"
+            for correct in element.xpath("./correct")
         )
-        return "".join(text)
 
     @staticmethod
     def combine(text, text_list):
