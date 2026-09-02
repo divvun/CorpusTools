@@ -24,6 +24,7 @@ import sys
 from functools import wraps
 from io import StringIO
 from traceback import print_exc
+from typing import Iterable
 
 from lxml import etree
 
@@ -72,29 +73,29 @@ class XMLPrinter:
     def __init__(  # noqa: PLR0913, PLR0915
         self,
         lang=None,
-        all_paragraphs=False,
-        title=False,
-        listitem=False,
-        table=False,
-        correction=False,
-        error=False,
-        errorort=False,
-        errorortreal=False,
-        errormorphsyn=False,
-        errorsyn=False,
-        errorlex=False,
-        errorlang=False,
-        foreign=False,
-        errorformat=False,
-        noforeign=False,
-        withforeign=False,
-        typos=False,
-        print_filename=False,
-        one_word_per_line=False,
-        disambiguation=False,
-        dependency=False,
-        hyph_replacement="",
-        orthography=None,
+        all_paragraphs: bool = False,
+        title: bool = False,
+        listitem: bool = False,
+        table: bool = False,
+        correction: bool = False,
+        error: bool = False,
+        errorort: bool = False,
+        errorortreal: bool = False,
+        errormorphsyn: bool = False,
+        errorsyn: bool = False,
+        errorlex: bool = False,
+        errorlang: bool = False,
+        foreign: bool = False,
+        errorformat: bool = False,
+        noforeign: bool = False,
+        withforeign: bool = False,
+        typos: bool = False,
+        print_filename: bool = False,
+        one_word_per_line: bool = False,
+        disambiguation: bool = False,
+        dependency: bool = False,
+        hyph_replacement: str = "",
+        orthography: str | None = None,
     ):
         """Setup all the options.
 
@@ -194,17 +195,21 @@ class XMLPrinter:
         return self.etree.getroot().attrib["{http://www.w3.org/XML/1998/namespace}lang"]
 
     @staticmethod
-    def get_element_language(element, parentlang):
+    def get_element_language(
+        element: etree.Element, parentlang: str | None
+    ) -> str | None:
         """Get the language of element.
 
         Elements inherit the parents language if not explicitely set
         """
         if element.get("{http://www.w3.org/XML/1998/namespace}lang") is None:
             return parentlang
-        else:
-            return element.get("{http://www.w3.org/XML/1998/namespace}lang")
 
-    def collect_not_inline_errors(self, element, textlist):
+        return element.get("{http://www.w3.org/XML/1998/namespace}lang")
+
+    def collect_not_inline_errors(
+        self, element: etree.Element, textlist: list[str]
+    ) -> None:
         """Add the formatted errors as strings to the textlist list."""
         error_string = self.error_not_inline(element)
         if error_string != "":
@@ -222,20 +227,20 @@ class XMLPrinter:
                     textlist.extend(element.tail.strip().split())
 
     @staticmethod
-    def corrected_texts(error_element):
+    def corrected_texts(error_element: etree.Element) -> Iterable[str]:
         """Yield corrected versions of the error element."""
         for correct in error_element.xpath("./correct"):
             correct_text = "" if correct.text is None else correct.text
             tail_text = "" if error_element.tail is None else error_element.tail
             yield f"{correct_text}{tail_text}"
 
-    def error_not_inline(self, element):
+    def error_not_inline(self, element: etree.Element) -> str:
         """Collect and format parts of the element.
 
         Also scan the children if there is no error filtering or
         if the element is filtered
         """
-        text = []
+        text: list[str] = []
         if element.text is not None and element.text.strip() != "":
             text.append(element.text)
 
@@ -250,11 +255,11 @@ class XMLPrinter:
         )
 
     @staticmethod
-    def combine(text, text_list):
+    def combine(text: str, text_list: list[str]):
         """Combine a text with a parto f the text_list."""
         return [f"{text}{part}" for part in text_list]
 
-    def get_error_attributes(self, correct_element):
+    def get_error_attributes(self, correct_element: etree.Element) -> str:
         """Collect and format the attributes + the filename."""
         text = ["\t"]
         text.append("" if correct_element.text is None else correct_element.text)
@@ -274,7 +279,9 @@ class XMLPrinter:
 
         return "".join(text)
 
-    def collect_inline_errors(self, element, textlist, parentlang):
+    def collect_inline_errors(
+        self, element: etree.Element, textlist: list[str], parentlang: str | None
+    ) -> None:
         """Add the "correct" element to the list textlist."""
         correct = element.find("./correct")
         if correct is not None and not self.noforeign:
@@ -282,9 +289,11 @@ class XMLPrinter:
 
         self.get_contents(element.tail, textlist, parentlang)
 
-    def collect_text(self, element, parentlang, buffer):
+    def collect_text(
+        self, element: etree.Element, parentlang: str, buffer: StringIO
+    ) -> None:
         """Collect text from element, and write the contents to buffer."""
-        textlist = []
+        textlist: list[str] = []
 
         self.visit_nonerror_element(element, textlist, parentlang)
 
@@ -297,29 +306,18 @@ class XMLPrinter:
                 buffer.write("\n".join(textlist))
                 buffer.write("\n")
 
-    def is_correct_lang(self, elt_lang):
-        """Check if elt_lang is a wanted language.
-
-        Args:
-            elt_lang (str): a three character language.
-
-        Returns:
-            (bool): boolean
-        """
+    def is_correct_lang(self, elt_lang: str | None) -> bool:
+        """Check if elt_lang is a wanted language."""
         return (
             self.lang is None
             or (not self.invert_lang and elt_lang == self.lang)
             or (self.invert_lang and elt_lang != self.lang)
         )
 
-    def get_contents(self, elt_contents, textlist, elt_lang):
-        """Get the contents of a xml document.
-
-        Args:
-            elt_contents (str): the text of an etree element.
-            textlist (list of str): text will be added this list.
-            elt_lang (str): language of the element.
-        """
+    def get_contents(
+        self, elt_contents: str | None, textlist: list[str], elt_lang: str | None
+    ) -> None:
+        """Get the contents of a xml document."""
         if elt_contents is not None:
             text = elt_contents
             if self.is_correct_lang(elt_lang):
@@ -328,7 +326,9 @@ class XMLPrinter:
                 else:
                     textlist.extend(text.split())
 
-    def visit_children(self, element, textlist, parentlang):
+    def visit_children(
+        self, element: etree.Element, textlist: list[str], parentlang: str | None
+    ) -> None:
         """Visit the children of element, adding their content to textlist."""
         for child in element:
             if child.tag != "correct":
@@ -342,12 +342,14 @@ class XMLPrinter:
                     )
                 elif self.visit_error_not_inline(child):
                     self.collect_not_inline_errors(child, textlist)
-                else:
-                    self.visit_nonerror_element(
-                        child, textlist, self.get_element_language(element, parentlang)
-                    )
+            else:
+                self.visit_nonerror_element(
+                    child, textlist, self.get_element_language(element, parentlang)
+                )
 
-    def visit_nonerror_element(self, element, textlist, parentlang):
+    def visit_nonerror_element(
+        self, element: etree.Element, textlist: list[str], parentlang: str | None
+    ) -> None:
         """Visit and extract text from non error element."""
         if not self.typos:
             self.get_contents(
@@ -357,7 +359,7 @@ class XMLPrinter:
         if not self.typos:
             self.get_contents(element.tail, textlist, parentlang)
 
-    def visit_this_node(self, element):
+    def visit_this_node(self, element: etree.Element) -> bool:
         """Return True if the element should be visited."""
         return (
             self.all_paragraphs
@@ -370,24 +372,26 @@ class XMLPrinter:
             or (self.table is True and element.get("type") == "tablecell")
         )
 
-    def visit_error_not_inline(self, element):
+    def visit_error_not_inline(self, element: etree.Element) -> bool:
         """Determine whether element should be visited."""
         return (
-            element.tag.startswith("error")
+            isinstance(element.tag, str)
+            and element.tag.startswith("error")
             and self.one_word_per_line
             and not self.error_filtering
             or self.include_this_error(element)
         )
 
-    def visit_error_inline(self, element):
+    def visit_error_inline(self, element: etree.Element) -> bool:
         """Determine whether element should be visited."""
         return (
-            element.tag.startswith("error")
+            isinstance(element.tag, str)
+            and element.tag.startswith("error")
             and not self.one_word_per_line
             and (self.correction or self.include_this_error(element))
         )
 
-    def include_this_error(self, element):
+    def include_this_error(self, element: etree.Element) -> bool:
         """Determine whether element should be visited."""
         return self.error_filtering and (
             (element.tag == "error" and self.error)
@@ -401,7 +405,7 @@ class XMLPrinter:
             or (element.tag == "errorlang" and self.noforeign)
         )
 
-    def parse_file(self, filename):
+    def parse_file(self, filename: str):
         """Parse the xml document.
 
         Args:
@@ -419,10 +423,16 @@ class XMLPrinter:
         buffer = StringIO()
 
         self.handle_hyph()
-        if self.dependency:
-            self.print_element(self.etree.find(".//dependency"), buffer)
-        elif self.disambiguation:
-            self.print_element(self.etree.find(".//disambiguation"), buffer)
+        if (
+            self.dependency
+            and (dependency := self.etree.find(".//dependency")) is not None
+        ):
+            self.print_element(dependency, buffer)
+        elif (
+            self.disambiguation
+            and (disambiguation := self.etree.find(".//disambiguation")) is not None
+        ):
+            self.print_element(disambiguation, buffer)
         else:
             for paragraph in self.etree.findall(".//p"):
                 if self.is_correct_lang(
@@ -432,32 +442,30 @@ class XMLPrinter:
 
         return buffer
 
-    def handle_hyph(self):
+    def handle_hyph(self) -> None:
         """Replace hyph tags."""
-        hyph_tails = []
+        hyph_tails: list[str] = []
         for hyph in self.etree.findall(".//hyph"):
             if hyph.tail is not None:
                 hyph_tails.append(hyph.tail)
 
-            if hyph.getnext() is None:
-                if hyph.getparent().text is not None:
-                    hyph_tails.insert(0, hyph.getparent().text)
-                hyph.getparent().text = self.hyph_replacement.join(hyph_tails)
-                hyph_tails[:] = []
+            hyph_parent = hyph.getparent()
 
-            hyph.getparent().remove(hyph)
+            if hyph_parent is not None:
+                if hyph.getnext() is None:
+                    if hyph_parent.text is not None:
+                        hyph_tails.insert(0, hyph_parent.text)
+                    hyph_parent.text = self.hyph_replacement.join(hyph_tails)
+                    hyph_tails[:] = []
 
-    def print_element(self, element, buffer):
-        """Write the text of the element to the buffer.
+                hyph_parent.remove(hyph)
 
-        Args:
-            element (etree._Element):
-            buffer ():
-        """
-        if element is not None and element.text is not None:
+    def print_element(self, element: etree.Element, buffer: StringIO):
+        """Write the text of the element to the buffer."""
+        if element.text is not None:
             buffer.write(element.text)
 
-    def print_file(self, file_):
+    def print_file(self, file_: str) -> bool:
         """Print a xml file to stdout. Returns True if something was printed,
         False otherwise."""
         if not file_.endswith(".xml"):
@@ -482,6 +490,8 @@ class XMLPrinter:
                 return True
             except BrokenPipeError:
                 pass
+
+        return False
 
 
 def parse_options():
@@ -652,7 +662,7 @@ def parse_options():
     return args
 
 
-def find_files(targets, extension):
+def find_files(targets: list[str], extension: str) -> Iterable[str]:
     """Search for files with extension in targets.
 
     Args:
