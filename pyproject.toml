@@ -11,7 +11,7 @@ authors = [
 ]
 license = "GPLv3+"
 readme = "README.md"
-homepage = "https://github.com/giellalt/CorpusTools"
+homepage = "https://github.com/divvun/CorpusTools"
 
 [tool.poetry.dependencies]
 python = "^3.12"
