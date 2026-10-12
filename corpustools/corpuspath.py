@@ -185,7 +185,10 @@ class CorpusPath:
     def converted(self) -> Path:
         """Return the path to the converted file."""
         module = "converted"
-        if self.metadata.get_variable("conversion_status") == "correct":
+        if self.metadata.get_variable("conversion_status") in [
+            "correct",
+            "goldstandard",
+        ]:
             module = "goldstandard/converted"
         if self.metadata.get_variable("conversion_status") == "correct-no-gs":
             module = "correct-no-gs/converted"
@@ -311,24 +314,18 @@ class CorpusPath:
         self.__post_init__()
 
     def is_convertable(self, goldstandard: bool) -> bool:
-        """Add file for conversion.
-
-        Args:
-            xsl_file (str): path to a metadata file
-        """
         metadata = self.metadata
         conversion_status = metadata.get_variable("conversion_status")
         if conversion_status is None:
             raise ValueError(f"No conversion_status set in {self.orig}")
 
-        return (
-            conversion_status in ["standard", "ocr"]
-            and not goldstandard
-        ) or (
-            conversion_status.startswith("correct")
+        return (conversion_status in ["standard", "ocr"] and not goldstandard) or (
+            (
+                conversion_status.startswith("correct")
+                or conversion_status == "goldstandard"
+            )
             and goldstandard
         )
-
 
 
 def collect_files(entities: list[str], suffix: str) -> Iterator[Path]:
