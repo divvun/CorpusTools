@@ -140,7 +140,9 @@ class CorpusPath:
         """Return the path of the log file."""
         return self.converted.with_name(f"{self.converted.name}.log")
 
-    def corpus_dir(self, module=None, corpus_lang=None) -> Path:
+    def corpus_dir(
+        self, module: str | None = None, corpus_lang: str | None = None
+    ) -> Path:
         this_lang = self.lang if corpus_lang is None else corpus_lang
         return (
             self.root / f"corpus-{this_lang}"
@@ -150,11 +152,11 @@ class CorpusPath:
 
     def name(  # noqa: PLR0913
         self,
-        module=None,
-        corpus_lang=None,
-        target_lang=None,
-        filepath=None,
-        suffix=None,
+        module: str | None = None,
+        corpus_lang: str | None = None,
+        target_lang: str | None = None,
+        filepath: str | Path | None = None,
+        suffix: str | None = None,
     ) -> Path:
         """Returns a path based on the module and extension.
 
@@ -163,7 +165,7 @@ class CorpusPath:
             corpus_lang (str): corpus language, as a three letter language code
             target_lang (str): string containing the target language of a tmx
                 file
-            filepath (str): path to the file
+            filepath (str | Path): path to the file
             suffix (str): file suffix
         """
         this_module = "" if module is None else module
@@ -200,7 +202,7 @@ class CorpusPath:
         """Return the path to analysed file."""
         return self.name(module="korp_mono", suffix=".xml")
 
-    def korp_tmx(self, target_language) -> Path:
+    def korp_tmx(self, target_language: str) -> Path:
         """Return the path to korp processed tmx file."""
         return self.name(
             module="korp_tmx",
@@ -290,7 +292,7 @@ class CorpusPath:
             name = name[:-1]
         return name
 
-    def __getstate__(self):
+    def __getstate__(self) -> dict[str, object]:
         """Return the dictionary of state of this object, for pickle."""
         # note the .copy(), to not alter the instance dictionary
         d = self.__dict__.copy()
@@ -301,7 +303,7 @@ class CorpusPath:
 
         return d
 
-    def __setstate__(self, state):
+    def __setstate__(self, state: dict[str, object]):
         """Set the state of the object, after deserializing with pickle."""
         self.__dict__.update(state)
 
