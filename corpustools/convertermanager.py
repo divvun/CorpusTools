@@ -129,7 +129,11 @@ class ConverterManager:
 
         for orig_file in self.files:
             LOGGER.debug("converting %s", orig_file)
-            self.convert(orig_file)
+            try:
+                self.convert(orig_file)
+            except util.ConversionError as error:
+                LOGGER.warning("Could not convert %s\n%s", orig_file, error)
+                print(f"Could not convert {orig_file.orig}\n{error}")
 
     def corpus_paths(self, sources: list[str]) -> Iterator[CorpusPath]:
         """Yield all convertible files in sources.
