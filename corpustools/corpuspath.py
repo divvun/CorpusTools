@@ -100,6 +100,11 @@ class CorpusPath:
         """Initialise the metadata attribute."""
         self.metadata = xslsetter.MetadataHandler(self.xsl, create=True)
 
+        # If we do not have an xsl file, but we have an original file,
+        # create the xsl file from the metadata
+        if not self.xsl.exists() and self.orig.exists():
+            self.metadata.write_file()
+
         # If we do not have access to the -orig part of the corpus
         # at least read the parallel info from the converted doc
         if not self.xsl.exists() and self.converted.exists():
