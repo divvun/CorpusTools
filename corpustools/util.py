@@ -33,7 +33,7 @@ import traceback
 from collections.abc import Callable
 from contextlib import contextmanager
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Generator
 
 from lxml import etree
 
@@ -158,7 +158,7 @@ def executable_in_path(program):
         )
 
 
-def sanity_check(program_list):
+def sanity_check(program_list: list[str]):
     """Look for programs and files that are needed to do the analysis.
 
     If they don't exist, raise an exception.
@@ -230,7 +230,7 @@ def print_element(element: etree.Element, level: int, indent: int) -> list[str]:
     """
     tag = element.tag.replace("{http://www.w3.org/1999/xhtml}", "")
 
-    strings:list[str] = []
+    strings: list[str] = []
     strings.append(" " * (level * indent))
     strings.append(f"<{tag}")
 
@@ -267,6 +267,7 @@ def print_element(element: etree.Element, level: int, indent: int) -> list[str]:
 
     return strings
 
+
 def name_to_unicode(filename):
     """Turn a filename to a unicode string.
 
@@ -292,7 +293,7 @@ def note(msg):
 
 
 @contextmanager
-def ignored(*exceptions):
+def ignored(*exceptions: type[BaseException]) -> Generator[None]:
     """Ignore exceptions."""
     try:
         yield

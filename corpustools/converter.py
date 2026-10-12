@@ -39,6 +39,7 @@ from corpustools import (
     ocrcontentconverter,
     plaintextconverter,
     svgconverter,
+    text_cat,
     usxconverter,
     util,
     xslmaker,
@@ -316,7 +317,7 @@ class Converter:
 
         return len(xml_printer.process_file().getvalue())
 
-    def write_complete(self, languageguesser):
+    def write_complete(self, languageguesser: text_cat.Classifier | None) -> None:
         """Write the complete converted document to disk.
 
         Args:

@@ -49,7 +49,7 @@ class ConverterManager:
 
     _languageguesser = None
 
-    def languageguesser(self):
+    def languageguesser(self) -> text_cat.Classifier | None:
         """Return our language guesser.
         This is a class variable, but since it takes a while to initialise,
         we don't do it until it's needed."""
@@ -58,7 +58,10 @@ class ConverterManager:
         return self._languageguesser
 
     def __init__(
-        self, lazy_conversion=False, write_intermediate=False, goldstandard=False
+        self,
+        lazy_conversion: bool = False,
+        write_intermediate: bool = False,
+        goldstandard: bool = False,
     ):
         """Initialise the ConverterManager class.
 
@@ -89,7 +92,7 @@ class ConverterManager:
             ValueError,
             IndexError,
         ) as error:
-            LOGGER.warn("Could not convert %s\n%s", orig_file, error)
+            LOGGER.warning("Could not convert %s\n%s", orig_file, error)
             raise
 
     def convert_in_parallel(self, pool_size: int):
@@ -168,13 +171,13 @@ class ConverterManager:
         ]
 
 
-def unwrap_self_convert(arg, **kwarg):
+def unwrap_self_convert(arg: tuple[ConverterManager, CorpusPath], **kwarg: object):
     """Unpack self from the arguments and call convert again.
 
     This is due to how multiprocess works:
     http://www.rueckstiess.net/research/snippets/show/ca1d7d90
     """
-    return ConverterManager.convert(*arg, **kwarg)
+    return ConverterManager.convert(*arg)
 
 
 def parse_options():

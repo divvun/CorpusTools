@@ -149,7 +149,7 @@ class TestCcatErrormarkup(unittest.TestCase):
 
         assert got == "fiske leting\tfiskeleting\t#errtype=nosplit,pos=noun"
 
-    def test_single_error_not_inline_with_filename(self):
+    def test_single_error_not_inline_with_filename(self) -> None:
         """Plain error element, one word per line output, with filename"""
         xml_printer = ccat.XMLPrinter(print_filename=True, one_word_per_line=True)
         input_error = etree.fromstring(
@@ -161,19 +161,18 @@ class TestCcatErrormarkup(unittest.TestCase):
 
         xml_printer.filename = "p.xml"
 
-        textlist = []
+        textlist: list[str] = []
         xml_printer.collect_not_inline_errors(input_error, textlist)
         got = "".join(textlist)
 
-        assert got == "fiske leting\tfiskeleting" "\t#errtype=nosplit,pos=noun, file: p.xml"
+        assert (
+            got == "fiske leting\tfiskeleting\t#errtype=nosplit,pos=noun, file: p.xml"
+        )
 
     def test_single_error_not_inline_with_filename_without_attributes(self):
         xml_printer = ccat.XMLPrinter(print_filename=True, one_word_per_line=True)
         input_error = etree.fromstring(
-            "<errorortreal>"
-            "fiske leting"
-            "<correct>fiskeleting</correct>"
-            "</errorortreal>"
+            "<errorortreal>fiske leting<correct>fiskeleting</correct></errorortreal>"
         )
 
         xml_printer.filename = "p.xml"
@@ -206,7 +205,11 @@ class TestCcatErrormarkup(unittest.TestCase):
         xml_printer.collect_not_inline_errors(input_error, textlist)
         got = "\n".join(textlist)
 
-        assert got == "skoledagene er så vanskelig\tskoledagene er så vanskelige" "\t#cat=x,const=spred,errtype=agr,orig=x,pos=adj, file: p.xml\n" "vanskerlig\tvanskelig\t#errtype=nosilent,pos=adj, file: p.xml"
+        assert (
+            got == "skoledagene er så vanskelig\tskoledagene er så vanskelige"
+            "\t#cat=x,const=spred,errtype=agr,orig=x,pos=adj, file: p.xml\n"
+            "vanskerlig\tvanskelig\t#errtype=nosilent,pos=adj, file: p.xml"
+        )
 
     def test_multi_errorlex_not_inline(self):
         """Nested error element, one word per line output"""
@@ -265,7 +268,10 @@ class TestCcat(unittest.TestCase):
         )
 
         xml_printer.collect_text(input_p, "nob", buffer)
-        assert buffer.getvalue() == "Et stykke av Norge som er lite kjent - " "Litt om Norge i mellomkrigstiden ¶\n"
+        assert (
+            buffer.getvalue() == "Et stykke av Norge som er lite kjent - "
+            "Litt om Norge i mellomkrigstiden ¶\n"
+        )
 
     def test_p_with_span(self):
         """The output of a plain p with a span element"""
@@ -320,7 +326,22 @@ class TestCcat(unittest.TestCase):
         buffer = io.StringIO()
 
         xml_printer.collect_text(input_p, "nob", buffer)
-        assert buffer.getvalue() == "Et\n" "stykke\n" "av\n" "Norge\n" "som\n" "er\n" "lite\n" "kjent\n" "-\n" "Litt\n" "om\n" "Norge\n" "i\n" "mellomkrigstiden\n"
+        assert (
+            buffer.getvalue() == "Et\n"
+            "stykke\n"
+            "av\n"
+            "Norge\n"
+            "som\n"
+            "er\n"
+            "lite\n"
+            "kjent\n"
+            "-\n"
+            "Litt\n"
+            "om\n"
+            "Norge\n"
+            "i\n"
+            "mellomkrigstiden\n"
+        )
 
     def test_p_with_span_one_word_per_line(self):
         """Output a plain p that contains a span element
@@ -339,7 +360,17 @@ class TestCcat(unittest.TestCase):
         buffer = io.StringIO()
 
         xml_printer.collect_text(input_p, "nob", buffer)
-        assert buffer.getvalue() == "I\n" "1864\n" "ga\n" "han\n" "ut\n" "boka\n" '"Fornuftigt\n' 'Madstel"\n' ".\n"
+        assert (
+            buffer.getvalue() == "I\n"
+            "1864\n"
+            "ga\n"
+            "han\n"
+            "ut\n"
+            "boka\n"
+            '"Fornuftigt\n'
+            'Madstel"\n'
+            ".\n"
+        )
 
     def test_p_with_error_one_word_per_line(self):
         input_p = etree.fromstring(
@@ -365,7 +396,13 @@ class TestCcat(unittest.TestCase):
 
         buffer = io.StringIO()
         xml_printer.collect_text(input_p, "sme", buffer)
-        assert buffer.getvalue() == "livččii\n" "makkarge\tmakkárge\t#errtype=á,pos=adv\n" "politihkka,\nmuhto\nrahpasit\nbaicca\nmuitalivčče\n" "makkár soga\tman soga\n" "makkar\tmakkár\t#errtype=á,pos=interr\nsoga\nsii\n"
+        assert (
+            buffer.getvalue() == "livččii\n"
+            "makkarge\tmakkárge\t#errtype=á,pos=adv\n"
+            "politihkka,\nmuhto\nrahpasit\nbaicca\nmuitalivčče\n"
+            "makkár soga\tman soga\n"
+            "makkar\tmakkár\t#errtype=á,pos=interr\nsoga\nsii\n"
+        )
 
     def test_p_with_error_correction(self):
         """correction = True, print all corrections"""
@@ -392,7 +429,11 @@ class TestCcat(unittest.TestCase):
 
         buffer = io.StringIO()
         xml_printer.collect_text(input_p, "sme", buffer)
-        assert buffer.getvalue() == "livččii makkárge politihkka, muhto rahpasit baicca muitalivčče " "man soga sii ¶\n"
+        assert (
+            buffer.getvalue()
+            == "livččii makkárge politihkka, muhto rahpasit baicca muitalivčče "
+            "man soga sii ¶\n"
+        )
 
     def test_p_with_error_filtering_errorlex(self):
         """errorlex = True, print errorlex corrections"""
@@ -419,7 +460,11 @@ class TestCcat(unittest.TestCase):
 
         buffer = io.StringIO()
         xml_printer.collect_text(input_p, "sme", buffer)
-        assert buffer.getvalue() == "livččii makkarge politihkka, muhto rahpasit baicca muitalivčče " "man soga sii ¶\n"
+        assert (
+            buffer.getvalue()
+            == "livččii makkarge politihkka, muhto rahpasit baicca muitalivčče "
+            "man soga sii ¶\n"
+        )
 
     def test_p_with_error_filtering_errormorphsyn(self):
         """errormorphsyn = True, print errormorphsyn corrections"""
@@ -446,7 +491,11 @@ class TestCcat(unittest.TestCase):
 
         buffer = io.StringIO()
         xml_printer.collect_text(input_p, "sme", buffer)
-        assert buffer.getvalue() == "livččii makkarge politihkka, muhto rahpasit baicca muitalivčče " "makkar soga sii ¶\n"
+        assert (
+            buffer.getvalue()
+            == "livččii makkarge politihkka, muhto rahpasit baicca muitalivčče "
+            "makkar soga sii ¶\n"
+        )
 
     def test_p_with_error_filtering_errorort(self):
         """errorort = True, print errorort corrections"""
@@ -473,7 +522,11 @@ class TestCcat(unittest.TestCase):
 
         buffer = io.StringIO()
         xml_printer.collect_text(input_p, "sme", buffer)
-        assert buffer.getvalue() == "livččii makkárge politihkka, muhto rahpasit baicca muitalivčče " "makkár soga sii ¶\n"
+        assert (
+            buffer.getvalue()
+            == "livččii makkárge politihkka, muhto rahpasit baicca muitalivčče "
+            "makkár soga sii ¶\n"
+        )
 
     def test_p_with_error_filtering_errorortreal(self):
         xml_printer = ccat.XMLPrinter(errorortreal=True)
@@ -499,7 +552,11 @@ class TestCcat(unittest.TestCase):
 
         buffer = io.StringIO()
         xml_printer.collect_text(input_p, "sme", buffer)
-        assert buffer.getvalue() == "livččii makkarge politihkka, muhto rahpasit baicca muitalivčče " "makkar soga sii ¶\n"
+        assert (
+            buffer.getvalue()
+            == "livččii makkarge politihkka, muhto rahpasit baicca muitalivčče "
+            "makkar soga sii ¶\n"
+        )
 
     def test_visit_this_p_default(self):
         """Visit only plain p and <p type=text> elements"""
@@ -727,8 +784,8 @@ class TestCcat(unittest.TestCase):
             "baicca\n"
             "muitalivčče\n"
             "makkár soga\tman soga\n"
-                "sii\n"
-            )
+            "sii\n"
+        )
 
     def test_process_file_one_word_per_line_errorort(self):
         """Print only errorort content
@@ -815,7 +872,7 @@ class TestCcat(unittest.TestCase):
             "makkarge\tmakkárge\t#errtype=á,pos=adv\n"
             "makkár soga\tman soga\n"
             "makkar\tmakkár\t#errtype=á,pos=interr\n"
-            )
+        )
 
     def test_process_file_typos_errorlex(self):
         """Print only errorlex content
@@ -885,7 +942,10 @@ class TestCcat(unittest.TestCase):
         xml_printer = ccat.XMLPrinter(typos=True, one_word_per_line=True, errorort=True)
         xml_printer.etree = etree.parse(io.BytesIO(document.encode("utf8")))
         buffer = xml_printer.process_file()
-        assert buffer.getvalue() == "makkarge\tmakkárge\t#errtype=á,pos=adv\n" "makkar\tmakkár\t#errtype=á,pos=interr\n"
+        assert (
+            buffer.getvalue() == "makkarge\tmakkárge\t#errtype=á,pos=adv\n"
+            "makkar\tmakkár\t#errtype=á,pos=interr\n"
+        )
 
     def test_get_lang(self):
         """Check that get_lang finds the main lang of the document"""
@@ -1009,7 +1069,9 @@ class TestCcat(unittest.TestCase):
         xml_printer.etree = etree.parse(io.BytesIO(document.encode("utf8")))
         buffer = xml_printer.process_file()
 
-        assert buffer.getvalue() == ("Vijmak bierjjedak! nor vijmak de bierjjedak sjattáj. ¶\n")
+        assert buffer.getvalue() == (
+            "Vijmak bierjjedak! nor vijmak de bierjjedak sjattáj. ¶\n"
+        )
 
     def test_no_foreign(self):
         """noforeign option is True
@@ -1041,7 +1103,9 @@ class TestCcat(unittest.TestCase):
         xml_printer.etree = etree.parse(io.BytesIO(document.encode("utf8")))
         buffer = xml_printer.process_file()
 
-        assert buffer.getvalue() == ("Vijmak bierjjedak!  vijmak de bierjjedak sjattáj. ¶\n")
+        assert buffer.getvalue() == (
+            "Vijmak bierjjedak!  vijmak de bierjjedak sjattáj. ¶\n"
+        )
 
     def test_no_foreign_typos(self):
         """noforeign is True, typos is True
@@ -1198,10 +1262,10 @@ class TestCcat(unittest.TestCase):
             '\t"leat" V <sme> IV Ind Prt Sg3 @+FMAINV\n"<buolaš>"\n'
             '\t"buolaš" Sem/Wthr N <sme> Sg Nom\n"<,>"\n'
             '\t"," CLB\n"<de>"\n\t"de" Adv <sme>\n"<aggregáhta>"\n'
-                '\t"aggregáhta" N <sme> Sg Nom\n"<billánii>"\n'
-                '\t"billánit" V <sme> IV Ind Prt Sg3 @+FMAINV\n"<.>"\n'
-                '\t"." CLB\n\n"<¶>"\n\t"¶" CLB\n\n'
-            )
+            '\t"aggregáhta" N <sme> Sg Nom\n"<billánii>"\n'
+            '\t"billánit" V <sme> IV Ind Prt Sg3 @+FMAINV\n"<.>"\n'
+            '\t"." CLB\n\n"<¶>"\n\t"¶" CLB\n\n'
+        )
 
     def test_process_file2(self):
         """Test process_file with a dependency element as input"""
@@ -1234,4 +1298,19 @@ class TestCcat(unittest.TestCase):
         xml_printer.etree = etree.parse(io.BytesIO(document.encode("utf8")))
         buffer = xml_printer.process_file()
 
-        assert buffer.getvalue() == '"<Muhto>"\n\t"muhto" CC @CVP #1->1 \n"<gaskkohagaid>"\n' '\t"gaskkohagaid" Adv @ADVL> #2->12 \n"<,>"\n' '\t"," CLB #3->4 \n"<ja>"\n' '\t"ja" CC @CNP #4->2 \n"<erenoamážit>"\n' '\t"erenoamážit" Adv @ADVL> #5->12 \n"<dalle_go>"\n' '\t"dalle_go" CS @CVP #6->7 \n"<lei>"\n' '\t"leat" V IV Ind Prt Sg3 @FS-ADVL> #7->12 \n"<buolaš>"\n' '\t"buolaš" N Sg Nom @<SPRED #8->7 \n"<,>"\n' '\t"," CLB #9->6 \n"<de>"\n' '\t"de" Adv @ADVL> #10->12 \n"<aggregáhta>"\n' '\t"aggregáhta" N Sg Nom @SUBJ> #11->12 \n"<billánii>"\n' '\t"billánit" V IV Ind Prt Sg3 @FS-ADVL> #12->0 \n"<.>"\n' '\t"." CLB #13->12 \n\n"<¶>"\n\t"¶" CLB #1->1 \n\n'
+        assert (
+            buffer.getvalue()
+            == '"<Muhto>"\n\t"muhto" CC @CVP #1->1 \n"<gaskkohagaid>"\n'
+            '\t"gaskkohagaid" Adv @ADVL> #2->12 \n"<,>"\n'
+            '\t"," CLB #3->4 \n"<ja>"\n'
+            '\t"ja" CC @CNP #4->2 \n"<erenoamážit>"\n'
+            '\t"erenoamážit" Adv @ADVL> #5->12 \n"<dalle_go>"\n'
+            '\t"dalle_go" CS @CVP #6->7 \n"<lei>"\n'
+            '\t"leat" V IV Ind Prt Sg3 @FS-ADVL> #7->12 \n"<buolaš>"\n'
+            '\t"buolaš" N Sg Nom @<SPRED #8->7 \n"<,>"\n'
+            '\t"," CLB #9->6 \n"<de>"\n'
+            '\t"de" Adv @ADVL> #10->12 \n"<aggregáhta>"\n'
+            '\t"aggregáhta" N Sg Nom @SUBJ> #11->12 \n"<billánii>"\n'
+            '\t"billánit" V IV Ind Prt Sg3 @FS-ADVL> #12->0 \n"<.>"\n'
+            '\t"." CLB #13->12 \n\n"<¶>"\n\t"¶" CLB #1->1 \n\n'
+        )
