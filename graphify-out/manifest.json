@@ -828,9 +828,9 @@
     "semantic_hash": "4c98590474599b0fa632003cb971ba06"
   },
   "pyproject.toml": {
-    "mtime": 1788875708.9516904,
-    "seen": 1791798686.760843,
-    "ast_hash": "fa8d1e664cd260a3fac802edb7acf666",
+    "mtime": 1791809628.910801,
+    "seen": 1791809685.500108,
+    "ast_hash": "a3ca764e880486d2b920bfad08c141e7",
     "semantic_hash": ""
   },
   ".github/workflows/docs.yml": {

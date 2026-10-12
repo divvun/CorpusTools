@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `9a6205a2`
+- Built from commit: `f42582a0`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -798,22 +798,22 @@ Cohesion: 0.40
 Nodes (4): Element, Path, Turn a udhr xml file to giella xml., to_html_elt()
 
 ## Knowledge Gaps
-- **91 isolated node(s):** `generate_tables.sh script`, `corpustools`, `Original Corpus`, `Korp-ready Files`, `VRT Corpus Files` (+86 more)
+- **91 isolated node(s):** `corpustools`, `generate_tables.sh script`, `Original Corpus`, `Korp-ready Files`, `VRT Corpus Files` (+86 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **128 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
+- **Why does `MetadataHandler` connect `MetadataHandler` to `finder.py`, `.get_variable`, `update_metadata.py`, `util.py`, `epubconverter.py`, `.directory`, `.validate_and_set_margins`?**
+  _High betweenness centrality (0.056) - this node is a cross-community bridge._
 - **Why does `TestDocumentFixer` connect `TestDocumentFixer` to `.test_fix_newstags_bold_1`, `.test_fix_sms1`, `.test_fix_sms2`, `.test_fix_newstags_bold_2`, `.test_fix_sms3`, `.test_fix_sms4`, `.test_fix_sms5`, `.test_fix_sms6`, `.test_fix_newstags_bold_3`, `test_htmlconverter.py`, `XMLTester`, `.test_fix_newstags_4`?**
-  _High betweenness centrality (0.073) - this node is a cross-community bridge._
-- **Why does `XMLPrinter` connect `XMLPrinter` to `CorpusPath`?**
-  _High betweenness centrality (0.067) - this node is a cross-community bridge._
+  _High betweenness centrality (0.056) - this node is a cross-community bridge._
 - **Why does `TestMetadataHandler` connect `TestMetadataHandler` to `.test_set_skip_pages6`, `.test_set_linespacing_7`, `.test_set_margin`, `.test_parse_margin_lines1`, `.test_parse_margin_lines2`, `.test_parse_margin_lines3`, `.test_parse_margin_lines4`, `.test_parse_margin_lines5`, `.test_parse_margin_lines6`, `.test_parse_margin_lines7`, `.test_inner_margin1`, `.test_inner_margin2`, `.test_inner_margin3`, `.test_inner_margin4`, `.test_skip_elements_1`, `.test_set_skip_lines1`, `.test_skip_elements_2`, `.test_skip_elements_empty`, `.test_mlangs_empty`, `.test_mlangs_set`, `.test_set_skip_lines2`, `.test_set_skip_lines3`, `.test_set_skip_pages1`, `.test_set_skip_pages2`, `.test_set_skip_pages3`, `.test_set_skip_pages4`, `.test_set_skip_pages5`?**
-  _High betweenness centrality (0.065) - this node is a cross-community bridge._
+  _High betweenness centrality (0.047) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `CorpusPath` (e.g. with `XMLPrinter` and `Converter`) actually correct?**
   _`CorpusPath` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `generate_tables.sh script`, `corpustools`, `Original Corpus` to the rest of the system?**
+- **What connects `corpustools`, `generate_tables.sh script`, `Original Corpus` to the rest of the system?**
   _91 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `TestDocumentFixer` be split into smaller, more focused modules?**
   _Cohesion score 0.028985507246376812 - nodes in this community are weakly interconnected._

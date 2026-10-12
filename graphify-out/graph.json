@@ -12689,7 +12689,7 @@
       "source_file": "pyproject.toml",
       "source_location": "L1",
       "type": "package",
-      "version": "2.6.1"
+      "version": "2.8.0"
     },
     {
       "id": "corpustools_test_test_decode",
@@ -72881,5 +72881,5 @@
       "source_file": "docs/docs/scripts/compile_cwb_mono.md"
     }
   ],
-  "built_at_commit": "9a6205a23fa2cdf2e1cdd1bc975dc88bc052f01f"
+  "built_at_commit": "f42582a05deb2215e06a6eb3810578ef1443ee51"
 }
