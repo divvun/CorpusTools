@@ -218,15 +218,14 @@ class CorpusPath:
             (pathlib.Path): path to the parallel file if it exist, else None
         """
 
-        return (
-            self.name(
-                corpus_lang=language,
-                filepath=self.filepath.with_name(
-                    self.metadata.get_parallel_texts().get(language)
-                ),
-            )
-            if self.metadata.get_parallel_texts().get(language) is not None
-            else None
+        parallel_languages = self.metadata.get_parallel_texts()
+        parallel_language = parallel_languages.get(language)
+        if parallel_language is None:
+            return None
+
+        return self.name(
+            corpus_lang=language,
+            filepath=self.filepath.with_name(parallel_language),
         )
 
     def parallels(self) -> Iterator[Path | None]:
