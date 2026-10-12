@@ -17,6 +17,8 @@
 #
 """Convert Ávvir-files to the Giella xml format."""
 
+from pathlib import Path
+
 from lxml import etree
 
 
@@ -75,12 +77,11 @@ def convert_sub_p(para):
                     parent.text = parent.text + sub_p.tail
                 else:
                     parent.text = sub_p.tail
-        else:
-            if sub_p.tail is not None:
-                if previous.tail is not None:
-                    previous.tail = previous.tail + sub_p.tail
-                else:
-                    previous.tail = sub_p.tail
+        elif sub_p.tail is not None:
+            if previous.tail is not None:
+                previous.tail = previous.tail + sub_p.tail
+            else:
+                previous.tail = sub_p.tail
         para.remove(sub_p)
 
 
@@ -181,7 +182,7 @@ def fix_quotemarks(avvir_doc):
         fix_quotemarks(child)
 
 
-def convert2intermediate(filename):
+def convert2intermediate(filename: Path) -> etree.Element:
     """Convert Ávvir xml files to the giellatekno xml format.
 
     The root node in an Ávvir document is article.

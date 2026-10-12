@@ -17,6 +17,8 @@
 #
 """Convert bible xml files to the Giella xml format."""
 
+from pathlib import Path
+
 from lxml import etree
 
 
@@ -172,7 +174,7 @@ def process_book(book_element):
     return section
 
 
-def process_bible(bible_doc):
+def process_bible(bible_doc) -> etree.Element:
     """Convert a bible xml document to a Giella xml document.
 
     Args:
@@ -189,7 +191,7 @@ def process_bible(bible_doc):
     return body
 
 
-def convert2intermediate(filename):
+def convert2intermediate(filename: Path) -> etree.Element:
     """Convert the bible xml to intermediate Giella xml format."""
 
     document = etree.Element("document")

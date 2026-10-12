@@ -57,7 +57,7 @@ class ConversionError(Exception):
     """Raise this exception when conversions error occur."""
 
 
-def print_frame(debug="", *args):
+def print_frame(debug: str = "", *args: object) -> None:
     """Print debug output."""
     # 0 represents this line, 1 represents line at caller
     callerframerecord = inspect.stack()[1]
@@ -283,7 +283,7 @@ def name_to_unicode(filename):
         return filename.decode("utf-8")
 
 
-def note(msg):
+def note(msg: object)-> None:
     """Print msg to stderr.
 
     Args:
@@ -293,7 +293,7 @@ def note(msg):
 
 
 @contextmanager
-def ignored(*exceptions: type[BaseException]) -> Generator[None]:
+def ignored(*exceptions: type[BaseException]) -> Generator[None, None, None]:
     """Ignore exceptions."""
     try:
         yield

@@ -17,6 +17,8 @@
 #
 """Convert bible usx xml files to giella xml format."""
 
+from pathlib import Path
+
 from lxml import etree
 
 
@@ -70,21 +72,20 @@ def usx_to_document(usx_document):
                         paragraph[-1].tail = " ".join(child.text.split())
                     else:
                         paragraph[-1].tail = (
-                            f"{paragraph[-1].tail} " f'{" ".join(child.text.split())}'
+                            f"{paragraph[-1].tail} {' '.join(child.text.split())}"
                         )
+                elif not paragraph.text:
+                    try:
+                        paragraph.text = " ".join(child.text.split())
+                    except AttributeError:
+                        pass
                 else:
-                    if not paragraph.text:
-                        try:
-                            paragraph.text = " ".join(child.text.split())
-                        except AttributeError:
-                            pass
-                    else:
-                        try:
-                            paragraph.text = (
-                                f"{paragraph.text} " f'{" ".join(child.text.split())}'
-                            )
-                        except AttributeError:
-                            pass
+                    try:
+                        paragraph.text = (
+                            f"{paragraph.text} {' '.join(child.text.split())}"
+                        )
+                    except AttributeError:
+                        pass
             elif child.get("style") in ["li", "li1", "li2"]:
                 paragraph = etree.SubElement(section, "p")
                 paragraph.set("type", "listitem")
@@ -106,7 +107,7 @@ def usx_to_document(usx_document):
     return document
 
 
-def convert2intermediate(filename):
+def convert2intermediate(filename: Path) -> etree.Element:
     """Convert usx xml files to the giellatekno xml format."""
     usx_doc = etree.parse(filename).getroot()
     remove_unwanted(usx_doc)

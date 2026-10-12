@@ -53,8 +53,8 @@ logging.basicConfig(level=logging.WARNING)
 LOGGER = logging.getLogger(__name__)
 
 
-def newer_group(sources, target):
-    if not os.path.exists(target):
+def newer_group(sources: list[Path], target: Path) -> bool:
+    if not target.exists():
         # Target does not exist, so we say that "sources are newer"
         return True
 
@@ -108,9 +108,9 @@ class Converter:
         return self.metadata.get_variable("conversion_status") == "ocr"
 
     @property
-    def goldstandard(self):
+    def goldstandard(self) -> bool:
         """Return a boolean indicating if the file is a gold standard doc."""
-        return self.metadata.get_variable("conversion_status").startswith("correct")
+        return self.metadata.get_variable("conversion_status") == "correct"
 
     @staticmethod
     def get_dtd_location():
@@ -143,7 +143,7 @@ class Converter:
         Returns:
             The converted document as an lxml Element.
         """
-        chooser: dict[str, Callable] = {
+        chooser: dict[str, Callable[[Path], etree.Element]] = {
             ".doc": htmlcontentconverter.convert2intermediate,
             ".docx": htmlcontentconverter.convert2intermediate,
             ".epub": htmlcontentconverter.convert2intermediate,
@@ -173,7 +173,7 @@ class Converter:
         else:
             return chooser[path.suffix](path)
 
-    def transform_to_complete(self):
+    def transform_to_complete(self) -> etree.Element:
         """Combine the intermediate xml document with its medatata."""
         try:
             intermediate = self.to_giella(self.names.orig)
@@ -213,7 +213,7 @@ class Converter:
                 f"XSLTParseError in: {self.names.xsl}\nError {str(error)}"
             ) from error
 
-    def fix_document(self, complete):
+    def fix_document(self, complete: etree.Element) -> None:
         """Fix a misc. issues found in converted document."""
         fixer = documentfixer.DocumentFixer(complete)
 
@@ -247,10 +247,12 @@ class Converter:
             "mns",
         ]:
             try:
-                fixer.fix_body_encoding(self.metadata.get_variable("mainlang"))
+                mainlang = self.metadata.get_variable("mainlang")
+                if mainlang is not None:
+                    fixer.fix_body_encoding(mainlang)
             except UserWarning as error:
-                util.print_frame(error)
-                util.print_frame(self.names.orig)
+                util.print_frame(str(error))
+                util.print_frame(str(self.names.orig))
 
     mixed_to_unicode = {
         "e4": "ä",
@@ -264,21 +266,25 @@ class Converter:
         "95": "•",  # u'\u2022' bullet
     }
 
-    def mixed_decoder(self, decode_error):
+    def mixed_decoder(self, decode_error: UnicodeDecodeError) -> tuple[str, int]:
         """Convert text to unicode."""
         badstring = decode_error.object[decode_error.start : decode_error.end]
-        badhex = badstring.encode("hex")
+        badhex = badstring.hex()
         repl = self.mixed_to_unicode.get(badhex, "\ufffd")
         if repl == "\ufffd":  # � unicode REPLACEMENT CHARACTER
-            LOGGER.warn("Skipped bad byte \\x%s, seen in %s", badhex, self.names.orig)
-        return repl, (decode_error.start + len(repl))
+            LOGGER.warning(
+                "Skipped bad byte \\x%s, seen in %s", badhex, self.names.orig
+            )
+        return repl, decode_error.end
 
-    def fix_parallels(self, complete):
+    def fix_parallels(self, complete: etree.Element) -> None:
         for parallel in complete.xpath(".//parallel_text"):
             if not parallel.get("location"):
                 parallel.getparent().remove(parallel)
 
-    def make_complete(self, language_guesser):
+    def make_complete(
+        self, language_guesser: text_cat.Classifier | None
+    ) -> etree.Element:
         """Make a complete Giella xml file.
 
         Combine the intermediate Giella xml file and the metadata into
@@ -294,15 +300,19 @@ class Converter:
 
         # Add whitespace to separate header, body and paragraphs
         # and make it easier to see where the diffs are
-        complete.find("header").tail = "\n"
-        complete.find("body").text = "\n"
+        header = complete.find("header")
+        if header is not None:
+            header.tail = "\n"
+        body = complete.find("body")
+        if body is not None:
+            body.text = "\n"
         for para in complete.iter("p"):
             para.tail = "\n"
 
         return complete
 
     @staticmethod
-    def has_content(complete):
+    def has_content(complete: etree.Element) -> int:
         """Find out if the xml document has any content.
 
         Args:
@@ -312,7 +322,7 @@ class Converter:
         Returns:
             (int): The length of the content in complete.
         """
-        xml_printer = ccat.XMLPrinter(all_paragraphs=True, hyph_replacement=None)
+        xml_printer = ccat.XMLPrinter(all_paragraphs=True, hyph_replacement="")
         xml_printer.etree = etree.ElementTree(complete)
 
         return len(xml_printer.process_file().getvalue())

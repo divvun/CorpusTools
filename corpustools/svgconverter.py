@@ -18,13 +18,14 @@
 """This file contains classes to convert svg files to the Giella xml format."""
 
 import os
+from pathlib import Path
 
 from lxml import etree
 
 HERE = os.path.dirname(__file__)
 
 
-def convert2intermediate(filename):
+def convert2intermediate(filename: Path) -> etree.Element:
     """Transform svg to an intermediate xml document.
 
     Args:

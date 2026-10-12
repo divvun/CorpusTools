@@ -59,7 +59,7 @@ class DocumentFixer:
     )
     boldtags = re.compile(r"@bold\s*:")
 
-    def __init__(self, document):
+    def __init__(self, document: etree.Element):
         """Initialise the DocumentFixer class."""
         self.root = document
 
@@ -67,12 +67,12 @@ class DocumentFixer:
         """Get the root of the xml document."""
         return self.root
 
-    def compact_ems(self):
+    def compact_ems(self) -> None:
         """Compact consecutive em elements into a single em if possible."""
         word = re.compile(r"\w+", re.UNICODE)
         for element in self.root.iter("p"):
             if len(element.xpath(".//em")) > 1:
-                lines = []
+                lines: list[str] = []
                 for emphasis in element.iter("em"):
                     next_elt = emphasis.getnext()
                     if (
@@ -82,7 +82,9 @@ class DocumentFixer:
                     ):
                         if emphasis.text is not None:
                             lines.append(emphasis.text.strip())
-                        emphasis.getparent().remove(emphasis)
+                        parent = emphasis.getparent()
+                        if parent is not None:
+                            parent.remove(emphasis)
                     else:
                         if emphasis.text is not None:
                             lines.append(emphasis.text.strip())
@@ -96,7 +98,7 @@ class DocumentFixer:
         for element in self.root.iter("p"):
             self.replace_shy(element)
 
-    def replace_shy(self, element):
+    def replace_shy(self, element: etree.Element) -> None:
         """Replace shy with a hyph element.
 
         Args:
@@ -123,17 +125,23 @@ class DocumentFixer:
                 for part in parts[1:]:
                     hyph = etree.Element("hyph")
                     hyph.tail = part
-                    element.getparent().append(hyph)
+                    parent = element.getparent()
+                    if parent is not None:
+                        parent.append(hyph)
 
-    def insert_spaces_after_semicolon(self):
+    def insert_spaces_after_semicolon(self) -> None:
         """Insert space after semicolon where needed."""
         irritating_words_regex = re.compile(
             "(govv(a|en|ejeaddji):)([^ ])", re.UNICODE | re.IGNORECASE
         )
-        for child in self.root.find(".//body"):
-            self.insert_space_after_semicolon(child, irritating_words_regex)
+        body = self.root.find(".//body")
+        if body is not None:
+            for child in body:
+                self.insert_space_after_semicolon(child, irritating_words_regex)
 
-    def insert_space_after_semicolon(self, element, irritating_words_regex):
+    def insert_space_after_semicolon(
+        self, element: etree.Element, irritating_words_regex: re.Pattern[str]
+    ):
         """Insert space after words needing it.
 
         Args:
@@ -168,7 +176,7 @@ class DocumentFixer:
             "\x04": "",
             "\x07": "",
             "\x08": "",
-            "\x0F": "",
+            "\x0f": "",
             "\x10": "",
             "\x11": "",
             "\x13": "",
@@ -176,11 +184,11 @@ class DocumentFixer:
             "\x15": "",
             "\x17": "",
             "\x18": "",
-            "\x1A": "",
-            "\x1B": "",
-            "\x1C": "",
-            "\x1D": "",
-            "\x1E": "",
+            "\x1a": "",
+            "\x1b": "",
+            "\x1c": "",
+            "\x1d": "",
+            "\x1e": "",
             "ﬁ": "fi",
             "ﬂ": "fl",
             "ﬀ": "ff",
@@ -230,14 +238,14 @@ class DocumentFixer:
 
         replacement_pairs = {
             "sms": [
-                ("\u2019", "\u02BC"),  # RIGHT SINGLE QUOTATION MARK,
+                ("\u2019", "\u02bc"),  # RIGHT SINGLE QUOTATION MARK,
                 # MODIFIER LETTER APOSTROPHE
-                ("\u0027", "\u02BC"),  # apostrophe,
+                ("\u0027", "\u02bc"),  # apostrophe,
                 # MODIFIER LETTER APOSTROPHE
-                ("\u2032", "\u02B9"),  # PRIME, MODIFIER LETTER PRIME
-                ("\u00B4", "\u02B9"),  # ACUTE ACCENT,
+                ("\u2032", "\u02b9"),  # PRIME, MODIFIER LETTER PRIME
+                ("\u00b4", "\u02b9"),  # ACUTE ACCENT,
                 # MODIFIER LETTER PRIME
-                ("\u0301", "\u02BC"),  # COMBINING ACUTE ACCENT,
+                ("\u0301", "\u02bc"),  # COMBINING ACUTE ACCENT,
                 # MODIFIER LETTER PRIME
             ],
             "mns": [
@@ -245,16 +253,16 @@ class DocumentFixer:
                 ("\uf50f", "а̄"),
                 ("\uf510", "Е̄"),
                 ("\uf511", "е̄"),
-                ("\uf512", "Ё̄"),  #
+                ("\uf512", "Ё̄"),
                 ("\uf513", "ё̄"),
                 ("\uf517", "О̄"),  # 17? Just guessing
                 ("\uf518", "О̄"),  # CYRILLIC LONG CAPITAL O
                 ("\uf519", "о̄"),  # CYRILLIC LONG SMALL O
-                ("\uf520", "Ы̄"),  #
-                ("\uf521", "ы̄"),  #
+                ("\uf520", "Ы̄"),
+                ("\uf521", "ы̄"),
                 ("\uf522", "Э̄"),
                 ("\uf523", "э̄"),
-                ("\uf52c", "Ю̄"),  #
+                ("\uf52c", "Ю̄"),
                 ("\uf52d", "ю̄"),
                 ("\uf528", "Я̄"),
                 ("\uf529", "я̄"),
@@ -272,7 +280,7 @@ class DocumentFixer:
         for child in element:
             self.fix_lang(child, lang)
 
-    def fix_body_encoding(self, mainlang):
+    def fix_body_encoding(self, mainlang: str) -> None:
         """Replace wrongly encoded saami chars with proper ones.
 
         Send a stringified version of the body into the EncodingGuesser class.
