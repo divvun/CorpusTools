@@ -30,10 +30,10 @@
     "semantic_hash": "ffa1ad97c39c3ffe2917c5773406b538"
   },
   "corpustools/avvirconverter.py": {
-    "mtime": 1787664152.3437653,
-    "seen": 1788870537.6080089,
-    "ast_hash": "3839d19f178ba70091e8f777dd96f8eb",
-    "semantic_hash": "3839d19f178ba70091e8f777dd96f8eb"
+    "mtime": 1791801617.499418,
+    "seen": 1791801659.078846,
+    "ast_hash": "cb885691cddb976f14c40307871131fc",
+    "semantic_hash": ""
   },
   "corpustools/basicconverter.py": {
     "mtime": 1787664152.345826,
@@ -54,10 +54,10 @@
     "semantic_hash": "18313b6dae4c7fd9ca06458649540d0d"
   },
   "corpustools/biblexmlconverter.py": {
-    "mtime": 1787664152.3543599,
-    "seen": 1788870537.6080132,
-    "ast_hash": "c777fe20e6e901da55e9d3a7bae61a9e",
-    "semantic_hash": "c777fe20e6e901da55e9d3a7bae61a9e"
+    "mtime": 1791801604.6030858,
+    "seen": 1791801659.07885,
+    "ast_hash": "944016d6ab7a729863a4787a8a24082a",
+    "semantic_hash": ""
   },
   "corpustools/ccat.py": {
     "mtime": 1788869987.4359918,
@@ -120,21 +120,21 @@
     "semantic_hash": "a129e649b71f3c8916ecf84f492d1a9d"
   },
   "corpustools/converter.py": {
-    "mtime": 1788870165.9804127,
-    "seen": 1788870537.6080189,
-    "ast_hash": "246cecab71374b433b32908a6b9d2220",
+    "mtime": 1791801713.0482757,
+    "seen": 1791801843.6622772,
+    "ast_hash": "6a2e1886c4181924dee6092e50ae432e",
     "semantic_hash": ""
   },
   "corpustools/convertermanager.py": {
-    "mtime": 1787668269.742486,
-    "seen": 1788870537.6080189,
-    "ast_hash": "1cd1a61a6208f94dcc4b9ae07bebc8ab",
+    "mtime": 1791802598.0303543,
+    "seen": 1791802757.258152,
+    "ast_hash": "a1e374cee8488d9289061938c9d7d719",
     "semantic_hash": ""
   },
   "corpustools/corpuspath.py": {
-    "mtime": 1787668269.7468462,
-    "seen": 1788870537.60802,
-    "ast_hash": "d07d2d54e7c5e610c48edaee9c4319ed",
+    "mtime": 1791809007.2078831,
+    "seen": 1791809088.975561,
+    "ast_hash": "823294f91bbc8161758d69a2ecee56e0",
     "semantic_hash": ""
   },
   "corpustools/corpusxmlfile.py": {
@@ -168,10 +168,10 @@
     "semantic_hash": "e2e52518336f85c993a9cc0fcf6bc0ab"
   },
   "corpustools/documentfixer.py": {
-    "mtime": 1787664152.3770628,
-    "seen": 1788870537.608023,
-    "ast_hash": "7675ef08dc0fe4437b79f3ae8707f7d1",
-    "semantic_hash": "7675ef08dc0fe4437b79f3ae8707f7d1"
+    "mtime": 1791800822.2848096,
+    "seen": 1791801659.0788631,
+    "ast_hash": "8c5f834bc5c6e70bd3f6005e4c5329fe",
+    "semantic_hash": ""
   },
   "corpustools/dropbox_adder.py": {
     "mtime": 1787664152.3777962,
@@ -426,10 +426,10 @@
     "semantic_hash": "446ba6522c86c7eabf64fd139b6879d8"
   },
   "corpustools/svgconverter.py": {
-    "mtime": 1787664152.406634,
-    "seen": 1788870537.608045,
-    "ast_hash": "1e718b9b971621f0672e63772c7a94bb",
-    "semantic_hash": "1e718b9b971621f0672e63772c7a94bb"
+    "mtime": 1791800184.5138807,
+    "seen": 1791801659.078889,
+    "ast_hash": "ca16daff6f4b4369ee5f64684dacd8f2",
+    "semantic_hash": ""
   },
   "corpustools/test/__init__.py": {
     "mtime": 1683833093.1334217,
@@ -462,9 +462,9 @@
     "semantic_hash": ""
   },
   "corpustools/test/test_ccat.py": {
-    "mtime": 1787753626.2912853,
-    "seen": 1788870537.6080482,
-    "ast_hash": "004ddeec748f62a7f78b0b32badd2499",
+    "mtime": 1791798725.7154763,
+    "seen": 1791798771.681607,
+    "ast_hash": "fb71727d8fc1dfb029bc948a500ec62d",
     "semantic_hash": ""
   },
   "corpustools/test/test_compare_tmx_goldstandard.py": {
@@ -696,15 +696,15 @@
     "semantic_hash": "a2e701cdf56d35da22ced50aa7226d86"
   },
   "corpustools/usxconverter.py": {
-    "mtime": 1767101921.4469395,
-    "seen": 1787262710.783139,
-    "ast_hash": "5bfdde2d5deec5af372cc4015edc0807",
-    "semantic_hash": "5bfdde2d5deec5af372cc4015edc0807"
+    "mtime": 1791801577.2324302,
+    "seen": 1791801659.078917,
+    "ast_hash": "5d013dd823d97dfb7a0e81171f66e4da",
+    "semantic_hash": ""
   },
   "corpustools/util.py": {
-    "mtime": 1787668269.7748468,
-    "seen": 1788870537.6080692,
-    "ast_hash": "9339c90bcf15869f0d66332f58428a25",
+    "mtime": 1791802272.2812424,
+    "seen": 1791802757.25821,
+    "ast_hash": "afe9de151a85c0807833b9a84cf64fa1",
     "semantic_hash": ""
   },
   "corpustools/versioncontrol.py": {
@@ -828,9 +828,9 @@
     "semantic_hash": "4c98590474599b0fa632003cb971ba06"
   },
   "pyproject.toml": {
-    "mtime": 1788870073.218473,
-    "seen": 1788870537.60808,
-    "ast_hash": "6da29fb056c86e2c34d84b38282a4670",
+    "mtime": 1788875708.9516904,
+    "seen": 1791798686.760843,
+    "ast_hash": "fa8d1e664cd260a3fac802edb7acf666",
     "semantic_hash": ""
   },
   ".github/workflows/docs.yml": {
@@ -1278,9 +1278,9 @@
     "semantic_hash": "3571ce5f4436058d217635ac3ae70158"
   },
   "corpustools/biblesfmconverter.py": {
-    "mtime": 1787668269.7311924,
-    "seen": 1788870537.608012,
-    "ast_hash": "3840bf920cb6f04c5409c2988c9b8fb9",
+    "mtime": 1791801610.802766,
+    "seen": 1791801659.078849,
+    "ast_hash": "1f53c532a4e6c291c6e2f267fd7e4d82",
     "semantic_hash": ""
   },
   ".github/copilot-instructions.md": {
@@ -1457,10 +1457,10 @@
     "ast_hash": "5decf359ddc636095050c8ca4a31140b",
     "semantic_hash": ""
   },
-  "compare.json": {
-    "mtime": 1787666584.721434,
-    "seen": 1788870537.608001,
-    "ast_hash": "4d37bc51357211c0a03b99caeb0c563b",
+  "corpustools/ocrcontentconverter.py": {
+    "mtime": 1789379734.0566988,
+    "seen": 1791798686.760792,
+    "ast_hash": "568523c4a6fd67b5f8556c6292c18de8",
     "semantic_hash": ""
   }
 }
