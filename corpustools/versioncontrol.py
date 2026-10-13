@@ -12,16 +12,16 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2013-2023 The University of Tromsø &
+#   Copyright © 2013-2026 The University of Tromsø &
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 """Classes and functions to change names of corpus files."""
 
-
 import getpass
 import os
 import pwd
+from pathlib import Path
 
 import git
 
@@ -48,7 +48,7 @@ class VersionController:
         """Meta function."""
         raise NotImplementedError("You have to subclass and override move")
 
-    def remove(self, path):
+    def remove(self, path: Path) -> None:
         """Meta function."""
         raise NotImplementedError("You have to subclass and override remove")
 
@@ -101,7 +101,7 @@ class GIT(VersionController):
         """
         self.gitrepo.git.mv(oldpath, newpath)
 
-    def remove(self, path):
+    def remove(self, path: Path) -> None:
         """Remove a file from the repo.
 
         Args:
@@ -110,7 +110,7 @@ class GIT(VersionController):
         self.gitrepo.git.rm(path)
 
 
-def vcs(directory):
+def vcs(directory: Path) -> VersionController:
     """Make a version control client.
 
     Args:
@@ -125,7 +125,7 @@ def vcs(directory):
     try:
         git_repo = git.Repo(directory)
         return GIT(git_repo)
-    except git.exc.InvalidGitRepositoryError:
+    except git.InvalidGitRepositoryError as err:
         raise VersionControlError(
             f"{directory} is not a Git repo. Files can only be added to a git repo."
-        )
+        ) from err

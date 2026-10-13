@@ -12,11 +12,10 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2015-2023 The University of Tromsø & the Norwegian Sámi Parliament
+#   Copyright © 2015-2026 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 """Move a corpus file from oldpath to newpath."""
-
 
 import argparse
 import sys
@@ -125,7 +124,7 @@ def compute_parallel_movenames(old_corpuspath, new_corpuspath):
     )
 
 
-def mover(oldpath, newpath):
+def mover(oldpath: corpuspath.CorpusPath, newpath: corpuspath.CorpusPath) -> None:
     """Move filepairs and update metadata."""
     filepairs = compute_movenames(oldpath, newpath)
     update_metadata(filepairs)

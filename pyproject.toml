@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "corpustools"
-version = "2.8.0"
+version = "2.9.0"
 description = "Manage giellalt corpora"
 authors = [
     "Børre Gaup <albbas@gmail.com>",
@@ -75,6 +75,7 @@ korp_para = "corpustools.korp_para:main"
 bibel_no_aligner = "corpustools.bibel_no_aligner:main"
 bibel_no_crawler = "corpustools.bibel_no_crawler:main"
 ces_to_bibel_no = "corpustools.ces2homegrown:main"
+gold2corr = "corpustools.gold2correct:main"
 
 [build-system]
 requires = ["poetry-core"]
