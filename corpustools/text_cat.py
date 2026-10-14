@@ -36,6 +36,7 @@ import gzip
 import os
 import re
 import sys
+from typing import TextIO
 
 from corpustools import argparse_version, util
 
@@ -66,7 +67,7 @@ class NGramModel:
         self.finish(freq)
         return self
 
-    def of_text_file(self, fil):
+    def of_text_file(self, fil: TextIO) -> "NGramModel":
         self.finish(self.freq_of_text_file(fil))
         return self
 
@@ -107,11 +108,11 @@ class NGramModel:
         """This should update freq and return it."""
         raise NotImplementedError("You have to subclass and override freq_of_text")
 
-    def to_model_file(self, fil, fname):
+    def to_model_file(self, fil: TextIO) -> None:
         raise NotImplementedError("You have to subclass and override to_model_file")
 
-    def freq_of_text_file(self, fil):
-        freq = {}
+    def freq_of_text_file(self, fil: TextIO) -> dict[str, int]:
+        freq: dict[str, int] = {}
         for nl, strline in enumerate(fil.readlines()):
             try:
                 line = strline
@@ -161,7 +162,7 @@ class CharModel(NGramModel):
         self.finish(self.freq_of_model_file(fil, fname, gram_column=0, freq_column=1))
         return self
 
-    def to_model_file(self, fil):
+    def to_model_file(self, fil: TextIO) -> None:
         lines = "".join(
             [
                 "%s\t%d\n" % (g, f)
@@ -192,7 +193,7 @@ class WordModel(NGramModel):
         self.finish(self.freq_of_model_file(fil, fname, gram_column=1, freq_column=0))
         return self
 
-    def to_model_file(self, fil):
+    def to_model_file(self, fil: TextIO) -> None:
         lines = "".join(
             [
                 "%d\t%s\n" % (f, g)
@@ -401,11 +402,11 @@ class FolderTrainer:
             sys.stderr.flush()
         return model(language).of_text_file(self.open_corpus(filename))
 
-    def open_corpus(self, fname: str):
+    def open_corpus(self, fname: str) -> TextIO:
         if fname.endswith(".gz"):
-            return gzip.open(fname, "rb")
-        else:
-            return open(fname, "r", encoding="utf8")
+            return gzip.open(fname, "rt", encoding="utf8")
+
+        return open(fname, "r", encoding="utf8")
 
     def save(self, folder: str, ext: str = ".lm", verbose: bool = False) -> None:
         for lang, model in self.models.items():
