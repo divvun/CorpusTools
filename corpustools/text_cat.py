@@ -56,9 +56,7 @@ class NGramModel:
     MISSING_VALUE = 400
     verbose = False
 
-    def __init__(self, arg=None, lang="input"):
-        if arg is None:
-            arg = {}
+    def __init__(self, lang="input"):
         self.lang = lang  # for debugging
         self.unicode_warned = 0
 
