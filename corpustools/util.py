@@ -57,7 +57,8 @@ class ConversionError(Exception):
     """Raise this exception when conversions error occur."""
 
 
-def print_frame(debug: str = "", *args: object) -> None:
+
+def print_frame(debug: object = "", *args: object) -> None:
     """Print debug output."""
     # 0 represents this line, 1 represents line at caller
     callerframerecord = inspect.stack()[1]
@@ -83,7 +84,9 @@ def basename_noext(fname: str, ext: str) -> str:
     return os.path.basename(fname)[: -len(ext)]
 
 
-def sort_by_value(table, reverse=False):
+def sort_by_value(
+    table: dict[str, int | float], reverse: bool = False
+) -> list[tuple[str, int | float]]:
     """Sort the table by value.
 
     Args:
@@ -283,7 +286,7 @@ def name_to_unicode(filename):
         return filename.decode("utf-8")
 
 
-def note(msg: object)-> None:
+def note(msg: object) -> None:
     """Print msg to stderr.
 
     Args:
