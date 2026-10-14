@@ -21,7 +21,29 @@
 
 from io import StringIO
 
+import pytest
+
 from corpustools import text_cat
+
+
+@pytest.mark.parametrize(
+    ("model_type", "training_text"),
+    [
+        (text_cat.CharModel, "šuhkoládagáhkku"),
+        (text_cat.WordModel, "šuhkoláda ja gáhkku ja gáfe"),
+    ],
+)
+def test_model_file_round_trip(model_type, training_text):
+    trained_model = model_type().of_text(training_text)
+    model_file = StringIO()
+    trained_model.to_model_file(model_file)
+
+    loaded_model = model_type().of_model_file(
+        StringIO(model_file.getvalue()), "in-memory model"
+    )
+
+    assert loaded_model.freq == trained_model.freq
+    assert loaded_model.ngrams == trained_model.ngrams
 
 
 def test_classify():
