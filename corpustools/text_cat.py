@@ -30,7 +30,6 @@ Original Perl implementation and article available from
 http://odur.let.rug.nl/~vannoord/TextCat/
 """
 
-
 import argparse
 import codecs
 import glob
@@ -56,7 +55,7 @@ class NGramModel:
     MISSING_VALUE = 400
     verbose = False
 
-    def __init__(self, lang: str="input"):
+    def __init__(self, lang: str = "input"):
         self.lang = lang  # for debugging
         self.unicode_warned = 0
 
