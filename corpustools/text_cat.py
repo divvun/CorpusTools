@@ -56,7 +56,7 @@ class NGramModel:
     MISSING_VALUE = 400
     verbose = False
 
-    def __init__(self, lang="input"):
+    def __init__(self, lang: str="input"):
         self.lang = lang  # for debugging
         self.unicode_warned = 0
 
@@ -95,7 +95,7 @@ class NGramModel:
                 raise ValueError("%s: %d %s" % (fname, nl + 1, error)) from error
         return freq
 
-    def tokenise(self, text):
+    def tokenise(self, text: str) -> list[str]:
         """Tokenise the text
 
         Since we use split() when loading the model file, we also use split()
@@ -105,7 +105,7 @@ class NGramModel:
         tokens = (re.split(self.SPLITCHARS, t) for t in text.split())
         return sum(tokens, [])  # flatten
 
-    def freq_of_text(self, text, freq):
+    def freq_of_text(self, text: str, freq: dict[str, int]) -> dict[str, int]:
         """This should update freq and return it."""
         raise NotImplementedError("You have to subclass and override freq_of_text")
 
@@ -173,7 +173,7 @@ class CharModel(NGramModel):
         )
         fil.write(lines)
 
-    def freq_of_text(self, text, freq):
+    def freq_of_text(self, text: str, freq: dict[str, int]) -> dict[str, int]:
         words = self.tokenise(text)
         for word in words:
             _word_ = "_" + word + "_"
@@ -204,7 +204,7 @@ class WordModel(NGramModel):
         )
         fil.write(lines)
 
-    def freq_of_text(self, text, freq):
+    def freq_of_text(self, text: str, freq: dict[str, int]) -> dict[str, int]:
         words = self.tokenise(text)
         for word in words:
             freq[word] = freq.get(word, 0) + 1
