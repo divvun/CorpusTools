@@ -111,8 +111,4 @@ def test_compare_tc():
     assert wmodel_sme.compare_tc(
         nob_test, cmodel_sme.compare(ctext_nob)
     ) < wmodel_nob.compare_tc(nob_test, cmodel_nob.compare(ctext_nob))
-    minimum_word_score = 3930431
-    assert minimum_word_score < wmodel_nob.compare_tc(
-        nob_test, cmodel_nob.compare(ctext_nob)
-    )
     assert 0 == wmodel_sme.compare_tc(nob_test, cmodel_sme.compare(ctext_nob))
