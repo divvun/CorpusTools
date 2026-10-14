@@ -36,14 +36,14 @@ import gzip
 import os
 import re
 import sys
-from typing import Self, Sequence, TextIO
+from typing import Iterable, Self, Sequence, TextIO
 
 from corpustools import argparse_version, util
 
 here = os.path.dirname(__file__)
 
 
-def pretty_tbl(table):
+def pretty_tbl(table: Iterable[tuple[str, int | float]]) -> str:
     return ", ".join(f"{k}:{v}" for k, v in table)
 
 
@@ -72,7 +72,7 @@ class NGramModel:
         self.finish(self.freq_of_text_file(fil))
         return self
 
-    def of_model_file(self, fil, fname):
+    def of_model_file(self, fil: TextIO, fname: str) -> Self:
         raise NotImplementedError("You have to subclass and override of_model_file")
 
     def freq_of_model_file(
@@ -105,7 +105,7 @@ class NGramModel:
         marks) that might not all be in SPLITCHARS
         """
         tokens = (re.split(self.SPLITCHARS, t) for t in text.split())
-        return sum(tokens, [])  # flatten
+        return [token for token_list in tokens for token in token_list]  # flatten
 
     def freq_of_text(
         self, text: str, freq: dict[str, int | float]
@@ -145,7 +145,6 @@ class NGramModel:
         # Only store the top NB_NGRAMS with frequency:
         self.freq = {gram: freq[gram] for gram in self.ngrams}
         self.ngramskeyset = set(self.ngrams.keys())
-        self.langs_warned: set[str] = set()
 
     def compare(self, unknown: "NGramModel") -> float:
         missing_count = len(unknown.ngramskeyset - self.ngramskeyset)

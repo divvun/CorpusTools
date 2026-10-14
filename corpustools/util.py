@@ -57,7 +57,6 @@ class ConversionError(Exception):
     """Raise this exception when conversions error occur."""
 
 
-
 def print_frame(debug: object = "", *args: object) -> None:
     """Print debug output."""
     # 0 represents this line, 1 represents line at caller
