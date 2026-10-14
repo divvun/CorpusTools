@@ -420,10 +420,10 @@ class FolderTrainer:
 class FileTrainer:
     """Train the language guesser from a file."""
 
-    def __init__(self, fil, model=CharModel, verbose=False):
+    def __init__(self, fil: TextIO, model: type[NGramModel], verbose: bool = False):
         self.model = model().of_text_file(fil)
 
-    def save(self, fil, verbose=False):
+    def save(self, fil: TextIO, verbose: bool = False):
         self.model.to_model_file(fil)
 
 
