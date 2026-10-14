@@ -137,7 +137,7 @@ class NGramModel:
     def finish(self, freq: dict[str, int | float]) -> None:
         self.ngrams = {
             gram: rank
-            for rank, (gram, freq) in enumerate(
+            for rank, (gram, _) in enumerate(
                 util.sort_by_value(freq, reverse=True)[: self.NB_NGRAMS]
             )
             if gram != ""
