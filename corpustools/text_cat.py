@@ -31,7 +31,6 @@ http://odur.let.rug.nl/~vannoord/TextCat/
 """
 
 import argparse
-import codecs
 import glob
 import gzip
 import os
@@ -267,14 +266,14 @@ class Classifier:
 
         for fname in fnames:
             lang = util.basename_noext(fname, ext)
-            with codecs.open(fname, "r", encoding="utf8") as fname_stream:
+            with open(fname, "r", encoding="utf8") as fname_stream:
                 self.cmodels[lang] = CharModel(lang).of_model_file(fname_stream, fname)
                 if verbose:
                     util.note(f"Loaded {fname}")
 
             fname_wm = os.path.join(folder, lang + ".wm")
             if os.path.exists(fname_wm):
-                with codecs.open(fname_wm, "r", encoding="utf8") as fname_wm_stream:
+                with open(fname_wm, "r", encoding="utf8") as fname_wm_stream:
                     self.wmodels[lang] = WordModel(lang).of_model_file(
                         fname_wm_stream, fname_wm
                     )
@@ -406,12 +405,13 @@ class FolderTrainer:
         if fname.endswith(".gz"):
             return gzip.open(fname, "rb")
         else:
-            return codecs.open(fname, "r", encoding="utf8")
+            return open(fname, "r", encoding="utf8")
 
     def save(self, folder: str, ext: str = ".lm", verbose: bool = False) -> None:
         for lang, model in self.models.items():
             fname = os.path.join(folder, lang + ext)
-            model.to_model_file(codecs.open(fname, "w", encoding="utf8"))
+            with open(fname, "w", encoding="utf8") as model_file:
+                model.to_model_file(model_file)
         if verbose and self.models:
             util.note("Wrote {{{}}}{}".format(",".join(list(self.models.keys())), ext))
 
