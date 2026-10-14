@@ -364,7 +364,13 @@ class Classifier:
 class FolderTrainer:
     """Train the language guesser from a directory."""
 
-    def __init__(self, folder, exts=None, model=CharModel, verbose=False):
+    def __init__(
+        self,
+        folder: str,
+        exts: list[str] | None = None,
+        model: type[NGramModel] = CharModel,
+        verbose: bool = False,
+    ) -> None:
         if exts is None:
             exts = [".txt", ".txt.gz"]
 
@@ -401,7 +407,7 @@ class FolderTrainer:
         else:
             return codecs.open(fname, "r", encoding="utf8")
 
-    def save(self, folder, ext=".lm", verbose=False):
+    def save(self, folder: str, ext: str = ".lm", verbose: bool = False) -> None:
         for lang, model in self.models.items():
             fname = os.path.join(folder, lang + ext)
             model.to_model_file(codecs.open(fname, "w", encoding="utf8"))
