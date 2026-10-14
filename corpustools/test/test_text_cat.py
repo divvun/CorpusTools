@@ -31,26 +31,24 @@ here = os.path.dirname(__file__)
 class TestTextCat(unittest.TestCase):
     def test_classify(self):
         guesser = text_cat.Classifier()
-        self.assertEqual(guesser.classify("eg køyrer ikkje"), "nno")
-        self.assertEqual(
-            guesser.classify("Sámediggi nammada sámi báikenammakonsuleanttaid"), "sme"
+        assert guesser.classify("eg køyrer ikkje") == "nno"
+        assert (
+            guesser.classify("Sámediggi nammada sámi báikenammakonsuleanttaid") == "sme"
         )
 
     def test_folder_none(self):
         guesser = text_cat.Classifier(None)
-        self.assertEqual(guesser.classify("eg køyrer ikkje"), "nno")
-        self.assertEqual(
-            guesser.classify("Almmá norggabeale guohtuneatnamiid ii leat vejolaš"),
-            "sme",
+        assert guesser.classify("eg køyrer ikkje") == "nno"
+        assert (
+            guesser.classify("Almmá norggabeale guohtuneatnamiid ii leat vejolaš")
+            == "sme"
         )
 
     def test_restricted(self):
         guesser = text_cat.Classifier(langs=["nob", "sma"])
-        self.assertEqual(guesser.classify("Regional utvikling"), "nob")
-        self.assertEqual(guesser.classify("Regijovnaale evtiedimmie"), "sma")
-        self.assertEqual(
-            guesser.classify("eg køyrer ikkje"), "nob"
-        )  # because restriction
+        assert guesser.classify("Regional utvikling") == "nob"
+        assert guesser.classify("Regijovnaale evtiedimmie") == "sma"
+        assert guesser.classify("eg køyrer ikkje") == "nob"  # because restriction
 
     def test_charmodel_compare(self):
         swe_train = (
@@ -72,31 +70,27 @@ class TestTextCat(unittest.TestCase):
         )
         swe_testmodel = text_cat.CharModel().of_text(swe_test)
         qer_testmodel = text_cat.CharModel().of_text(qer_test)
-        self.assertLess(
-            swe_model.compare(swe_testmodel), qer_model.compare(swe_testmodel)
-        )
-        self.assertLess(
-            qer_model.compare(qer_testmodel), swe_model.compare(qer_testmodel)
-        )
+        assert swe_model.compare(swe_testmodel) < qer_model.compare(swe_testmodel)
+        assert qer_model.compare(qer_testmodel) < swe_model.compare(qer_testmodel)
 
     def test_charmodel_model_file(self):
         model = text_cat.CharModel().of_text("šuhkoládagáhkku")
         model_file = StringIO()
         model.to_model_file(model_file)
         lines = model_file.getvalue().split("\n")
-        self.assertEqual(["k\t3"], lines[:1])
-        self.assertIn("á\t2", lines)
-        self.assertIn("hk\t2", lines)
-        self.assertIn("_\t2", lines)
-        self.assertIn("gáhk\t1", lines)
+        assert ["k\t3"] == lines[:1]
+        assert "á\t2" in lines
+        assert "hk\t2" in lines
+        assert "_\t2" in lines
+        assert "gáhk\t1" in lines
 
     def test_wordmodel_model_file(self):
         model = text_cat.WordModel().of_text("šuhkoláda ja gáhkku ja gáfe")
         model_file = StringIO()
         model.to_model_file(model_file)
         lines = model_file.getvalue().split("\n")
-        self.assertEqual(["2\tja"], lines[:1])
-        self.assertIn("1\tgáhkku", lines)
+        assert ["2\tja"] == lines[:1]
+        assert "1\tgáhkku" in lines
 
     def test_compare_tc(self):
         sme_train = (
@@ -116,13 +110,8 @@ class TestTextCat(unittest.TestCase):
         wmodel_nob = text_cat.WordModel().of_text(nob_train)
         ctext_nob = text_cat.CharModel().of_text(nob_test)
 
-        self.assertLess(
-            wmodel_sme.compare_tc(nob_test, cmodel_sme.compare(ctext_nob)),
-            wmodel_nob.compare_tc(nob_test, cmodel_nob.compare(ctext_nob)),
-        )
-        self.assertLess(
-            3930431, wmodel_nob.compare_tc(nob_test, cmodel_nob.compare(ctext_nob))
-        )
-        self.assertEqual(
-            0, wmodel_sme.compare_tc(nob_test, cmodel_sme.compare(ctext_nob))
-        )
+        assert wmodel_sme.compare_tc(
+            nob_test, cmodel_sme.compare(ctext_nob)
+        ) < wmodel_nob.compare_tc(nob_test, cmodel_nob.compare(ctext_nob))
+        assert 3930431 < wmodel_nob.compare_tc(nob_test, cmodel_nob.compare(ctext_nob))
+        assert 0 == wmodel_sme.compare_tc(nob_test, cmodel_sme.compare(ctext_nob))
