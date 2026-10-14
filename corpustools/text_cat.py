@@ -419,7 +419,7 @@ class FileTrainer:
         self.model.to_model_file(fil)
 
 
-def proc(args):
+def proc(args: argparse.Namespace):
     langs = [lang for lang in args.langs.split(",") if lang != ""]
     c = Classifier(folder=args.model_dir, langs=langs)
     if args.u is not None:
@@ -433,7 +433,7 @@ def proc(args):
         print(c.classify(sys.stdin.read(), verbose=args.verbose))
 
 
-def file_comp(args):
+def file_comp(args: argparse.Namespace):
     if args.mtype == "lm":
         FileTrainer(sys.stdin, model=CharModel, verbose=args.verbose).save(
             sys.stdout, verbose=args.verbose
@@ -446,7 +446,7 @@ def file_comp(args):
         raise util.ArgumentError("This shouldn't happen; mtype should be lm or wm")
 
 
-def folder_comp(args):
+def folder_comp(args: argparse.Namespace):
     # Check that output dir exists *first* so we don't waste time on
     # training and only then crash :-)
     for d in [args.corp_dir, args.model_dir]:
@@ -460,7 +460,7 @@ def folder_comp(args):
     )
 
 
-def parse_options():
+def parse_options() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
         description="Create or use n-gram models for language classification.",
