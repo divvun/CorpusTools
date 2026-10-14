@@ -70,15 +70,15 @@ def print_frame(debug: str = "", *args: object) -> None:
     print(file=sys.stderr)
 
 
-def basename_noext(fname, ext):
+def basename_noext(fname: str, ext: str) -> str:
     """Get the basename without the extension.
 
     Args:
-        fname (str): path to the file.
-        ext (str): the extension that should be removed.
+        fname: path to the file.
+        ext: the extension that should be removed.
 
     Returns:
-        (str): fname without the extension.
+        fname without the extension.
     """
     return os.path.basename(fname)[: -len(ext)]
 

@@ -390,7 +390,9 @@ class FolderTrainer:
                 )
             )
 
-    def create_model(self, model, verbose: bool, language, filename):
+    def create_model(
+        self, model: type[NGramModel], verbose: bool, language: str, filename: str
+    ) -> NGramModel:
         file_size_threshold = 5000000
         if verbose:
             msg = f"Processing {filename}"
@@ -400,7 +402,7 @@ class FolderTrainer:
             sys.stderr.flush()
         return model(language).of_text_file(self.open_corpus(filename))
 
-    def open_corpus(self, fname):
+    def open_corpus(self, fname: str):
         if fname.endswith(".gz"):
             return gzip.open(fname, "rb")
         else:
