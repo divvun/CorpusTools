@@ -26,22 +26,29 @@ from git.exc import GitCommandError
 from corpustools import argparse_version, corpuspath, namechanger, versioncontrol
 
 
-def update_metadata(filepairs):
+def update_metadata(
+    filepairs: list[tuple[corpuspath.CorpusPath, corpuspath.CorpusPath]],
+) -> None:
     """Update parallel info for all filepairs."""
     for filepair in filepairs:
         if filepair[0].filepath.name != filepair[1].filepath.name:
             for parallel_name in filepair[0].parallels():
-                parallel_path = corpuspath.make_corpus_path(parallel_name)
-                parallel_path.metadata.set_parallel_text(
-                    language=filepair[1].lang,
-                    location=filepair[1].filepath.name,
-                )
-                parallel_path.metadata.write_file()
-                parallel_vcs = versioncontrol.vcs(parallel_path.orig_corpus_dir)
-                parallel_vcs.add(parallel_path.xsl)
+                if parallel_name is not None:
+                    parallel_path = corpuspath.make_corpus_path(
+                        parallel_name.as_posix()
+                    )
+                    parallel_path.metadata.set_parallel_text(
+                        language=filepair[1].lang,
+                        location=filepair[1].filepath.name,
+                    )
+                    parallel_path.metadata.write_file()
+                    parallel_vcs = versioncontrol.vcs(parallel_path.orig_corpus_dir)
+                    parallel_vcs.add(parallel_path.xsl)
 
 
-def move_corpuspath(old_corpuspath, new_corpuspath):
+def move_corpuspath(
+    old_corpuspath: corpuspath.CorpusPath, new_corpuspath: corpuspath.CorpusPath
+):
     """Move a set of corpus files to a new location."""
     orig_vcs = versioncontrol.vcs(old_corpuspath.orig_corpus_dir)
     conv_vcs = versioncontrol.vcs(old_corpuspath.converted_corpus_dir)
@@ -64,19 +71,21 @@ def move_corpuspath(old_corpuspath, new_corpuspath):
                 conv_vcs.move(old_corpuspath.tmx(lang), new_corpuspath.tmx(lang))
 
 
-def is_parallel_move_needed(old_filepath, new_filepath):
+def is_parallel_move_needed(old_filepath: Path, new_filepath: Path) -> bool:
     return old_filepath.parent != new_filepath.parent
 
 
-def compute_movenames(oldpath, newpath):
+def compute_movenames(
+    oldpath: corpuspath.CorpusPath, newpath: corpuspath.CorpusPath
+) -> list[tuple[corpuspath.CorpusPath, corpuspath.CorpusPath]]:
     """Make CorpusPath pairs for the files that needs to move.
 
     Args:
-        oldpath (Path): path to the old file
-        newpath (Path): path to the new file, with normalised name
+        oldpath: path to the old file
+        newpath: path to the new file, with normalised name
 
     Returns:
-        (list[tuple]): List of tuples of the files that needs to be moved
+        List of tuples of the files that needs to be moved
     """
     filepairs = [
         (oldpath, newpath),
@@ -86,7 +95,9 @@ def compute_movenames(oldpath, newpath):
     return filepairs
 
 
-def compute_parallel_movenames(old_corpuspath, new_corpuspath):
+def compute_parallel_movenames(
+    old_corpuspath: corpuspath.CorpusPath, new_corpuspath: corpuspath.CorpusPath
+) -> list[tuple[corpuspath.CorpusPath, corpuspath.CorpusPath]]:
     """Compute pairs of CorpusPaths for parallel files.
 
     Args:
@@ -106,12 +117,16 @@ def compute_parallel_movenames(old_corpuspath, new_corpuspath):
                         corpus_lang=para_lang,
                         filepath=old_corpuspath.filepath.with_name(para_name),
                     )
+                    .absolute()
+                    .as_posix()
                 ),
                 corpuspath.make_corpus_path(
                     new_corpuspath.name(
                         corpus_lang=para_lang,
                         filepath=new_corpuspath.filepath.with_name(para_name),
                     )
+                    .absolute()
+                    .as_posix()
                 ),
             )
             for (
@@ -170,21 +185,23 @@ def main():
 
         try:
             mover(
-                corpuspath.make_corpus_path(oldpath),
-                corpuspath.make_corpus_path(namechanger.compute_new_basename(newpath)),
+                corpuspath.make_corpus_path(oldpath.as_posix()),
+                corpuspath.make_corpus_path(
+                    namechanger.compute_new_basename(newpath).as_posix()
+                ),
             )
         except UserWarning as e:
             print("Can not move file:", str(e), file=sys.stderr)
 
 
-def remove_metadata(remove_path):
+def remove_metadata(remove_path: corpuspath.CorpusPath) -> None:
     """Remove parallel info about remove_path."""
     for para_lang, para_name in remove_path.metadata.get_parallel_texts().items():
         para_path = corpuspath.make_corpus_path(
             remove_path.name(
                 corpus_lang=para_lang,
                 filepath=remove_path.filepath.with_name(para_name),
-            )
+            ).as_posix()
         )
         para_path.metadata.set_parallel_text(language=remove_path.lang, location="")
         para_path.metadata.write_file()
@@ -227,7 +244,7 @@ def remove_main():
         for lang in old_corpuspath.metadata.get_parallel_texts():
             tmx_path = Path(old_corpuspath.tmx(lang))
             if tmx_path.exists():
-                conv_vcs.remove(tmx_path.as_posix())
+                conv_vcs.remove(tmx_path)
 
     except UserWarning as e:
         print("Can not remove file:", str(e), file=sys.stderr)
