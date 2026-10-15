@@ -51,7 +51,7 @@ def add_url_extension(url, content_type):
     return basename
 
 
-def content_disposition_to_filename(response):
+def content_disposition_to_filename(response: requests.Response) -> str | None:
     """Compute filename from response."""
     try:
         msg = Message()
@@ -62,7 +62,7 @@ def content_disposition_to_filename(response):
         return None
 
 
-def url_to_filename(response):
+def url_to_filename(response: requests.Response) -> str:
     """Compute the filename.
 
     Args:
@@ -81,7 +81,7 @@ def url_to_filename(response):
 class UrlDownloader:
     """Download a document from a url."""
 
-    def __init__(self, download_dir):
+    def __init__(self, download_dir: str) -> None:
         """Initialise the UrlDownloader class.
 
         Args:
@@ -95,33 +95,50 @@ class UrlDownloader:
             )
         }
 
-    def download(self, url, wanted_name="", params=None):
-        """Download a url to a temporary file.
+    def get_response(
+        self, url: str, params: dict[str, str] | None = None
+    ) -> requests.Response:
+        """Get the content of a url.
 
-        Return the request object and the name of the temporary file
+        Args:
+            url: the url to fetch
+            params: optional parameters to pass to requests.get
+
+        Returns:
+            The response object
         """
         try:
             request = requests.get(url, headers=self.headers, params=params)
             if request.status_code == requests.codes.ok:
-                filename = wanted_name if wanted_name else url_to_filename(request)
-                tmpname = os.path.join(self.download_dir, filename)
-                with util.ignored(OSError):
-                    os.makedirs(self.download_dir)
-                with open(tmpname, "wb") as tmpfile:
-                    tmpfile.write(request.content)
-
-                return (request, tmpname)
+                return request
             raise AdderError("ERROR:", url, "does not exist")
         except requests.exceptions.MissingSchema as error:
             raise AdderError(str(error)) from error
         except requests.exceptions.ConnectionError as error:
             raise AdderError(str(error)) from error
 
+    def download(
+        self, url: str, params: dict[str, str] | None = None
+    ) -> tuple[requests.Response, str]:
+        """Download a url to a temporary file.
+
+        Return the request object and the name of the temporary file
+        """
+        request = self.get_response(url, params=params)
+        filename = url_to_filename(request)
+        tmpname = os.path.join(self.download_dir, filename)
+        with util.ignored(OSError):
+            os.makedirs(self.download_dir)
+        with open(tmpname, "wb") as tmpfile:
+            tmpfile.write(request.content)
+
+        return (request, tmpname)
+
 
 class AddToCorpus:
     """Class to add files, urls and dirs to the corpus."""
 
-    def __init__(self, corpus_directory, sub_directory):
+    def __init__(self, corpus_directory: Path, sub_directory: Path) -> None:
         """Initialise the AddToCorpus class.
 
         Args:
@@ -129,22 +146,28 @@ class AddToCorpus:
             sub_directory (str): subdirectory in the corpus
         """
         self.corpusdir = corpus_directory
-        self.goalpath = Path(corpus_directory) / sub_directory
+        self.goalpath = corpus_directory / sub_directory
         self.goalpath.mkdir(parents=True, exist_ok=True)
         self.vcs = versioncontrol.vcs(corpus_directory)
-        self.additions = []
+        self.additions: list[Path] = []
 
-    def copy_url_to_corpus(self, url, wanted_name="", parallelpath=""):
+    def copy_url_to_corpus(self, url: str, wanted_name: str, parallelpath: str):
         """Add a URL to the corpus.
 
         Copy a downloaded url to the corpus
         """
         downloader = UrlDownloader(os.path.join(self.corpusdir, "tmp"))
-        (request, tmpname) = downloader.download(url, wanted_name=wanted_name)
-
-        return self.copy_file_to_corpus(
-            origpath=tmpname, metadata_filename=request.url, parallelpath=parallelpath
+        request = downloader.get_response(url)
+        filename = wanted_name if wanted_name else url_to_filename(request)
+        none_dupe_path = corpuspath.make_corpus_path(
+            namechanger.compute_new_basename(self.goalpath / filename).as_posix()
         )
+        none_dupe_path.orig.write_bytes(request.content)
+        self.additions.append(none_dupe_path.orig)
+        self.add_metadata_to_corpus(none_dupe_path, request.url)
+
+        if parallelpath:
+            self.update_parallel_data(none_dupe_path, parallelpath)
 
     def copy_file_to_corpus(self, origpath, metadata_filename, parallelpath=""):
         """Add a file from the hard disk to the corpus.
@@ -171,7 +194,7 @@ class AddToCorpus:
         print("Added", none_dupe_path.orig)
         return none_dupe_path.orig
 
-    def add_metadata_to_corpus(self, none_dupe_path, meta_filename):
+    def add_metadata_to_corpus(self, none_dupe_path: corpuspath.CorpusPath, meta_filename: str) -> None:
         """Add the metadata file to the corpus."""
         new_metadata = none_dupe_path.metadata
         new_metadata.set_variable("filename", meta_filename)
@@ -181,7 +204,7 @@ class AddToCorpus:
         self.additions.append(none_dupe_path.xsl)
 
     @staticmethod
-    def update_parallel_data(none_dupe_path, parallelpath):
+    def update_parallel_data(none_dupe_path: corpuspath.CorpusPath, parallelpath: str):
         """Update metadata in the parallel files.
 
         Args:
@@ -205,7 +228,7 @@ class AddToCorpus:
                 parallel_corpuspath.name(
                     corpus_lang=lang,
                     filepath=parallel_corpuspath.filepath.with_name(parallel_file),
-                )
+                ).as_posix()
             )
             this_para_corpuspath.metadata.set_parallel_text(
                 none_dupe_path.lang, none_dupe_path.filepath.name
@@ -301,7 +324,9 @@ def add_originals_to_corpus(args: argparse.Namespace) -> AddToCorpus:
     )
 
     orig = args.orig
-    if os.path.isfile(orig):
+    if orig.startswith("http"):
+        adder.copy_url_to_corpus(orig, wanted_name=args.name, parallelpath="")
+    elif os.path.isfile(orig):
         if args.name:
             newname = os.path.join(os.path.dirname(orig), args.name)
             try:
@@ -312,8 +337,6 @@ def add_originals_to_corpus(args: argparse.Namespace) -> AddToCorpus:
         adder.copy_file_to_corpus(
             origpath=orig, metadata_filename=os.path.basename(orig)
         )
-    elif orig.startswith("http"):
-        adder.copy_url_to_corpus(orig, wanted_name=args.name)
     elif os.path.isdir(orig):
         if args.name:
             raise SystemExit(
