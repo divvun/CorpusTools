@@ -76,6 +76,9 @@ def main():
 
     for orig_file in gold_files:
         try:
+            metadata = orig_file.metadata
+            metadata.set_variable("monolingual", "1")  # turn off language detection
+            metadata.write_file()
             converter_manager.convert(orig_file)
         except (AttributeError, NameError) as error:
             print(f"Conversion failed for {orig_file.orig}: {error}")
