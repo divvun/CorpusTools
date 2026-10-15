@@ -299,33 +299,33 @@ def add_originals_to_corpus(args: argparse.Namespace) -> AddToCorpus:
         corpus_path.orig_corpus_dir,
         corpus_path.filepath.parent,
     )
-    for orig in args.origs:
-        if os.path.isfile(orig):
-            if args.name:
-                newname = os.path.join(os.path.dirname(orig), args.name)
-                try:
-                    shutil.copy(orig, newname)
-                except FileNotFoundError:
-                    raise SystemExit(f"Not a valid filename: {args.name}")
-                orig = newname
-            adder.copy_file_to_corpus(
-                origpath=orig, metadata_filename=os.path.basename(orig)
-            )
-        elif orig.startswith("http"):
-            adder.copy_url_to_corpus(orig, wanted_name=args.name)
-        elif os.path.isdir(orig):
-            if args.name:
-                raise SystemExit(
-                    "It makes no sense to use the --name "
-                    "option together with --directory."
-                )
-            adder.copy_files_in_dir_to_corpus(orig)
-        else:
+
+    orig = args.orig
+    if os.path.isfile(orig):
+        if args.name:
+            newname = os.path.join(os.path.dirname(orig), args.name)
+            try:
+                shutil.copy(orig, newname)
+            except FileNotFoundError:
+                raise SystemExit(f"Not a valid filename: {args.name}")
+            orig = newname
+        adder.copy_file_to_corpus(
+            origpath=orig, metadata_filename=os.path.basename(orig)
+        )
+    elif orig.startswith("http"):
+        adder.copy_url_to_corpus(orig, wanted_name=args.name)
+    elif os.path.isdir(orig):
+        if args.name:
             raise SystemExit(
-                "Cannot handle the orig named: {}.\n"
-                "If you used the --name option and a name with spaces, "
-                "encase it in quote marks.".format(orig)
+                "It makes no sense to use the --name option together with --directory."
             )
+        adder.copy_files_in_dir_to_corpus(orig)
+    else:
+        raise SystemExit(
+            "Cannot handle the orig named: {}.\n"
+            "If you used the --name option and a name with spaces, "
+            "encase it in quote marks.".format(orig)
+        )
     return adder
 
 
@@ -383,16 +383,15 @@ def parse_args() -> argparse.Namespace:
     """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description="Add file(s) to a corpus directory. The filenames are "
-        "converted to ascii only names. Metadata files containing the "
-        "original name, the main language, the genre and possibly parallel "
+        description="Add a file, a url or a directory to a corpus directory. "
+        "The filenames are converted to ascii only names. Metadata files containing "
+        "the original name, the main language, the genre and possibly parallel "
         "files are also made. The files are added to the working copy.",
     )
     parser.add_argument(
-        "origs",
-        nargs="+",
-        help="The original files, urls or directories where "
-        "the original files reside (not the corpus repository)",
+        "orig",
+        help="The original file, url or directory where "
+        "the original file resides (not the corpus repository)",
     )
     parser.add_argument(
         "--name",
