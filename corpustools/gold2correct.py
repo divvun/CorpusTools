@@ -75,20 +75,19 @@ def main():
         print(f"Found {len(gold_files)} goldstandard files to convert")
 
     for orig_file in gold_files:
+        orig_vcs = versioncontrol.vcs(orig_file.orig_corpus_dir)
         try:
-            metadata = orig_file.metadata
-            metadata.set_variable("monolingual", "1")  # turn off language detection
-            metadata.write_file()
             converter_manager.convert(orig_file)
         except (AttributeError, NameError) as error:
             print(f"Conversion failed for {orig_file.orig}: {error}")
             continue
+            
 
         if not orig_file.converted.exists():
             print(f"\nCould not convert {orig_file}")
             continue
 
-        xml_printer = XMLPrinter(lang=orig_file.lang, all_paragraphs=True)
+        xml_printer = XMLPrinter(all_paragraphs=True) # get all text
         xml_printer.parse_file(orig_file.converted.absolute().as_posix())
         text = xml_printer.process_file().getvalue().replace(" ¶", "\n")
 
@@ -119,5 +118,8 @@ def main():
                 orig_vcs = versioncontrol.vcs(orig_file.orig_corpus_dir)
                 orig_vcs.remove(orig_file.orig)
                 orig_vcs.remove(orig_file.xsl)
+                if orig_file.converted.exists():
+                    conv_vcs = versioncontrol.vcs(orig_file.converted_corpus_dir)
+                    conv_vcs.remove(orig_file.converted)
             else:
                 raise
