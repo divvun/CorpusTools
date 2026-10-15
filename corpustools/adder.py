@@ -18,7 +18,6 @@
 #
 """This file contains classes to add files to a corpus directory."""
 
-
 import argparse
 import os
 import shutil
@@ -280,7 +279,103 @@ class AddToCorpus:
         self.vcs.add(self.additions)
 
 
-def parse_args():
+def add_originals_to_corpus(args: argparse.Namespace) -> AddToCorpus:
+    if args.lang is not None:
+        raise SystemExit(
+            "The argument -l|--lang is not allowed together with -d|--directory"
+        )
+    corpus_path = corpuspath.make_corpus_path(
+        (Path(args.directory) / "dummy.txt").as_posix()
+    )
+
+    if corpus_path.name == "dummy.txt":
+        raise SystemExit(
+            "Error!\nYou must add genre to the directory\ne.g. {}".format(
+                os.path.join(args.directory, "admin")
+            )
+        )
+
+    adder = AddToCorpus(
+        corpus_path.orig_corpus_dir,
+        corpus_path.filepath.parent,
+    )
+    for orig in args.origs:
+        if os.path.isfile(orig):
+            if args.name:
+                newname = os.path.join(os.path.dirname(orig), args.name)
+                try:
+                    shutil.copy(orig, newname)
+                except FileNotFoundError:
+                    raise SystemExit(f"Not a valid filename: {args.name}")
+                orig = newname
+            adder.copy_file_to_corpus(
+                origpath=orig, metadata_filename=os.path.basename(orig)
+            )
+        elif orig.startswith("http"):
+            adder.copy_url_to_corpus(orig, wanted_name=args.name)
+        elif os.path.isdir(orig):
+            if args.name:
+                raise SystemExit(
+                    "It makes no sense to use the --name "
+                    "option together with --directory."
+                )
+            adder.copy_files_in_dir_to_corpus(orig)
+        else:
+            raise SystemExit(
+                "Cannot handle the orig named: {}.\n"
+                "If you used the --name option and a name with spaces, "
+                "encase it in quote marks.".format(orig)
+            )
+    return adder
+
+
+def add_parallel_to_corpus(args: argparse.Namespace) -> AddToCorpus:
+    if args.directory is not None:
+        raise SystemExit(
+            "The argument -d|--directory is not allowed together with "
+            "-p|--parallel\n"
+            "Only -l|--lang is allowed together with -p|--parallel"
+        )
+    if not os.path.exists(args.parallel_file):
+        raise SystemExit(
+            "The given parallel file\n\t{}\ndoes not exist".format(args.parallel_file)
+        )
+    if len(args.origs) > 1:
+        raise SystemExit(
+            "When the -p option is given, it only makes "
+            "sense to add one file at a time."
+        )
+    if len(args.origs) == 1 and os.path.isdir(args.origs[-1]):
+        raise SystemExit(
+            "It is not possible to add a directory when the -p option is given."
+        )
+
+    parallel_corpus_path = corpuspath.make_corpus_path(args.parallel_file)
+    corpus_path = corpuspath.make_corpus_path(
+        parallel_corpus_path.name(corpus_lang=args.lang)
+    )
+    adder = AddToCorpus(
+        corpus_directory=corpus_path.orig_corpus_dir,
+        sub_directory=corpus_path.filepath.parent,
+    )
+
+    orig = args.origs[0]
+    if os.path.isfile(orig):
+        if args.name:
+            newname = os.path.join(os.path.dirname(orig), args.name)
+            shutil.copy(orig, newname)
+            orig = newname
+        adder.copy_file_to_corpus(
+            origpath=orig, metadata_filename=orig, parallelpath=args.parallel_file
+        )
+    elif orig.startswith("http"):
+        adder.copy_url_to_corpus(
+            orig, wanted_name=args.name, parallelpath=args.parallel_file
+        )
+    return adder
+
+
+def parse_args() -> argparse.Namespace:
     """Parse the commandline options.
 
     Returns:
@@ -335,97 +430,9 @@ def main():
     """Add files, directories and urls to the corpus."""
     args = parse_args()
 
-    if args.parallel_file is None:
-        if args.lang is not None:
-            raise SystemExit(
-                "The argument -l|--lang is not allowed together with " "-d|--directory"
-            )
-        corpus_path = corpuspath.make_corpus_path(
-            (Path(args.directory) / "dummy.txt").as_posix()
-        )
-
-        if corpus_path.name == "dummy.txt":
-            raise SystemExit(
-                "Error!\n"
-                "You must add genre to the directory\ne.g. {}".format(
-                    os.path.join(args.directory, "admin")
-                )
-            )
-
-        adder = AddToCorpus(
-            corpus_path.orig_corpus_dir,
-            corpus_path.filepath.parent,
-        )
-        for orig in args.origs:
-            if os.path.isfile(orig):
-                if args.name:
-                    newname = os.path.join(os.path.dirname(orig), args.name)
-                    try:
-                        shutil.copy(orig, newname)
-                    except FileNotFoundError:
-                        raise SystemExit(f"Not a valid filename: {args.name}")
-                    orig = newname
-                adder.copy_file_to_corpus(
-                    origpath=orig, metadata_filename=os.path.basename(orig)
-                )
-            elif orig.startswith("http"):
-                adder.copy_url_to_corpus(orig, wanted_name=args.name)
-            elif os.path.isdir(orig):
-                if args.name:
-                    raise SystemExit(
-                        "It makes no sense to use the --name "
-                        "option together with --directory."
-                    )
-                adder.copy_files_in_dir_to_corpus(orig)
-            else:
-                raise SystemExit(
-                    "Cannot handle the orig named: {}.\n"
-                    "If you used the --name option and a name with spaces, "
-                    "encase it in quote marks.".format(orig)
-                )
-    else:
-        if args.directory is not None:
-            raise SystemExit(
-                "The argument -d|--directory is not allowed together with "
-                "-p|--parallel\n"
-                "Only -l|--lang is allowed together with -p|--parallel"
-            )
-        if not os.path.exists(args.parallel_file):
-            raise SystemExit(
-                "The given parallel file\n\t{}\n"
-                "does not exist".format(args.parallel_file)
-            )
-        if len(args.origs) > 1:
-            raise SystemExit(
-                "When the -p option is given, it only makes "
-                "sense to add one file at a time."
-            )
-        if len(args.origs) == 1 and os.path.isdir(args.origs[-1]):
-            raise SystemExit(
-                "It is not possible to add a directory " "when the -p option is given."
-            )
-
-        parallel_corpus_path = corpuspath.make_corpus_path(args.parallel_file)
-        corpus_path = corpuspath.make_corpus_path(
-            parallel_corpus_path.name(corpus_lang=args.lang)
-        )
-        adder = AddToCorpus(
-            corpus_directory=corpus_path.orig_corpus_dir,
-            sub_directory=corpus_path.filepath.parent,
-        )
-
-        orig = args.origs[0]
-        if os.path.isfile(orig):
-            if args.name:
-                newname = os.path.join(os.path.dirname(orig), args.name)
-                shutil.copy(orig, newname)
-                orig = newname
-            adder.copy_file_to_corpus(
-                origpath=orig, metadata_filename=orig, parallelpath=args.parallel_file
-            )
-        elif orig.startswith("http"):
-            adder.copy_url_to_corpus(
-                orig, wanted_name=args.name, parallelpath=args.parallel_file
-            )
-
+    adder = (
+        add_originals_to_corpus(args)
+        if args.parallel_file is None
+        else add_parallel_to_corpus(args)
+    )
     adder.add_files_to_working_copy()
