@@ -30,20 +30,24 @@ def update_metadata(
     filepairs: list[tuple[corpuspath.CorpusPath, corpuspath.CorpusPath]],
 ) -> None:
     """Update parallel info for all filepairs."""
-    for filepair in filepairs:
-        if filepair[0].filepath.name != filepair[1].filepath.name:
-            for parallel_name in filepair[0].parallels():
-                if parallel_name is not None:
-                    parallel_path = corpuspath.make_corpus_path(
-                        parallel_name.as_posix()
-                    )
-                    parallel_path.metadata.set_parallel_text(
-                        language=filepair[1].lang,
-                        location=filepair[1].filepath.name,
-                    )
-                    parallel_path.metadata.write_file()
-                    parallel_vcs = versioncontrol.vcs(parallel_path.orig_corpus_dir)
-                    parallel_vcs.add(parallel_path.xsl)
+    unique_names = [
+        filepair
+        for filepair in filepairs
+        if filepair[0].filepath.name != filepair[1].filepath.name
+    ]
+    for filepair in unique_names:
+        for parallel_name in filepair[0].parallels():
+            if parallel_name is not None:
+                parallel_path = corpuspath.make_corpus_path(
+                    parallel_name.as_posix()
+                )
+                parallel_path.metadata.set_parallel_text(
+                    language=filepair[1].lang,
+                    location=filepair[1].filepath.name,
+                )
+                parallel_path.metadata.write_file()
+                parallel_vcs = versioncontrol.vcs(parallel_path.orig_corpus_dir)
+                parallel_vcs.add(parallel_path.xsl)
 
 
 def move_corpuspath(
@@ -117,7 +121,6 @@ def compute_parallel_movenames(
                         corpus_lang=para_lang,
                         filepath=old_corpuspath.filepath.with_name(para_name),
                     )
-                    .absolute()
                     .as_posix()
                 ),
                 corpuspath.make_corpus_path(
@@ -125,7 +128,6 @@ def compute_parallel_movenames(
                         corpus_lang=para_lang,
                         filepath=new_corpuspath.filepath.with_name(para_name),
                     )
-                    .absolute()
                     .as_posix()
                 ),
             )
