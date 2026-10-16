@@ -20,6 +20,7 @@
 
 
 import hashlib
+from io import BufferedReader
 import os
 import re
 from collections import namedtuple
@@ -64,7 +65,7 @@ class CorpusFileRemover:
                 self.conv_vcs.remove(self.old_corpus_path.tmx(lang))
 
 
-def compute_hexdigest(afile, blocksize=65536):
+def compute_hexdigest(afile: BufferedReader, blocksize:int=65536) -> str:
     """Compute the hexdigest of the file in path.
 
     Args:
