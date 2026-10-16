@@ -20,7 +20,6 @@
 
 import argparse
 import os
-import shutil
 from email.message import Message
 from pathlib import Path
 
@@ -33,7 +32,7 @@ class AdderError(Exception):
     """Raise this exception when errors happen in this module."""
 
 
-def add_url_extension(url, content_type):
+def add_url_extension(url: str, content_type: dict[str, str]) -> str:
     """Add an extension to the file depending on the content type."""
     basename = url.split("/")[-2] if url.endswith("/") else "index"
 
@@ -56,7 +55,7 @@ def content_disposition_to_filename(response: requests.Response) -> str | None:
     try:
         msg = Message()
         msg["Content-Disposition"] = response.headers["Content-Disposition"]
-        params = dict(msg.get_params(header="Content-Disposition"))
+        params = dict(msg.get_params(header="Content-Disposition") or [])
         return params["filename"]
     except KeyError:
         return None
