@@ -359,6 +359,7 @@ def add_originals_to_corpus(args: argparse.Namespace) -> AddToCorpus:
             "If you used the --name option and a name with spaces, "
             "encase it in quote marks."
         )
+
     return adder
 
 
@@ -369,42 +370,41 @@ def add_parallel_to_corpus(args: argparse.Namespace) -> AddToCorpus:
             "-p|--parallel\n"
             "Only -l|--lang is allowed together with -p|--parallel"
         )
-    if not os.path.exists(args.parallel_file):
+    if not Path(args.parallel_file).is_file():
         raise SystemExit(
             "The given parallel file\n\t{}\ndoes not exist".format(args.parallel_file)
-        )
-    if len(args.origs) > 1:
-        raise SystemExit(
-            "When the -p option is given, it only makes "
-            "sense to add one file at a time."
-        )
-    if len(args.origs) == 1 and os.path.isdir(args.origs[-1]):
-        raise SystemExit(
-            "It is not possible to add a directory when the -p option is given."
         )
 
     parallel_corpus_path = corpuspath.make_corpus_path(args.parallel_file)
     corpus_path = corpuspath.make_corpus_path(
-        parallel_corpus_path.name(corpus_lang=args.lang)
+        parallel_corpus_path.name(corpus_lang=args.lang).as_posix()
     )
     adder = AddToCorpus(
         corpus_directory=corpus_path.orig_corpus_dir,
         sub_directory=corpus_path.filepath.parent,
     )
 
-    orig = args.origs[0]
-    if os.path.isfile(orig):
-        if args.name:
-            newname = os.path.join(os.path.dirname(orig), args.name)
-            shutil.copy(orig, newname)
-            orig = newname
-        adder.copy_file_to_corpus(
-            origpath=orig, metadata_filename=orig, parallelpath=args.parallel_file
-        )
-    elif orig.startswith("http"):
+    if args.orig.startswith("http"):
         adder.copy_url_to_corpus(
-            orig, wanted_name=args.name, parallelpath=args.parallel_file
+            args.orig, wanted_name=args.name, parallelpath=args.parallel_file
         )
+        return adder
+
+    orig_path = Path(args.orig)
+    if orig_path.is_file():
+        adder.copy_file_to_corpus(
+            origpath=orig_path,
+            metadata_filename=orig_path.name,
+            wanted_name=args.name,
+            parallelpath=args.parallel_file,
+        )
+    else:
+        raise SystemExit(
+            f"Cannot handle the orig named: {args.orig}.\n"
+            "If you used the --name option and a name with spaces, "
+            "encase it in quote marks."
+        )
+
     return adder
 
 
