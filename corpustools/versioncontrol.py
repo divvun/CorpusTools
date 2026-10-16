@@ -38,7 +38,7 @@ class VersionController:
         """
         self.gitrepo = git.Repo(directory)
 
-    def add(self, path: Path):
+    def add(self, path: Path | list[Path]):
         """Add path to the repo.
 
         Args:
