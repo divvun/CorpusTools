@@ -12,7 +12,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2013-2025 The University of Tromsø &
+#   Copyright © 2013-2026 The University of Tromsø &
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
@@ -151,7 +151,7 @@ class AddToCorpus:
         self.vcs = versioncontrol.vcs(corpus_directory)
         self.additions: list[Path] = []
 
-    def copy_url_to_corpus(self, url: str, wanted_name: str, parallelpath: str):
+    def copy_url_to_corpus(self, url: str, wanted_name: str="", parallelpath: str=""):
         """Add a URL to the corpus.
 
         Copy a downloaded url to the corpus
@@ -169,22 +169,30 @@ class AddToCorpus:
         if parallelpath:
             self.update_parallel_data(none_dupe_path, parallelpath)
 
-    def copy_file_to_corpus(self, origpath, metadata_filename, parallelpath=""):
+    def copy_file_to_corpus(
+        self,
+        origpath: Path,
+        metadata_filename: str,
+        wanted_name: str="",
+        parallelpath: str="",
+    ) -> Path:
         """Add a file from the hard disk to the corpus.
 
         Args:
-            origpath (str): path where the original file exists
-            metadata_filename (str): the value of the filename in the
+            origpath: path where the original file exists
+            metadata_filename: the value of the filename in the
                 metadata file
-            parallelpath (str): where the parallel file of the original
+            wanted_name: the name to give the file in the corpus
+            parallelpath: where the parallel file of the original
                 file exists in the corpus
 
         Returns:
-            (str): path to where the origfile exists in the corpus
+            Path to where the origfile exists in the corpus
         """
-        origpath = Path(origpath)
         none_dupe_path = corpuspath.make_corpus_path(
-            namechanger.compute_new_basename(Path(self.goalpath) / origpath.name)
+            namechanger.compute_new_basename(
+                self.goalpath / (wanted_name if wanted_name else origpath.name)
+            ).as_posix()
         )
         none_dupe_path.orig.write_bytes(origpath.read_bytes())
         self.additions.append(none_dupe_path.orig)
@@ -194,7 +202,9 @@ class AddToCorpus:
         print("Added", none_dupe_path.orig)
         return none_dupe_path.orig
 
-    def add_metadata_to_corpus(self, none_dupe_path: corpuspath.CorpusPath, meta_filename: str) -> None:
+    def add_metadata_to_corpus(
+        self, none_dupe_path: corpuspath.CorpusPath, meta_filename: str
+    ) -> None:
         """Add the metadata file to the corpus."""
         new_metadata = none_dupe_path.metadata
         new_metadata.set_variable("filename", meta_filename)
@@ -245,15 +255,16 @@ class AddToCorpus:
         )
         parallel_corpuspath.metadata.write_file()
 
-    def none_dupe_basename(self, orig_basename):
+    def none_dupe_basename(self, orig_basename: str) -> Path:
         """Compute the none duplicate path of the file to be added.
 
         Args:
             orig_basename (str): basename of the original file
+        Returns:
+            Path: path to the none duplicate file
         """
         return namechanger.compute_new_basename(
-            self.goalpath,
-            namechanger.normalise_filename(orig_basename),
+            self.goalpath/namechanger.normalise_filename(orig_basename),
         )
 
     def copy_files_in_dir_to_corpus(self, origpath):
@@ -323,31 +334,29 @@ def add_originals_to_corpus(args: argparse.Namespace) -> AddToCorpus:
         corpus_path.filepath.parent,
     )
 
-    orig = args.orig
-    if orig.startswith("http"):
-        adder.copy_url_to_corpus(orig, wanted_name=args.name, parallelpath="")
-    elif os.path.isfile(orig):
-        if args.name:
-            newname = os.path.join(os.path.dirname(orig), args.name)
-            try:
-                shutil.copy(orig, newname)
-            except FileNotFoundError:
-                raise SystemExit(f"Not a valid filename: {args.name}")
-            orig = newname
+    if args.orig.startswith("http"):
+        adder.copy_url_to_corpus(args.orig, wanted_name=args.name, parallelpath="")
+        return adder
+
+    orig_path = Path(args.orig)
+    if orig_path.is_file():
         adder.copy_file_to_corpus(
-            origpath=orig, metadata_filename=os.path.basename(orig)
+            origpath=orig_path,
+            metadata_filename=orig_path.name,
+            wanted_name=args.name,
+            parallelpath=args.parallel_file,
         )
-    elif os.path.isdir(orig):
+    elif orig_path.is_dir():
         if args.name:
             raise SystemExit(
                 "It makes no sense to use the --name option together with --directory."
             )
-        adder.copy_files_in_dir_to_corpus(orig)
+        adder.copy_files_in_dir_to_corpus(orig_path)
     else:
         raise SystemExit(
-            "Cannot handle the orig named: {}.\n"
+            f"Cannot handle the orig named: {args.orig}.\n"
             "If you used the --name option and a name with spaces, "
-            "encase it in quote marks.".format(orig)
+            "encase it in quote marks."
         )
     return adder
 
