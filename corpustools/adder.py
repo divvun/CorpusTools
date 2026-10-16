@@ -151,7 +151,9 @@ class AddToCorpus:
         self.vcs = versioncontrol.vcs(corpus_directory)
         self.additions: list[Path] = []
 
-    def copy_url_to_corpus(self, url: str, wanted_name: str="", parallelpath: str=""):
+    def copy_url_to_corpus(
+        self, url: str, wanted_name: str = "", parallelpath: str = ""
+    ):
         """Add a URL to the corpus.
 
         Copy a downloaded url to the corpus
@@ -173,8 +175,8 @@ class AddToCorpus:
         self,
         origpath: Path,
         metadata_filename: str,
-        wanted_name: str="",
-        parallelpath: str="",
+        wanted_name: str = "",
+        parallelpath: str = "",
     ) -> Path:
         """Add a file from the hard disk to the corpus.
 
@@ -264,10 +266,10 @@ class AddToCorpus:
             Path: path to the none duplicate file
         """
         return namechanger.compute_new_basename(
-            self.goalpath/namechanger.normalise_filename(orig_basename),
+            self.goalpath / namechanger.normalise_filename(orig_basename),
         )
 
-    def copy_files_in_dir_to_corpus(self, origpath):
+    def copy_files_in_dir_to_corpus(self, origpath: Path) -> None:
         """Add a directory to the corpus.
 
         * Recursively walks through the given original directory
@@ -278,24 +280,23 @@ class AddToCorpus:
 
         """
         self.find_duplicates(origpath)
-        for root, _, files in os.walk(origpath):
+        for root, _, files in origpath.walk():
             for file_ in files:
-                orig_f = os.path.join(root, file_)
-                self.copy_file_to_corpus(origpath=orig_f, metadata_filename=orig_f)
+                orig_f = root / file_
+                self.copy_file_to_corpus(origpath=orig_f, metadata_filename=file_)
 
     @staticmethod
-    def find_duplicates(origpath):
+    def find_duplicates(origpath: Path):
         """Find duplicates based on the hex digests of the corpus files."""
-        duplicates = {}
-        for root, _, files in os.walk(origpath):
+        duplicates: dict[str, list[Path]] = {}
+        for root, _, files in origpath.walk():
             for file_ in files:
-                path = os.path.join(root, file_)
-                with open(path, "rb") as content:
-                    file_hash = namechanger.compute_hexdigest(content)
-                    if file_hash in duplicates:
-                        duplicates[file_hash].append(path)
-                    else:
-                        duplicates[file_hash] = [path]
+                path = root / file_
+                file_hash = namechanger.compute_hexdigest(path.open("rb"))
+                if file_hash in duplicates:
+                    duplicates[file_hash].append(path)
+                else:
+                    duplicates[file_hash] = [path]
 
         results = [x for x in list(duplicates.values()) if len(x) > 1]
         if results:
