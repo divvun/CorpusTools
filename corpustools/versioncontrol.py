@@ -44,7 +44,17 @@ class VersionController:
         Args:
             path: path that should be added to the git repo.
         """
-        self.gitrepo.git.add(path)
+        if isinstance(path, list):
+            path_len = len(path)
+            start = 0
+            end = 200
+            self.gitrepo.git.add(path[:end])
+            while path_len > end:
+                start = end
+                end += 200
+                self.gitrepo.git.add(path[start:end])
+        else:
+            self.gitrepo.git.add(path)
 
     def move(self, oldpath: Path, newpath: Path):
         """Move a file within the repo.
