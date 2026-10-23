@@ -303,7 +303,7 @@ class AddToCorpus:
             print("___")
             for result in results:
                 for subresult in result:
-                    print(f"\t{subresult}")
+                    print(f"\t'{subresult}'")
                 print("___")
 
             raise AdderError("Found duplicates")
