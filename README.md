@@ -19,4 +19,10 @@ using the package manager.
 - [Install pipx](https://pypa.github.io/pipx/installation/)
 - Run `pipx install --force git+https://github.com/divvun/CorpusTools.git`
 
+## Development
+
+- [Install uv](https://docs.astral.sh/uv/getting-started/installation/)
+- Run `uv sync` to install the project and development dependencies.
+- Run `uv run pytest` to run the test suite.
+
 [API and manual pages](https://divvun.github.io/CorpusTools/)

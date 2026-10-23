@@ -6,3 +6,6 @@ recursive-include corpustools/lm *.lm *.wm
 recursive-include corpustools/dtd *.dtd
 include corpustools/tca2/dist/lib/alignment.jar
 recursive-exclude corpustools/test *
+prune docs/.venv
+prune CorpusTools.egg-info
+prune corpustools.egg-info
