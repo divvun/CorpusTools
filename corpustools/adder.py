@@ -32,7 +32,7 @@ class AdderError(Exception):
     """Raise this exception when errors happen in this module."""
 
 
-def add_url_extension(url: str, content_type: dict[str, str]) -> str:
+def add_url_extension(url: str, content_type: str) -> str:
     """Add an extension to the file depending on the content type."""
     basename = url.split("/")[-2] if url.endswith("/") else "index"
 
