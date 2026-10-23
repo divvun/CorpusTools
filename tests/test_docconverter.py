@@ -16,42 +16,26 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-"""Test conversion of docx files."""
+"""Test conversion of doc files."""
+
 import os
 
 from lxml import etree
 
 from corpustools import htmlcontentconverter
-from corpustools.test.xmltester import XMLTester
+from tests.xmltester import XMLTester
 
 HERE = os.path.dirname(__file__)
 
 
-class TestDocxConverter(XMLTester):
+class TestDocConverter(XMLTester):
     """Test docx conversion."""
 
     def test_convert2intermediate(self):
-        """Test conversion of a docx file."""
+        """Test conversion of a doc file."""
         got = htmlcontentconverter.convert2intermediate(
-            os.path.join(HERE, "converter_data/fakecorpus/orig/sme/riddu/doc-test.docx")
+            os.path.join(HERE, "converter_data/fakecorpus/orig/sme/riddu/doc-test.doc")
         )
-        want = (
-            "<document>"
-            "    <header>"
-            "        <title/>"
-            "    </header>"
-            "    <body>"
-            "        <p>–Mun lean njeallje jagi boaris.</p>"
-            "        <p>Nu beaivvádat.</p>"
-            "        <p>oahppat guovttejuvlla nalde sykkelastit.</p>"
-            "        <p>njeallje suorpma boaris.</p>"
-            "        <p>Olggobealde Áššu</p>"
-            "        <p>Lea go dus meahccebiila ?</p>"
-            "        <p>–Mii lea suohttaseamos geassebargu dus ?</p>"
-            "        <p>Suohkana bearašásodagaid juohkin</p>"
-            "        <p>Sámi kulturfestivála 1998</p>"
-            "    </body>"
-            "</document>"
-        )
+        want = etree.parse(os.path.join(HERE, "converter_data/doc-test.xml"))
 
-        self.assertXmlEqual(got, etree.fromstring(want))
+        self.assertXmlEqual(got, want)

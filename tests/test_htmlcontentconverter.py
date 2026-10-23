@@ -23,8 +23,8 @@ from lxml import etree, html
 from parameterized import parameterized
 
 from corpustools import htmlcontentconverter
-from corpustools.test import xmltester
-from corpustools.test.test_xhtml2corpus import assertXmlEqual
+from tests import xmltester
+from tests.test_xhtml2corpus import assertXmlEqual
 
 
 def test_remove_unwanted_content():

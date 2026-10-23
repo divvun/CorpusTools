@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
-<xsl:import href="file:///home/boerre/langtech/trunk/tools/CorpusTools/corpustools/xslt/common.xsl"/>
+<xsl:import href="file:///home/boerre/langtech/trunk/tools/CorpusTools/src/corpustools/xslt/common.xsl"/>
 
 <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes" doctype-public="-//UIT//DTD Corpus V1.0//EN" doctype-system="http://giellatekno.uit.no/dtd/corpus.dtd"/>
 

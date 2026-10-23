@@ -24,7 +24,7 @@ import os
 from lxml import etree
 
 from corpustools import xslmaker
-from corpustools.test.xmltester import XMLTester
+from tests.xmltester import XMLTester
 
 HERE = os.path.dirname(__file__)
 
@@ -53,7 +53,7 @@ class TestXslMaker(XMLTester):
         # ... and set it to the hardcoded path in test.xsl:
         import_elt.attrib["href"] = (
             "file:///home/boerre/langtech/trunk/tools/CorpusTools/"
-            "corpustools/xslt/common.xsl"
+            "src/corpustools/xslt/common.xsl"
         )
 
         want = etree.parse(os.path.join(HERE, "converter_data/test.xsl"))

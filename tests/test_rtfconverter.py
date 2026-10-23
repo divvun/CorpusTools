@@ -22,7 +22,7 @@ import os
 from lxml import etree
 
 from corpustools import htmlcontentconverter
-from corpustools.test.xmltester import XMLTester
+from tests.xmltester import XMLTester
 
 HERE = os.path.dirname(__file__)
 

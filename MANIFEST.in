@@ -1,11 +1,13 @@
 include *.txt
 recursive-include docs *.txt
-recursive-include corpustools/xslt *.xsl *.xml *.ent
-recursive-include corpustools/xml *.xml
-recursive-include corpustools/lm *.lm *.wm
-recursive-include corpustools/dtd *.dtd
-include corpustools/tca2/dist/lib/alignment.jar
-recursive-exclude corpustools/test *
+recursive-include src/corpustools *
+prune tests
 prune docs/.venv
 prune CorpusTools.egg-info
 prune corpustools.egg-info
+prune src/corpustools.egg-info
+prune src/corpustools/.mypy_cache
+prune src/corpustools/.pytest_cache
+prune src/corpustools/__pycache__
+global-exclude *.py[cod]
+global-exclude .DS_Store

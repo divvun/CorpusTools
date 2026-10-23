@@ -1,5 +1,8 @@
-CorpusTools.egg-info/
+*.egg-info/
 __pycache__/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
 /installed_files.txt
 /build
 /dist

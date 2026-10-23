@@ -57,4 +57,4 @@ plugins:
   - mkdocstrings:
       handlers:
         python:
-          paths: [..]
+          paths: [../src]

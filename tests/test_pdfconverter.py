@@ -26,7 +26,7 @@ import pytest
 from lxml import etree
 
 from corpustools import pdfconverter, xslsetter
-from corpustools.test import xmltester
+from tests import xmltester
 
 HERE = os.path.dirname(__file__)
 

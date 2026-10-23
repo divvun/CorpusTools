@@ -21,7 +21,7 @@
 from lxml import etree
 
 from corpustools import avvirconverter
-from corpustools.test import xmltester
+from tests import xmltester
 
 
 class TestAvvirConverter(xmltester.XMLTester):

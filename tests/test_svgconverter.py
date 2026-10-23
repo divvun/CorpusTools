@@ -23,7 +23,7 @@ import os
 from lxml import etree
 
 from corpustools import svgconverter
-from corpustools.test import xmltester
+from tests import xmltester
 
 HERE = os.path.dirname(__file__)
 

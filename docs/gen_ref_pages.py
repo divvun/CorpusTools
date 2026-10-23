@@ -12,9 +12,11 @@ cwd = Path(os.getcwd())
 # with mkdocs_gen_files.open("reference/index.md", "w") as f:
 #     print("hei hei", file=f)
 
-for path in sorted(Path("..", "corpustools").rglob("*.py")):
-    module_path = path.relative_to("..").with_suffix("")
-    doc_path = path.relative_to(Path("..") / "corpustools").with_suffix(".md")
+package_root = Path("..") / "src" / "corpustools"
+
+for path in sorted(package_root.rglob("*.py")):
+    module_path = path.relative_to(Path("..") / "src").with_suffix("")
+    doc_path = path.relative_to(package_root).with_suffix(".md")
     full_doc_path = Path("reference", doc_path)
 
     parts = tuple(module_path.parts)

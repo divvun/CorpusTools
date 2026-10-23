@@ -22,6 +22,7 @@ using the package manager.
 ## Development
 
 - [Install uv](https://docs.astral.sh/uv/getting-started/installation/)
+- Package source is in `src/corpustools/`; tests are in `tests/`.
 - Run `uv sync` to install the project and development dependencies.
 - Run `uv run pytest` to run the test suite.
 

@@ -25,7 +25,7 @@ import os
 from lxml import etree
 
 from corpustools import plaintextconverter
-from corpustools.test import xmltester
+from tests import xmltester
 
 HERE = os.path.dirname(__file__)
 

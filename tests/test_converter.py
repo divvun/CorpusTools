@@ -24,7 +24,7 @@ import os
 from lxml import etree
 
 from corpustools import converter, text_cat, util, xslsetter
-from corpustools.test.xmltester import XMLTester
+from tests.xmltester import XMLTester
 
 HERE = os.path.dirname(__file__)
 LANGUAGEGUESSER = text_cat.Classifier(None)

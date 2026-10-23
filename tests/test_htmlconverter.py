@@ -27,8 +27,8 @@ from lxml import etree, html
 from parameterized import parameterized
 
 from corpustools import htmlcontentconverter, htmlconverter
-from corpustools.test.test_xhtml2corpus import assertXmlEqual
-from corpustools.test.xmltester import XMLTester
+from tests.test_xhtml2corpus import assertXmlEqual
+from tests.xmltester import XMLTester
 
 HERE = os.path.dirname(__file__)
 
