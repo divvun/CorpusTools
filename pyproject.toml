@@ -80,6 +80,7 @@ bibel_no_aligner = "corpustools.bibel_no_aligner:main"
 bibel_no_crawler = "corpustools.bibel_no_crawler:main"
 ces_to_bibel_no = "corpustools.ces2homegrown:main"
 gold2corr = "corpustools.gold2correct:main"
+avvirdigi = "corpustools.avvirdigital:main"
 
 [tool.uv]
 package = true

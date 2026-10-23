@@ -29,6 +29,7 @@ from lxml import etree
 
 from corpustools import (
     avvirconverter,
+    avvirdigital,
     biblesfmconverter,
     biblexmlconverter,
     ccat,
@@ -165,8 +166,10 @@ class Converter:
         }
 
         str_path = path.absolute().as_posix()
-        if "avvir_xml" in str_path:
+        if "avvir_xml" in str_path and path.suffix == ".xml":
             return avvirconverter.convert2intermediate(path)
+        if "avvir_xml" in str_path and path.suffix == ".digital":
+            return avvirdigital.convert2intermediate(path)
         elif str_path.endswith("bible.xml"):
             return biblexmlconverter.convert2intermediate(path)
         elif "udhr_" in str_path and path.suffix == ".xml":
