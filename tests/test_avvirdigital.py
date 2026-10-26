@@ -2,13 +2,14 @@ import pytest
 
 from corpustools.avvirdigital import (
     AvvirAuthor,
+    AvvirContainer,
+    AvvirDocument,
     AvvirTaggedText,
     convert_author,
     convert_image,
     convert_slideshow,
     convert_tagged_text,
 )
-
 
 @pytest.mark.parametrize(
     ("author_dict", "expected"),
@@ -35,7 +36,10 @@ from corpustools.avvirdigital import (
                 "identifier": "author",
                 "styles": {},
             },
-            None,
+            AvvirAuthor(
+                forname="",
+                surname="",
+            ),
         ),
     ],
 )
@@ -165,3 +169,58 @@ def test_extract_slideshow(
     slideshow_dict: dict[str, object], expected: AvvirTaggedText
 ) -> None:
     assert convert_slideshow(slideshow_dict) == expected  # type: ignore
+
+
+def _sample_container(
+    text: str, children: list[AvvirContainer] | None = None
+) -> AvvirContainer:
+    return AvvirContainer(
+        main_content=[AvvirTaggedText(text=f"{text} main", tag="body")],
+        captions=[AvvirTaggedText(text=f"{text} caption", tag="image")],
+        slideshows=[AvvirTaggedText(text=f"{text} slideshow", tag="slideshow")],
+        containers=children or [],
+    )
+
+
+def test_container_serialize_flattens_nested_containers() -> None:
+    container = _sample_container(
+        "parent",
+        [_sample_container("child", [_sample_container("grandchild")])],
+    )
+
+    serialized = container.serialize()
+
+    assert [element.text for element in serialized] == [
+        "parent main",
+        "parent caption",
+        "parent slideshow",
+        "child main",
+        "child caption",
+        "child slideshow",
+        "grandchild main",
+        "grandchild caption",
+        "grandchild slideshow",
+    ]
+
+
+def test_document_serialize_flattens_nested_containers() -> None:
+    document = AvvirDocument(
+        authors=None,
+        title=AvvirTaggedText(text="title", tag="title").text,
+        main_content=[],
+        captions=[],
+        slideshows=[],
+        containers=[
+            _sample_container("child", [_sample_container("grandchild")])
+        ],
+    )
+    serialized = document.serialize()
+
+    assert [element.text for element in serialized] == [
+        "child main",
+        "child caption",
+        "child slideshow",
+        "grandchild main",
+        "grandchild caption",
+        "grandchild slideshow",
+    ]
