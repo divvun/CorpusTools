@@ -17,11 +17,9 @@
 #
 """Convert Ávvir-json-files to the Giella xml format."""
 
-import json
-import sys
 from dataclasses import dataclass
 from pathlib import Path
-from pprint import pprint
+from typing import Any
 
 from lxml import etree
 
@@ -34,6 +32,14 @@ class AvvirAuthor:
     surname: str
 
 
+@dataclass
+class AvvirTaggedText:
+    """A class representing an Ávvir tagged text."""
+
+    text: str
+    tag: str
+
+
 def convert_article(avvir_doc: Path) -> etree.Element:
     """Convert an Ávvir article to the giellatekno xml format.
 
@@ -44,7 +50,7 @@ def convert_article(avvir_doc: Path) -> etree.Element:
         The resulting etree.Element after the conversion.
     """
     tree = etree.Element("document")
-    body = etree.SubElement(tree, "body")
+    body = etree.SubElement(tree, "body")  # noqa: F841
 
     return tree
 
@@ -61,44 +67,8 @@ def convert2intermediate(filename: Path) -> etree.Element:
     return convert_article(filename)
 
 
-def content_list(avvir_json: dict) -> None:
-    known_content_identifiers = []
-
-    interesting_content_identifiers = [
-        "author",
-    ]
-
-    to_handle = [
-        "body",
-        "faktatekst",
-        "faktatittel",
-        "intro",
-        "mellom",
-        "subtitle",
-        "title",
-        "slideshow",
-        "image",
-        "container",
-        "quote",
-    ]
-    not_interesting_content_identifiers = [
-        "embed",
-        "tags",
-        "video",
-    ]
-    hits = 0
-    for content in avvir_json["data"]["content"]:
-        if hits > 10:
-            break
-        if content["identifier"] in interesting_content_identifiers:
-            print(f"Interesting content identifier: {content['identifier']}")
-            pprint(content)
-            print()
-            hits += 1
-
-
-def convert_author(fullname: str) -> AvvirAuthor:
-    """Convert an Ávvir author to the giellatekno xml format.
+def convert_author(author_dict: dict[str, Any]) -> AvvirAuthor | None:
+    """Convert an Ávvir author to AvvirAuthor.
 
     Args:
         fullname: the full name of the Ávvir author.
@@ -106,16 +76,63 @@ def convert_author(fullname: str) -> AvvirAuthor:
     Returns:
         The resulting AvvirAuthor object after the conversion.
     """
+    fullname = author_dict.get("content", {}).get("name", [{}])[0].get("insert", "")
+    if not fullname:
+        return None
+
     name_parts = fullname.split(" ")
     return AvvirAuthor(forname=" ".join(name_parts[:-1]), surname=name_parts[-1])
 
 
-def main():
-    json_dir = Path(sys.argv[1])
-    known_versions = ["2.2", "2.3"]
+def convert_tagged_text(faktatittel_dict: dict[str, Any]) -> AvvirTaggedText:
+    """Convert an Ávvir faktatittel to AvvirTaggedText.
 
-    for json_file in json_dir.glob("*.digital"):
-        avvir_json = json.loads(json_file.read_text(encoding="utf-8"))
-        if avvir_json["version"] not in known_versions:
-            print(f"Unknown version: {avvir_json['version']}")
-        content_list(avvir_json)
+    Args:
+        faktatittel_dict: the faktatittel of the Ávvir document.
+
+    Returns:
+        The resulting AvvirTaggedText object after the conversion.
+    """
+    texts = (
+        text_part.get("insert", "")
+        for text_part in faktatittel_dict.get("content", {}).get("text", [{}])
+    )
+    return AvvirTaggedText(text="".join(texts), tag=faktatittel_dict["identifier"])
+
+
+def convert_image(image_dict: dict[str, Any]) -> AvvirTaggedText:
+    """Convert an Ávvir image to AvvirTaggedText.
+
+    Args:
+        image_dict: the image of the Ávvir document.
+
+    Returns:
+        The resulting AvvirTaggedText object after the conversion.
+    """
+    texts = (
+        text_part.get("insert", "")
+        for text_part in image_dict.get("content", {}).get("caption", [{}])
+    )
+    return AvvirTaggedText(text="".join(texts), tag=image_dict["identifier"])
+
+
+def convert_slideshow(slideshow_dict: dict[str, Any]) -> AvvirTaggedText:
+    """Convert an Ávvir slideshow to AvvirTaggedText.
+
+    Avoid duplicate text by using a dictionary comprehension to extract unique text
+    parts from the slideshow's containers.
+
+    Args:
+        slideshow_dict: the slideshow of the Ávvir document.
+
+    Returns:
+        The resulting AvvirTaggedText object after the conversion.
+    """
+    texts = {
+        text_part.get("insert", ""): None
+        for images in slideshow_dict.get("containers", {}).get("slideshow", [{}])
+        for text_part in images.get("content", {}).get("caption", [{}])
+    }
+    return AvvirTaggedText(
+        text=" ".join(texts.keys()), tag=slideshow_dict["identifier"]
+    )
