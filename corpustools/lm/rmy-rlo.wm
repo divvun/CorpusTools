@@ -1,572 +1,4218 @@
-1170 thaj
- 620 so
- 615 vaj
- 565 kodo
- 547 ande
- 535 šaj
- 507 maj
- 502 khaj
- 458 avel
- 398 manuš
- 360 kerel
- 343 kana
- 315 či
- 305 žutipe
- 260 kade
- 240 kaver
- 217 kado
- 211 ando
- 195 pala
- 193 naj
- 192 khatar
- 186 pa
- 177 trobuj
- 174 kusa
- 157 vrama
- 155 Šaj
- 151 anda
- 136 tela
- 132 avri
- 122 atunči
- 121 birij
- 108 tut
- 107 sa
- 106 than
- 106 Kodo
- 102 šon
- 100 žal
- 100 eksemplo
-  97 berš
-  95 dikhel
-  94 žuvli
-  94 buci
-  94 ačarel
-  92 kerdžol
-  92 inkrel
-  90 šavoro
-  89 aven
-  86 les
-  84 thana
-  83 uni
-  83 musaj
-  81 sas
-  81 medicina
-  79 landsting
-  79 kamel
-  78 phenel
-  78 numa
-  78 mišto
-  77 von
-  76 korkori
-  74 Numa
-  73 andre
-  68 pruba
-  68 opre
-  65 -
-  64 sigo
-  64 džes
-  63 doktori
-  62 manušes
-  62 kodi
-  62 butivar
-  61 nasul
-  61 keren
-  61 feri
-  60 ži
-  60 Jekh
-  59 žuvliako
-  59 shaj
-  58 karing
-  58 kadal
-  57 žuvlia
-  57 variso
-  57 normalno
-  56 abortsia
-  54 čačipe
-  54 rat
-  54 mukhel
-  54 buči
-  54 Si
-  53 sekso
-  53 prubi
-  53 phari
-  53 kontakto
-  53 bucia
-  52 žanel
-  52 vårdcentral
-  52 stato
-  52 kodol
-  51 čores
-  51 varikhon
-  51 Univar
-  50 nasvalipe
-  50 cancer
-  48 feder
-  48 bi
-  47 san
-  47 prostata
-  47 angla
-  47 Sar
-  46 tu
-  46 sako
-  46 lašo
-  46 dikhipe
-  45 xal
-  44 seksualno
-  44 remiso
-  44 ekcera
-  43 univar
-  43 sama
-  43 diferentne
-  42 žutij
-  42 temperatura
-  42 nasvalimata
-  42 inkren
-  42 den
-  42 Maj
-  41 šavora
-  41 tele
-  41 duj
-  41 Pala
-  41 Atunči
-  40 zakono
-  40 intrego
-  39 perel
-  39 dur
-  39 bušol
-  39 buča
-  38 počinel
-  38 mobbing
-  38 kames
-  38 informatsia
-  38 birin
-  38 barol
-  38 PSA
-  38 Kado
-  37 uči
-  37 peste
-  37 bučara
-  36 zurales
-  36 maškar
-  35 čiro
-  35 trajo
-  35 sikavel
-  35 pun
-  35 pel
-  35 och
-  35 Vi
-  34 tabletka
-  34 paji
-  34 informatcia
-  33 phares
-  33 decizia
-  33 Ande
-  32 puberteto
-  32 ačardžol
-  32 Butivar
-  32 Ame
-  31 žutimaske
-  31 vov
-  31 vorbij
-  31 save
-  31 kote
-  31 data
-  30 žutimasko
-  30 Či
-  30 them
-  30 telune
-  30 ongesto
-  30 manush
-  30 love
-  30 košta
-  30 khinel
-  30 diferentno
-  29 miljö
-  29 biris
-  29 aresel
-  28 zumavel
-  28 vård
-  28 ungdomsmottagning
-  28 pesko
-  28 manges
-  28 ghindo
-  28 atunci
-  28 anglal
-  28 Pe
-  27 čire
-  27 tabletki
-  27 nakhel
-  27 kadi
-  27 firmi
-  27 duxano
-  27 differentne
-  27 bajura
-  27 avla
-  27 akto
-  27 Naj
-  26 za
-  26 länet
-  26 Uni
-  25 Švedo
-  25 peske
-  25 mangel
-  25 lokho
-  25 khere
-  25 kanči
-  25 ghindura
-  25 dukhal
-  25 drom
-  25 Vårdguiden
-  24 čuči
-  24 šavores
-  24 vazdel
-  24 vast
-  24 las
-  24 kurko
-  24 exemplo
-  24 doš
-  24 ačaripe
-  23 čuča
-  23 žutimaski
-  23 varikhasa
-  23 vagina
-  23 undersökningar
-  23 sjukdomar
-  23 phenen
-  23 paša
-  23 parujipe
-  23 nevo
-  23 lungo
-  23 lenge
-  23 hitta
-  23 e-tjänster
-  23 dujto
-  23 alosares
-  23 alosarel
-  22 responsebilita
-  22 recepta
-  22 nevi
-  22 murš
-  22 medicinsko
-  22 khetanes
-  22 keras
-  22 jekhes
-  22 djal
-  22 dikhen
-  22 decizi
-  22 atveto
-  22 18
-  21 šol
-  21 vizita
-  21 skrij
-  21 skirisardo
-  21 riziko
-  21 phuterdo
-  21 perdal
-  21 palpale
-  21 opral
-  21 kerdo
-  21 hångel
-  21 ghindoj
-  21 fungus
-  21 arakhel
-  21 angle
-  21 alkoholo
-  21 Sa
-  20 šavoreske
-  20 terne
-  20 specialno
-  20 rodes
-  20 parujimata
-  20 kamen
-  20 doša
-  20 das
-  20 andral
-  19 čoro
-  19 specialist
-  19 problemura
-  19 län
-  19 khan
-  19 kerdas
-  19 gazda
-  19 cini
-  19 celake
-  19 bučia
-  19 apoteka
-  19 Tela
-  19 Anda
-  18 čačimasa
-  18 testulij
-  18 paruvel
-  18 nas
-  18 mindik
-  18 mapa
-  18 košti
-  18 jekhe
-  18 civari
-  18 cino
-  18 ačaren
-  18 angluni
-  18 ame
-  17 žutimata
-  17 šavorenge
-  17 značil
-  17 trin
-  17 seksualne
-  17 paše
-  17 minoritetura
-  17 mačycako
-  17 kirlesko
-  17 kerde
-  17 kasave
-  17 aves
-  17 akutno-p-piller
-  16 zutipe
-  16 sode
-  16 regiona
-  16 phure
-  16 phenes
-  16 peniso
-  16 neve
-  16 mezij
-  16 medicini
-  16 malavel
-  16 kondomo
-  16 kerdžon
-  16 karring
-  16 jakh
-  16 inflamatcia
-  16 dukh
-  16 dosta
-  16 doktora
-  16 cine
-  16 baron
-  16 bari
-  16 ašol
-  16 But
-  15 žukarel
-  15 šov
-  15 časura
-  15 žanes
-  15 zor
-  15 vrami
-  15 važno
-  15 varikhaske
-  15 sovel
-  15 sostar
-  15 skola
-  15 sastipe
-  15 pušimata
-  15 kollin
-  15 baro
-  14 Šavora
-  14 šajipe
-  14 ultraljud
-  14 themeske
-  14 subventcia
-  14 sekurno
-  14 savi
-  14 regioni
-  14 problemo
-  14 pharo
-  14 pharipe
-  14 penge
-  14 mindig
-  14 manušen
-  14 lil
-  14 laši
-  14 kurke
-  14 koroni
-  14 kam
-  14 celaki
-  14 brigako
-  14 bare
-  14 ačares
-  13 žan
-  13 trobun
-  13 patretura
-  13 mačyca
-  13 lashio
-  13 krujal
-  13 kommuni
-  13 infektcia
-  13 hormoni
-  13 gata
-  13 eksaminatcia
-  13 cirdel
-  13 Paša
-  13 Normalno
-  13 Kam
-  13 Kadi
-  12 šavoresko
-  12 žanen
-  12 šadel
-  12 zuralo
-  12 vušt
-  12 voj
-  12 vaginalno
-  12 tuke
-  12 telunipe
-  12 telal
-  12 soske
-  12 sastimasko
-  12 röntgen
-  12 rodipe
-  12 righ
-  12 protektsia
-  12 protekcia
-  12 peski
-  12 partča
-  12 naštik
-  12 natura
-  12 nasvalo
-  12 nasvale
-  12 nacionalne
-  12 medicinako
-  12 manušesko
-  12 manušeske
-  12 lashie
-  12 landstinget
-  12 komplikatsi
-  12 klinika
-  12 inke
-  12 haj
-  12 funguso
-  12 familja
-  12 doktoritsko
-  12 des
-  12 ačiaripe
-  12 animalura
-  12 Von
-  11 žutin
-  11 šudel
-  11 šero
-  11 šansa
-  11 varikhas
-  11 trozna
-  11 tolmačo
-  11 specialne
-  11 soski
-  11 skirime
-  11 reguli
-  11 protektcia
-  11 privatno
-  11 pien
-  11 phare
-  11 pasha
-  11 nasulimata
-  11 mutrel
-  11 mukhen
-  11 morci
-  11 kotor
-  11 kondomura
-  11 kolin
-  11 kodoles
-  11 khas
-  11 keres
-  11 internet
-  11 identiteto
-  11 garantcia
-  11 evulutcia
-  11 dej
-  11 bolnica
-  11 barnmorska
-  11 atvetura
-  11 Ongesto
-  11 Mindik
-  11 50
-  10 čumidipe
-  10 šordžol
-  10 čiri
-  10 šib
-  10 šavoren
-  10 zurali
-  10 zakonura
-  10 webthan
-  10 vorbin
-  10 vorba
-  10 vazno
-  10 trajij
-  10 tovel
-  10 testa
-  10 sjukvården
-  10 sikaven
-  10 rodel
-  10 preventivno
-  10 per
-  10 parudžol
-  10 operatcia
-  10 normalne
-  10 nationalne
-  10 nasvalengo
-  10 nakhen
-  10 nakh
-  10 laše
-  10 kontroli
-  10 kodolesa
-  10 khera
-  10 kaverenge
-  10 kanci
-  10 jiva
-  10 jakha
-  10 hälso-
-  10 ghada
-  10 forma
-  10 firma
-  10 diaré
-  10 bučiara
-  10 bute
-  10 bul
-  10 bolnicia
-  10 anglunes
-  10 aba
-  10 Shvedo
-  10 Kodol
-  10 Ke
-  10 Fungus
-   9 šunel
-   9 čumidel
-   9 šiba
-   9 varisavo
-   9 tystnadsplikt
-   9 trajin
-   9 teluno
-   9 suv
-   9 slobodia
-   9 sjuksköterska
-   9 situatsia
-   9 situatsi
-   9 sajek
-   9 privatne
-   9 paluni
-   9 manushenge
-   9 mangen
-   9 lokhes
-   9 kodole
-   9 kodola
-   9 ketanes
-   9 kerdi
-   9 kaveren
-   9 kasavo
-   9 inkerdo
-   9 hasajvel
-   9 ginavel
-   9 dičol
-   9 dat
-   9 daral
-   9 dar
-   9 dandengo
-   9 chi
-   9 cera
-   9 ačarimata
-   9 avilas
-   9 aresen
-   9 akutno
-   9 Trobuj
-   9 Skåne
-   9 Sako
-   9 Mobbing
-   9 Atunci
-   9 Ando
-   9 Akutno-p-piller
-
+2515	te
+2092	pe
+1666	si
+1218	e
+1127	thaj
+908	jekh
+840	o
+749	ke
+574	so
+565	vaj
+561	kodo
+511	ande
+499	šaj
+492	maj
+473	khaj
+439	avel
+389	vi
+370	manuš
+348	kerel
+339	sar
+320	kana
+314	lel
+290	Te
+286	či
+271	žutipe
+248	kade
+225	kaver
+221	but
+206	kado
+202	ando
+197	pala
+184	khatar
+176	pa
+170	naj
+163	trobuj
+157	del
+152	vrama
+149	anda
+148	kusa
+136	Šaj
+125	na
+123	po
+122	tela
+119	avri
+117	Länsstyrelsen
+114	atunči
+113	tut
+111	birij
+110	Kana
+109	len
+102	than
+102	sa
+101	Kodo
+94	buci
+94	berš
+93	žal
+91	dikhel
+90	ačarel
+89	inkrel
+89	aven
+88	šon
+87	šavoro
+86	kerdžol
+85	eksemplo
+84	les
+82	žuvli
+81	musaj
+78	thana
+76	a
+76	kamel
+75	von
+75	E
+75	mišto
+73	pruba
+72	sas
+72	uni
+71	numa
+68	phenel
+68	medicina
+67	Numa
+65	andre
+64	korkori
+64	landsting
+63	sigo
+60	kadal
+59	keren
+59	shaj
+58	Jekh
+58	kodi
+58	normalno
+58	džes
+57	butivar
+57	nasul
+56	manušes
+56	abortsia
+55	opre
+55	nasvalipe
+55	doktori
+54	feri
+53	bucia
+53	prubi
+53	variso
+52	buči
+52	čores
+52	phari
+51	karing
+51	sekso
+51	žuvliako
+50	kodol
+50	san
+50	ži
+50	žuvlia
+49	Univar
+49	Si
+49	mukhel
+48	čačipe
+48	stato
+48	rat
+47	žanel
+47	cancer
+45	sama
+45	sako
+45	tu
+45	kontakto
+45	lašo
+44	prostata
+44	PSA
+43	dikhipe
+43	ekcera
+43	Sar
+43	angla
+42	feder
+42	duj
+42	Maj
+42	varikhon
+42	piller
+41	perel
+41	remiso
+41	p
+40	Pala
+40	nasvalimata
+40	temperatura
+39	diferentne
+39	Atunči
+39	zurales
+38	inkren
+38	zakono
+38	seksualno
+38	uči
+37	tele
+37	bi
+37	Kado
+36	dur
+36	peste
+36	vårdcentral
+36	maškar
+36	informatsia
+36	xal
+35	trajo
+35	žutij
+35	bušol
+35	univar
+35	pel
+35	bučara
+35	barol
+34	paji
+34	buča
+34	mobbing
+33	Ame
+33	birin
+33	informatcia
+33	sikavel
+33	kames
+33	them
+33	den
+33	šavora
+32	Vi
+32	intrego
+32	pun
+32	ačardžol
+31	decizia
+31	O
+31	kon
+31	save
+31	phares
+31	avla
+31	čiro
+30	love
+30	manush
+29	miljö
+29	khere
+29	kote
+29	diferentno
+29	žutimaske
+29	Či
+29	vov
+29	ongesto
+28	ghindo
+28	manges
+28	tabletka
+28	Butivar
+27	firmi
+27	Ande
+27	differentne
+27	biris
+27	atunci
+27	bajura
+27	zumavel
+27	data
+27	žutimasko
+27	čire
+27	puberteto
+27	duxano
+26	vast
+26	länet
+26	pesko
+26	nakhel
+26	Naj
+26	telune
+26	ačaripe
+25	nevo
+25	lokho
+25	dukhal
+24	kadi
+24	exemplo
+24	ghindura
+24	peske
+24	vazdel
+24	lungo
+24	počinel
+24	vorbij
+24	anglal
+24	čuči
+23	Uni
+23	drom
+23	za
+23	doš
+23	akto
+23	paša
+23	čuča
+22	keras
+22	parujipe
+22	alkoholo
+22	atveto
+22	Švedo
+22	šavores
+22	kurko
+22	kanči
+21	djal
+21	aresel
+21	lenge
+21	las
+21	mangel
+21	khetanes
+21	nevi
+21	jekhes
+21	košta
+21	khinel
+21	tabletki
+21	ghindoj
+21	hångel
+20	angle
+20	das
+20	perdal
+20	decizi
+20	dikhen
+20	kerdo
+20	och
+20	Sa
+20	alosarel
+20	žutimaski
+20	alosares
+20	šol
+20	opral
+20	pušimata
+20	vagina
+20	paše
+20	murš
+20	Anda
+19	län
+19	Pe
+19	responsebilita
+19	gazda
+19	skirisardo
+19	kerdas
+19	dujto
+19	specialno
+19	palpale
+19	rodes
+19	parujimata
+19	vizita
+19	savo
+19	dukh
+19	bučia
+19	arakhel
+19	phenen
+19	čoro
+19	varikhasa
+18	kamen
+18	cini
+18	problemura
+18	Tela
+18	skrij
+18	doša
+18	mindik
+18	andral
+18	terne
+18	nas
+18	riziko
+18	šavoreske
+18	čačimasa
+18	civari
+18	mapa
+17	kerde
+17	ame
+17	kasave
+17	jekhe
+17	phure
+17	paruvel
+17	recepta
+17	celake
+17	žutimata
+17	ačaren
+17	fungus
+16	neve
+16	cine
+16	baro
+16	malavel
+16	zutipe
+16	zor
+16	minoritetura
+16	phuterdo
+16	cino
+16	ašol
+16	značil
+16	medicinsko
+16	apoteka
+16	šavorenge
+16	aves
+16	ačares
+16	specialist
+16	važno
+16	jakh
+16	akutno
+16	peniso
+16	testulij
+15	But
+15	sastipe
+15	regiona
+15	žukarel
+15	košti
+15	trin
+15	doktora
+15	khan
+15	sovel
+15	nasvalo
+15	časura
+15	pharipe
+15	žanes
+15	manušen
+15	kollin
+15	mamografia
+15	pharo
+15	baron
+14	karring
+14	themeske
+14	lil
+14	nasvale
+14	tuke
+14	bari
+14	sode
+14	subventcia
+14	laši
+14	Šavora
+14	inflamatcia
+14	kirlesko
+14	seksualne
+14	mačycako
+14	kurke
+14	angluni
+14	phenes
+14	Socialstyrelsen
+14	ultraljud
+14	skola
+14	ungdomsmottagning
+14	varikhaske
+14	brigako
+14	kondomo
+13	lashio
+13	penge
+13	bare
+13	mezij
+13	sekurno
+13	patretura
+13	kaveren
+13	dosta
+13	savi
+13	trozna
+13	Paša
+13	sastimasko
+13	celaki
+13	mačyca
+13	infektcia
+13	gata
+13	cirdel
+13	problemo
+13	eksaminatcia
+13	Normalno
+13	vorbin
+13	Kam
+12	EU
+12	animalura
+12	haj
+12	kommuni
+12	Länsstyrelsens
+12	lashie
+12	keres
+12	natura
+12	krujal
+12	inke
+12	rodipe
+12	kam
+12	trobun
+12	vrami
+12	högkostnadsskyddet
+12	medicini
+12	koroni
+12	žan
+12	peski
+12	šov
+12	šajipe
+12	atvetura
+12	kerdžon
+12	phare
+12	partča
+12	röntgen
+12	hormoni
+12	žanen
+12	vušt
+12	vaginalno
+12	funguso
+12	ačiaripe
+11	pasha
+11	Kadi
+11	evulutcia
+11	tute
+11	zuralo
+11	sikaven
+11	kodoles
+11	khas
+11	telal
+11	landstinget
+11	mindig
+11	soski
+11	manušeske
+11	Mindik
+11	šavoresko
+11	manušesko
+11	mutrel
+11	nakh
+11	tolmačo
+11	morci
+11	familja
+11	šadel
+11	šib
+11	pien
+11	nacionalne
+11	šansa
+11	sostar
+11	protekcia
+10	Shvedo
+10	khera
+10	reguli
+10	vazno
+10	righ
+10	nakhen
+10	privatno
+10	kodolesa
+10	bute
+10	nationalne
+10	nasulimata
+10	protektcia
+10	dar
+10	specialne
+10	kotor
+10	anglunes
+10	firma
+10	garantcia
+10	webthan
+10	kaverenge
+10	hälso
+10	bolnica
+10	naštik
+10	šordžol
+10	zurali
+10	aba
+10	voj
+10	viruso
+10	operatcia
+10	klinika
+10	varikhas
+10	bolnicia
+10	medicinako
+10	telunipe
+10	jakha
+10	šavoren
+10	čiri
+10	kolin
+10	per
+10	soske
+10	šudel
+10	bučiara
+10	parudžol
+10	ghada
+10	čumidipe
+10	Ongesto
+9	Skåne
+9	trajin
+9	slobodia
+9	inkerdo
+9	aresen
+9	ketanes
+9	zakonura
+9	manushenge
+9	kodola
+9	forma
+9	ginavel
+9	kasavo
+9	des
+9	kavere
+9	kerdi
+9	rodel
+9	varisavo
+9	skirime
+9	normalne
+9	šero
+9	šunel
+9	doktoritsko
+9	regioni
+9	barnmorska
+9	Kade
+9	teluno
+9	kontroli
+9	Ke
+9	lokhes
+9	hasajvel
+9	situatsia
+9	kanci
+9	bul
+9	suv
+9	tovel
+9	laše
+9	testa
+9	diaré
+9	tystnadsplikt
+9	mukhen
+9	protektsia
+9	dej
+9	daral
+9	čumidel
+9	ačarimata
+8	phuv
+8	dikhas
+8	mangen
+8	mashkar
+8	kodolenge
+8	appelatcia
+8	kommuna
+8	Tu
+8	Sako
+8	shajipe
+8	kodole
+8	phiren
+8	Ando
+8	manushen
+8	mansuh
+8	tradel
+8	nasvajven
+8	chi
+8	paluni
+8	privatne
+8	phuro
+8	varisave
+8	Akutno
+8	TLV
+8	alternativa
+8	Von
+8	keči
+8	pačka
+8	beršeski
+8	sajek
+8	khino
+8	jiva
+8	dandengo
+8	počines
+8	muj
+8	avilas
+8	azbal
+8	varisavi
+8	nasvalengo
+8	sjukvården
+8	situatsi
+8	eksaminacia
+8	komplikatsi
+8	identiteto
+8	eksamina
+8	getso
+8	vorta
+8	cera
+8	zurale
+8	ghindon
+8	dičol
+8	symtomura
+8	ačiarel
+8	Trobuj
+8	Tut
+8	vorba
+8	situatci
+8	amala
+8	štar
+8	covid
+8	bal
+8	dat
+8	Fungus
+8	kaveres
+8	Manušesko
+7	lashi
+7	avna
+7	kerdjiol
+7	mishto
+7	line
+7	bersh
+7	znacil
+7	Khaj
+7	kontaktura
+7	inkres
+7	naturake
+7	kotar
+7	zutij
+7	droma
+7	pende
+7	sastimaski
+7	Thaj
+7	boldes
+7	zumaven
+7	maksimalno
+7	džal
+7	žutin
+7	Feri
+7	produkto
+7	trajij
+7	angluno
+7	Manuš
+7	xasajvel
+7	akanak
+7	mačica
+7	akharipe
+7	aktura
+7	gynekologicno
+7	Doktori
+7	sastimaske
+7	pušel
+7	sosko
+7	Kodol
+7	čalo
+7	žutimasa
+7	palal
+7	policia
+7	manušipe
+7	muter
+7	varikhaste
+7	pugnia
+7	kikidel
+7	kollinesko
+7	thulipe
+7	Atunci
+7	žnačij
+7	šiba
+7	se
+7	tolmačos
+7	godži
+7	peren
+7	smittskyddslagen
+7	So
+7	xas
+7	kostulij
+7	Vaj
+7	naturalno
+7	mukhipe
+7	khelipe
+7	piel
+7	kondomura
+6	politika
+6	habe
+6	Pa
+6	themeski
+6	bararipe
+6	skurto
+6	intressura
+6	kadalesa
+6	internet
+6	kasavi
+6	amen
+6	slobodo
+6	mashie
+6	keravel
+6	savorenge
+6	pesa
+6	pet
+6	pen
+6	kulturako
+6	roden
+6	resti
+6	paruven
+6	sekurita
+6	kaske
+6	varikon
+6	tume
+6	Internet
+6	sit
+6	alternativi
+6	lezno
+6	anavel
+6	de
+6	registirime
+6	kečij
+6	čačo
+6	Šavoren
+6	sikadžol
+6	screening
+6	celako
+6	jekha
+6	gynekologo
+6	panš
+6	preventivno
+6	daravno
+6	lenca
+6	dukhajimata
+6	savori
+6	tordžol
+6	proba
+6	antibiotika
+6	hjilo
+6	sastri
+6	prostatacancer
+6	dosa
+6	patreto
+6	perdžol
+6	škola
+6	ašon
+6	vårdcentralen
+6	jokvareste
+6	Sajek
+6	mamografiako
+6	radiatcia
+6	cinjarel
+6	ačardžon
+6	ekstra
+6	terno
+6	dukhan
+6	pipe
+6	paja
+6	jokhvareste
+6	žurnalura
+6	dukha
+6	Kate
+6	khetanipe
+6	tekstura
+6	manušenca
+6	konik
+6	vramasa
+6	spermia
+6	učo
+6	variatsia
+6	anrengo
+6	pele
+6	žuvliake
+6	lošako
+6	problematicno
+6	butenge
+6	bajo
+6	testo
+6	depresirime
+6	pacia
+5	regionalno
+5	gazdi
+5	dikhimata
+5	inkras
+5	sam
+5	rig
+5	trajimaske
+5	konditci
+5	regeriungo
+5	djes
+5	direktno
+5	bushiol
+5	amare
+5	Kadal
+5	chiro
+5	amende
+5	skirisarde
+5	om
+5	reservatura
+5	lende
+5	lishij
+5	merel
+5	kodolen
+5	Ghindo
+5	cellura
+5	romuj
+5	permissia
+5	lengi
+5	pacape
+5	kulturake
+5	purane
+5	maripe
+5	jekhipe
+5	drogi
+5	mezin
+5	paluno
+5	kris
+5	mangipe
+5	lista
+5	ekonomiako
+5	kriminalne
+5	EES
+5	Žutimaski
+5	bišado
+5	garantsia
+5	uče
+5	čimin
+5	Medicina
+5	diferencia
+5	periodako
+5	apoteki
+5	trito
+5	lan
+5	skirisardas
+5	počindas
+5	phandado
+5	la
+5	doktoros
+5	sjukvårdsrådgivningen
+5	kontrola
+5	areslas
+5	kronor
+5	sastčol
+5	šinel
+5	efektura
+5	Žuvlia
+5	pašljol
+5	kovlo
+5	minutci
+5	kirlo
+5	čudno
+5	šoha
+5	Karing
+5	bišavel
+5	astarel
+5	eksaminaci
+5	vorbipe
+5	boldel
+5	sjuksköterska
+5	pacientnämnden
+5	khote
+5	dostaj
+5	ašavel
+5	formi
+5	kriminalno
+5	morči
+5	rateski
+5	sani
+5	infektci
+5	doktorosa
+5	grupa
+5	nasvaravel
+5	azban
+5	Kote
+5	Mamografia
+5	pacal
+5	Anglunes
+5	leste
+5	miškij
+5	avilov
+5	importantno
+5	aj
+5	tromal
+5	jekheste
+5	šibako
+5	ginadžol
+5	žukares
+5	žukarimata
+5	Anglunimastar
+5	leske
+5	receptako
+5	drago
+5	kombinatsia
+5	pundre
+5	körtlar
+5	kar
+5	varikhana
+5	Ži
+5	folimata
+5	žuvliori
+5	Angluni
+5	iregularno
+5	hal
+5	marel
+5	uravel
+5	miž
+5	gestagen
+5	agorij
+5	hångla
+5	kavereske
+5	testi
+5	mobbad
+5	trenulij
+5	pačivalo
+5	Žuvliako
+5	deprisirime
+5	štato
+5	Abortsia
+4	naturako
+4	kontrolli
+4	permissi
+4	djan
+4	mishtipe
+4	riksdagen
+4	publikatcia
+4	dine
+4	pangle
+4	kodoleske
+4	chiri
+4	organizatci
+4	djanglipe
+4	diciol
+4	thanende
+4	lagen
+4	lashiarel
+4	parkura
+4	inkerde
+4	projekti
+4	regionalne
+4	reservato
+4	nasvalenge
+4	phiraven
+4	hasajven
+4	themesko
+4	pacake
+4	cello
+4	Pasha
+4	trafika
+4	phagel
+4	tradipe
+4	klimato
+4	shajimata
+4	lishipe
+4	situatcia
+4	inkeripe
+4	energia
+4	savorren
+4	lengo
+4	pushimata
+4	alosarimata
+4	chire
+4	peres
+4	citizento
+4	arakhes
+4	righa
+4	funktcia
+4	malaven
+4	projekta
+4	phendo
+4	lombardo
+4	žukarimaske
+4	nasvajvel
+4	kheresko
+4	medicinske
+4	alergia
+4	parudžon
+4	agorisajlas
+4	Intrego
+4	thema
+4	insuransovo
+4	kontrakto
+4	kher
+4	högkostnadsdatabasen
+4	khanengi
+4	račate
+4	šuvlipe
+4	inkerdžol
+4	inflamatci
+4	rura
+4	khelel
+4	azylo
+4	pača
+4	kuratoro
+4	tradimata
+4	šavorengo
+4	rutini
+4	lako
+4	Pruba
+4	Kaver
+4	deš
+4	prubako
+4	prubake
+4	trobujas
+4	rekomendatcia
+4	nervozno
+4	Zurales
+4	rodimata
+4	dikhlo
+4	ačarde
+4	Mišto
+4	komuna
+4	Khatar
+4	cirden
+4	dini
+4	krisi
+4	second
+4	opinion
+4	seriozno
+4	nervovo
+4	antibiotikaki
+4	toaleta
+4	morčiaki
+4	šutino
+4	dešuduj
+4	Riziko
+4	galbeno
+4	pumb
+4	sel
+4	čačes
+4	sekreteso
+4	Korkori
+4	pugni
+4	pušen
+4	aparato
+4	tumoro
+4	phej
+4	thulo
+4	hormona
+4	individualno
+4	žene
+4	Uči
+4	temperature
+4	thud
+4	xabe
+4	phiravel
+4	khaver
+4	žas
+4	dikhes
+4	areses
+4	tystnadsplikten
+4	šavoreski
+4	insuranso
+4	pindžarde
+4	Phen
+4	serel
+4	tumen
+4	lim
+4	kaštoro
+4	thuv
+4	panglo
+4	pilas
+4	tsera
+4	sojipe
+4	anglunimastar
+4	vušta
+4	ägglossning
+4	Muršenge
+4	signalura
+4	glaso
+4	phurij
+4	varisar
+4	hanžoj
+4	hud
+4	könsmottagning
+4	šukar
+4	nikotina
+4	adiktovano
+4	östrogen
+4	zaleži
+4	regularno
+4	čumiden
+4	strul
+4	mottagning
+4	anro
+4	terni
+4	kliniki
+3	gav
+3	zelenipe
+3	zuvindi
+3	animalon
+3	vazden
+3	inkerdjiol
+3	organizacia
+3	pashe
+3	Landshövdingen
+3	regeriungoske
+3	vastesa
+3	puterdo
+3	naklas
+3	vazdes
+3	bishaves
+3	departamentura
+3	aktivno
+3	media
+3	amari
+3	citizentura
+3	jekhutne
+3	kaverenca
+3	länsstyrelse
+3	Amen
+3	rigate
+3	puterde
+3	zelenimata
+3	kaverendar
+3	phenas
+3	le
+3	mudarel
+3	pep
+3	klimatoski
+3	phuterde
+3	pek
+3	pajeske
+3	pajesko
+3	planeringo
+3	historia
+3	kommunikatci
+3	marketi
+3	zutimata
+3	nashtik
+3	kadala
+3	stiftelser
+3	föreningura
+3	chachimata
+3	religia
+3	rom
+3	tornedalingar
+3	integratcia
+3	alosarimaske
+3	koperatcia
+3	kameraövervakning
+3	kontrolla
+3	lotteria
+3	pengi
+3	skrin
+3	kerla
+3	cookies
+3	ginaves
+3	anav
+3	zurarel
+3	biknel
+3	konkurrensia
+3	terrorismo
+3	Vårdgarantin
+3	operatci
+3	lila
+3	alosaren
+3	pacientonge
+3	bušon
+3	generiska
+3	kuč
+3	putrel
+3	čimina
+3	variatcia
+3	šonesko
+3	kartčia
+3	egenavgift
+3	rabato
+3	högkostnadsbevis
+3	pumbarel
+3	infamatcia
+3	khaneski
+3	paracetamol
+3	Alvedon
+3	Panodil
+3	ibuprofen
+3	Ipren
+3	Ibumetin
+3	medicine
+3	draba
+3	Treo
+3	Albyl
+3	lilengo
+3	lovengo
+3	ašos
+3	garudžol
+3	počin
+3	preventivne
+3	arakhadžol
+3	ingrel
+3	cellake
+3	arakhle
+3	panšto
+3	beršengi
+3	preparatcia
+3	nandžarel
+3	Atveto
+3	mačycaki
+3	defencia
+3	Anrengo
+3	Mačycako
+3	bakteri
+3	akharel
+3	HPV
+3	makhel
+3	kremo
+3	bišadi
+3	akharen
+3	trobuja
+3	manušenge
+3	bučari
+3	komuni
+3	čori
+3	bučake
+3	dikhhel
+3	pacientura
+3	komplikatsia
+3	HSAN
+3	pačape
+3	pačako
+3	šundas
+3	pasulij
+3	diabetes
+3	sanjarel
+3	pato
+3	sperma
+3	khul
+3	Prostata
+3	hjileske
+3	šaravel
+3	uži
+3	fali
+3	organura
+3	parno
+3	körtel
+3	dukhavel
+3	Rat
+3	jakhenge
+3	jakhengi
+3	Šavoro
+3	kavereste
+3	mištoj
+3	thovel
+3	pajesa
+3	thoven
+3	džene
+3	phabardo
+3	koksaltlösning
+3	trubuj
+3	alos
+3	vårdnadshavare
+3	medvetslös
+3	medicinake
+3	Patientnämnden
+3	sikade
+3	ačardas
+3	procedura
+3	kikidini
+3	guzuj
+3	dopaš
+3	phuren
+3	dičon
+3	lino
+3	diklo
+3	Importantno
+3	lon
+3	sensetivne
+3	pompa
+3	Ghindon
+3	sapujesa
+3	perno
+3	skirisardi
+3	Vorbin
+3	Remiso
+3	žurnalo
+3	granitsa
+3	ternikano
+3	socialo
+3	nakhes
+3	švedicka
+3	Švedoske
+3	pindžarel
+3	grupi
+3	Vårdguiden
+3	khedipe
+3	jekheske
+3	zorasa
+3	žanglipe
+3	tusa
+3	UMO
+3	porunčin
+3	kasa
+3	Puš
+3	personalno
+3	šavorikano
+3	š
+3	vorbis
+3	brigake
+3	anglune
+3	birj
+3	kropli
+3	rovel
+3	xasal
+3	xasan
+3	muršen
+3	statoske
+3	doktoro
+3	muršeske
+3	testulin
+3	viziti
+3	Schwaizo
+3	kartcia
+3	pale
+3	Save
+3	lunge
+3	statoski
+3	kirleski
+3	pehenij
+3	gada
+3	xan
+3	tabletkenca
+3	eksera
+3	Zumav
+3	muršipe
+3	žuvlipe
+3	Butenge
+3	dume
+3	phara
+3	bririj
+3	baripe
+3	kamipe
+3	paradžol
+3	sano
+3	bera
+3	amalenca
+3	keci
+3	phabarel
+3	seksosko
+3	vuš
+3	avela
+3	membrano
+3	fakti
+3	bendžalo
+3	smakulij
+3	Phares
+3	negativne
+3	Kondomo
+3	latex
+3	mižako
+3	tabletkengi
+3	xalas
+3	startulij
+3	kikiden
+3	urin
+3	protekciako
+3	klamydia
+3	gonorré
+3	zaležij
+3	instrumento
+3	fruktovano
+3	Unien
+3	PMS
+3	Tipsura
+3	självkänsla
+3	nasulipe
+3	solutcia
+3	sporto
+3	Mobbing
+3	abortsiako
+3	randel
+3	suporto
+2	buciazi
+2	agrikultura
+2	nevelo
+2	trajil
+2	barvalo
+2	alternativne
+2	serviso
+2	inkerdjion
+2	producirime
+2	Jordbruksverket
+2	skoli
+2	bararen
+2	zuvindo
+2	bararel
+2	Amari
+2	shvedosko
+2	mangimata
+2	regering
+2	riksdag
+2	Centrala
+2	myndigheter
+2	sherutno
+2	missia
+2	perrdal
+2	manusheke
+2	Stockholms
+2	registro
+2	savorrenge
+2	personuppgiftslagen
+2	lilesa
+2	bishavel
+2	pushipe
+2	bygglov
+2	citizentonge
+2	nevimata
+2	internationalne
+2	lashipe
+2	Kadala
+2	koperatci
+2	themenca
+2	buciako
+2	organizatcia
+2	vazdas
+2	socialno
+2	kinipe
+2	kontraktura
+2	site
+2	inkerdjil
+2	artura
+2	chorres
+2	birisaras
+2	varikaske
+2	zakoni
+2	animaloske
+2	ghindos
+2	plaja
+2	phandavel
+2	zutimaski
+2	zuralipe
+2	Kulturako
+2	kulturalno
+2	vurdona
+2	regulo
+2	saj
+2	dzike
+2	leski
+2	licensi
+2	vesheske
+2	mudaripe
+2	vurdonenca
+2	är
+2	scoter
+2	Länstyrelsen
+2	uzho
+2	mangas
+2	zhi
+2	avral
+2	mel
+2	energiaki
+2	strategia
+2	energiako
+2	acharipe
+2	parudjiol
+2	pansh
+2	distriktura
+2	responsebiliteta
+2	delegatcia
+2	rumun
+2	han
+2	kothe
+2	vramako
+2	aktorura
+2	shvedo
+2	kommunake
+2	energiake
+2	phurenge
+2	lovenge
+2	lokalura
+2	manushengo
+2	historicne
+2	murmunci
+2	monumento
+2	kultura
+2	metodi
+2	purani
+2	historicno
+2	ashion
+2	kerdjion
+2	garajipe
+2	barvalipe
+2	LONA
+2	Manush
+2	zutin
+2	chib
+2	krujak
+2	saste
+2	etnicno
+2	reponsebilita
+2	Angla
+2	alosaripe
+2	ei
+2	anava
+2	resultatura
+2	zutimasa
+2	kontrollik
+2	shutino
+2	pocines
+2	holji
+2	khereske
+2	gazdasa
+2	kamerako
+2	allmän
+2	Primerno
+2	linja
+2	produktcia
+2	transporto
+2	biknen
+2	konkurso
+2	publicus
+2	ekonomia
+2	en
+2	förvaltare
+2	startoski
+2	patrin
+2	opruno
+2	vorbi
+2	arakhen
+2	rodimasko
+2	typura
+2	Sikavel
+2	struktura
+2	Skrin
+2	Shaj
+2	texto
+2	computeri
+2	teknicne
+2	phandaves
+2	programo
+2	Adobe
+2	PUL
+2	protektulij
+2	integriteto
+2	informatciasa
+2	informatci
+2	mail
+2	dino
+2	stimulatcia
+2	ekonomiake
+2	edukatcia
+2	differentno
+2	investatci
+2	oe
+2	Resultato
+2	hasna
+2	lishimaske
+2	mashienge
+2	chokaja
+2	producentura
+2	manglo
+2	Mindig
+2	jo
+2	sjukvårdslagen
+2	propozalo
+2	žutori
+2	činjarel
+2	phuterdi
+2	unie
+2	koštulin
+2	parude
+2	kaveresa
+2	lezni
+2	Högkostnadsskyddet
+2	nakhlas
+2	adresi
+2	högkostnadsskydd
+2	pral
+2	Apotekens
+2	Service
+2	AB
+2	systemo
+2	trapta
+2	basa
+2	khinen
+2	lini
+2	Informatcia
+2	blanketa
+2	Vazno
+2	palune
+2	maškaral
+2	šuvljiol
+2	učes
+2	šeranda
+2	pajeski
+2	čopki
+2	acetylsalicyra
+2	Nakheske
+2	nakha
+2	najol
+2	agorisardas
+2	dentista
+2	konditsi
+2	aresle
+2	Žutipe
+2	koštulij
+2	dejango
+2	ferij
+2	mačicako
+2	Celaki
+2	anglunimasko
+2	čore
+2	akharde
+2	gynegologo
+2	kremura
+2	makle
+2	skamin
+2	spatel
+2	bontovo
+2	kanalosko
+2	analyzatcia
+2	rizikako
+2	kerdžile
+2	Vagina
+2	kerdžilas
+2	gelas
+2	typo
+2	humant
+2	homoseksualno
+2	šindo
+2	manušeski
+2	kašt
+2	teluni
+2	minuta
+2	protektciako
+2	lokhi
+2	dikle
+2	procenti
+2	čuda
+2	dati
+2	ašade
+2	kvaliteto
+2	dukhado
+2	bučaki
+2	šefo
+2	komunalno
+2	akhardi
+2	Pacientnämnden
+2	pacientongo
+2	jekhutni
+2	departamento
+2	rizikura
+2	Savori
+2	kritika
+2	organizatsia
+2	pacientongi
+2	ghindosko
+2	organizatsi
+2	ginaven
+2	journalura
+2	Lex
+2	Maria
+2	ta
+2	pacienton
+2	bučaren
+2	Hälso
+2	sjukvårdens
+2	ansvarsnämnd
+2	meripe
+2	dikhlas
+2	DO
+2	diskriminatsia
+2	sanas
+2	opinja
+2	patientnämnden
+2	patientombudsmannen
+2	kotora
+2	arakhadžilas
+2	hjilesa
+2	kortison
+2	Vorta
+2	šušarel
+2	pora
+2	stungo
+2	centrimetri
+2	kanalo
+2	lokalbedövning
+2	kortel
+2	gono
+2	biopsi
+2	Kusa
+2	semno
+2	buliako
+2	falo
+2	morčiake
+2	hatar
+2	mikroskopicno
+2	Waran
+2	ušpeji
+2	bolnici
+2	milimetri
+2	pusavel
+2	djas
+2	virusovo
+2	čikinaslo
+2	Jakhengi
+2	reaktcia
+2	statosko
+2	kosel
+2	šavorengi
+2	khelen
+2	Nasvalipe
+2	khelimaske
+2	kompreso
+2	troznale
+2	Mištoj
+2	khendevura
+2	troznalo
+2	patsiento
+2	informatsiasa
+2	Važno
+2	paruves
+2	počindo
+2	trobujimata
+2	žnacij
+2	raportulis
+2	žuvljiange
+2	vårdcentraler
+2	pipera
+2	semnura
+2	kikidžol
+2	tejari
+2	Landstingen
+2	Terne
+2	žuvliange
+2	studi
+2	thudeske
+2	organizmura
+2	kovle
+2	hormonake
+2	žuvlikano
+2	sapuj
+2	darajvel
+2	beršenca
+2	slabo
+2	mamografiake
+2	hormonako
+2	implantato
+2	padžol
+2	čučako
+2	diarré
+2	Peresko
+2	teksto
+2	čine
+2	Problemura
+2	perdžilas
+2	rači
+2	kovles
+2	diarée
+2	xasarel
+2	litra
+2	zukro
+2	Na
+2	savoren
+2	nakle
+2	akharkhaj
+2	morčako
+2	bokhe
+2	bučarenca
+2	Grundosko
+2	Tystnadsplikten
+2	bolnicaki
+2	bolden
+2	Tystnadsplikt
+2	Šavorenge
+2	ternenge
+2	porunčij
+2	pestar
+2	phagen
+2	Eksemplo
+2	vurdon
+2	investigatcia
+2	Žutimaske
+2	kadej
+2	Sverigefinnar
+2	finlanderura
+2	židevura
+2	sami
+2	nacionalno
+2	Šako
+2	khamel
+2	Ginadžol
+2	sava
+2	grupasa
+2	pans
+2	minoritetsni
+2	pozitcia
+2	Umo
+2	sasčipe
+2	varietetura
+2	inkerdam
+2	Språkrådets
+2	rekomendatci
+2	boldam
+2	eksaminovane
+2	dikhade
+2	granskade
+2	specialst
+2	doktoroske
+2	daravel
+2	skris
+2	psykiatrisk
+2	tvångsvård
+2	psykiatricno
+2	Vov
+2	porunčis
+2	beršengo
+2	plano
+2	patsientonge
+2	čačimata
+2	musajimata
+2	patientlagen
+2	konventsia
+2	granitsia
+2	porunčil
+2	deja
+2	šunen
+2	soves
+2	Jekhe
+2	khine
+2	džan
+2	aptito
+2	vällingo
+2	lodo
+2	paho
+2	šorel
+2	nakheske
+2	stolpiller
+2	Inkren
+2	kombinatci
+2	thato
+2	šudro
+2	perdžon
+2	kuj
+2	zorako
+2	phurdel
+2	šundžol
+2	vazdipe
+2	eksaminura
+2	cinjiol
+2	starto
+2	kerdov
+2	cerra
+2	prostatit
+2	vuna
+2	bešel
+2	kirurgicno
+2	laboratorium
+2	urina
+2	högkostnadskydd
+2	počinen
+2	insuransa
+2	tradimasko
+2	Högkostnadskyddet
+2	dešuduje
+2	šoneski
+2	högkostnadskyddet
+2	skolhälsovården
+2	skolako
+2	trobus
+2	skurte
+2	gradi
+2	termometri
+2	De
+2	soven
+2	načol
+2	unienge
+2	pharimasa
+2	bukhengi
+2	inflamatsia
+2	Covid
+2	nasvalimasko
+2	Važne
+2	telefonoske
+2	numera
+2	korkoro
+2	www
+2	Aš
+2	rizikovo
+2	bolitsako
+2	sasto
+2	boltsi
+2	kaverentsa
+2	resen
+2	Varikhana
+2	hango
+2	interesso
+2	Puberteto
+2	humoro
+2	decidulij
+2	žukaren
+2	lošasa
+2	šor
+2	Žuvliorange
+2	taktura
+2	ternimata
+2	negativno
+2	guzuja
+2	pulpi
+2	taka
+2	pofi
+2	Unienge
+2	koloro
+2	khiden
+2	khandel
+2	tunjariko
+2	Keči
+2	raciate
+2	infektsia
+2	ghata
+2	seks
+2	erekcia
+2	Žuvliange
+2	parajimata
+2	skolsköterskan
+2	Alkoholo
+2	mol
+2	recija
+2	macion
+2	čudne
+2	depresi
+2	ångest
+2	ternen
+2	adikcia
+2	trobusardov
+2	balanso
+2	reagulin
+2	heteroseksualno
+2	unien
+2	Trin
+2	stresso
+2	nasvarel
+2	mujesko
+2	kikidine
+2	yoghurto
+2	membranura
+2	ezera
+2	toksicne
+2	konditsia
+2	pabaren
+2	luljavi
+2	Lokho
+2	pasivno
+2	gonoro
+2	guma
+2	muršesko
+2	khelimasko
+2	masterbutcia
+2	Diferentne
+2	morel
+2	importatno
+2	dildo
+2	Kondomura
+2	boltci
+2	Čoro
+2	P
+2	tabletkaki
+2	galbenostatesko
+2	kombinovane
+2	pausa
+2	bistrel
+2	Sode
+2	trombo
+2	Vušt
+2	odo
+2	fantazia
+2	dželi
+2	agor
+2	gladžj
+2	šibasa
+2	pizdel
+2	rozduho
+2	statura
+2	nange
+2	bišaven
+2	godž
+2	pher
+2	khanden
+2	rateske
+2	Sekso
+2	interesno
+2	barilas
+2	hiv
+2	urinaki
+2	vatako
+2	herpes
+2	skolsköterska
+2	masterbutsia
+2	eksperienca
+2	varikhastar
+2	gymnasium
+2	stresovano
+2	kamlov
+2	kanikas
+2	Phenel
+2	pačiv
+2	žuvliaki
+2	phuteripe
+2	livmoder
+2	pubertetaki
+2	žuvloria
+2	resel
+2	reslas
+2	ačiardžol
+2	sanitarno
+2	kada
+2	naja
+2	pharimaski
+2	kikidipe
+2	loš
+2	voja
+2	utipe
+2	familjasa
+2	nakhavel
+2	holjiako
+2	depressia
+2	tipsura
+2	varikana
+2	garuvel
+2	reaktci
+2	ongest
+2	maren
+2	maladžol
+2	romus
+2	graviditet
+2	žuvla
+2	prevencia
+2	preventiva
+2	Ačiaripe
+2	džela
+2	ghinadžol
+2	ghindžol
+2	Ačaripe
+2	daran
+2	pherel
+2	čavores
+2	došako
+2	dejako
+2	khereski
+2	kosta
+2	kontaktirime
+1	Gaveski
+1	politka
+1	forosko
+1	kerajipe
+1	konkuril
+1	naturaki
+1	bariol
+1	kuturakosafo
+1	znaci
+1	attraktivne
+1	pushipenca
+1	pabuci
+1	animalongi
+1	vramasamthaj
+1	farmi
+1	transportitime
+1	kontrollovano
+1	animalonca
+1	djuklenge
+1	grastenge
+1	vadel
+1	Landsbygdsprogrammet
+1	program
+1	aktoron
+1	entreprenoron
+1	psooibilita
+1	startulin
+1	kompetencia
+1	sherutni
+1	effektivnot
+1	agrikulturaki
+1	Kadalesa
+1	gavutne
+1	applikatci
+1	länsstyrelseinstruktcia
+1	regeriungosko
+1	alosardo
+1	landshövdingen
+1	Skånes
+1	Västa
+1	Götalands
+1	länsöverdirektoro
+1	consilga
+1	djesengo
+1	diariet
+1	registrulij
+1	aktci
+1	Buciako
+1	publicime
+1	diarium
+1	inderektno
+1	kaste
+1	gazheta
+1	kungörelseannonsering
+1	bishado
+1	A
+1	deciziasa
+1	keravas
+1	vadas
+1	delpe
+1	Musaj
+1	achares
+1	remissura
+1	propusalura
+1	propozalura
+1	premissursa
+1	intressentura
+1	internetoske
+1	presso
+1	membrura
+1	projektiso
+1	leshiarel
+1	djanglimasko
+1	dikhimaski
+1	kompetenciasa
+1	riksdagens
+1	interessura
+1	opinji
+1	ekonomiaki
+1	lahio
+1	offentlig
+1	upphandling
+1	ramavtal
+1	firmenca
+1	Animalura
+1	su
+1	naturi
+1	experiensi
+1	reposebilita
+1	animalongo
+1	animalonge
+1	dikhasam
+1	djurskyddslagen
+1	grundoske
+1	’’’’’te
+1	chorre
+1	regionura
+1	Länstyrelseb
+1	rakhas
+1	mashiaripe
+1	kulturakereservat
+1	parkerura
+1	phirimaske
+1	fjällen
+1	Nationalne
+1	pengo
+1	kanchesko
+1	Naturako
+1	biologicno
+1	kuch
+1	puterdi
+1	beshen
+1	skamina
+1	partia
+1	djuvljia
+1	chavorenca
+1	chavorenge
+1	allemansrätten
+1	fonduno
+1	Allemansrätten
+1	programura
+1	du
+1	rte
+1	sip
+1	meren
+1	arto
+1	vas
+1	fridlyst
+1	kiddes
+1	dukhaves
+1	jaktlagen
+1	vilt
+1	dziko
+1	anre
+1	kadalen
+1	mudares
+1	normaln
+1	okade
+1	phuva
+1	katar
+1	principe
+1	manushn
+1	regitrulij
+1	ekadal
+1	statestika
+1	dukhaven
+1	siffra
+1	telen
+1	rovdjur
+1	rish
+1	ruv
+1	muci
+1	lodjur
+1	järv
+1	kungsörn
+1	dikiphe
+1	licencia
+1	mudaren
+1	chordanes
+1	anumalura
+1	pagren
+1	viltskadeärenden
+1	vesh
+1	scoteronca
+1	tranculij
+1	rumuj
+1	vesha
+1	Terenosko
+1	barmark
+1	nastik
+1	Ivesko
+1	jiv
+1	Pajesko
+1	tradine
+1	phendas
+1	Miljö
+1	rolla
+1	cellonca
+1	lishisaras
+1	Riksdagen
+1	khiddino
+1	tthaj
+1	generatcia
+1	kvalitetne
+1	Sastimaski
+1	malajimata
+1	vibratci
+1	luftosko
+1	radiatci
+1	Kommunalne
+1	gazura
+1	raj
+1	aresas
+1	klimatonge
+1	lashiaras
+1	zukaras
+1	vadela
+1	pashion
+1	Resultatato
+1	Pajeske
+1	lashime
+1	uzhe
+1	ulado
+1	distrikt
+1	Bucia
+1	Exempel
+1	vattenverksamhet
+1	pasjeske
+1	elektriciteta
+1	fallura
+1	tunnlura
+1	podura
+1	bucian
+1	miljöbalken
+1	Exemplo
+1	på
+1	miljöfarliga
+1	verksamheter
+1	ytbehandlingsanläggningar
+1	gjuterier
+1	pappersbruk
+1	vindkraftverk
+1	värmeverk
+1	energianläggningar
+1	sågverk
+1	avfallsanläggningar
+1	avloppsreningsverk
+1	grus
+1	bergtäkter
+1	gruvor
+1	kommunalnot
+1	bordasa
+1	oala
+1	generationenge
+1	malaripe
+1	buciasi
+1	problemi
+1	Planeringo
+1	trajimako
+1	strukturaki
+1	kontinuiteto
+1	lettko
+1	Lashie
+1	IT
+1	infrastruktur
+1	bulhjaren
+1	buciake
+1	intressi
+1	paningi
+1	infrastukturne
+1	administratcia
+1	bredband
+1	gava
+1	pacimasko
+1	Ketanes
+1	lam
+1	materialura
+1	planingo
+1	tipura
+1	effektovane
+1	miljöprövningsdelegation
+1	vindkraftsparker
+1	fjärrvärmeverk
+1	radono
+1	shiol
+1	khetnes
+1	analyzi
+1	kherengi
+1	materialo
+1	planeringura
+1	trajimasko
+1	energiakoproduktcia
+1	kommunaki
+1	planeringi
+1	chalo
+1	planura
+1	khangera
+1	sadura
+1	paghel
+1	thele
+1	Byggnadsvårdensi
+1	shukar
+1	inkerdjin
+1	shukaripe
+1	premissura
+1	hasarel
+1	shuk
+1	Civilne
+1	temangen
+1	kulturhistoricno
+1	byggnadsvårdsbidrag
+1	Fornlämningar
+1	manushikane
+1	ruini
+1	ashajimata
+1	anticne
+1	forura
+1	ashilas
+1	kulturminneslagen
+1	sharavel
+1	fornlämning
+1	reservatur
+1	industriako
+1	landskapsvård
+1	varto
+1	lov
+1	lokalne
+1	projeka
+1	paca
+1	diskrimineringslagen
+1	diskriminatci
+1	diskriminacia
+1	murshipe
+1	djuvlipe
+1	etniciteto
+1	sexuallno
+1	sexualne
+1	identitetura
+1	nationalno
+1	djuvljian
+1	mushen
+1	trajura
+1	Länsstyrelserna
+1	murshengo
+1	djuvlia
+1	prostitutcia
+1	manushikano
+1	handlo
+1	andoi
+1	Sametinget
+1	sherutne
+1	Shvedoske
+1	Minoritetno
+1	pindjarde
+1	zidevura
+1	samer
+1	purianimaske
+1	sverigefinnar
+1	minoritetne
+1	chiba
+1	jiddisch
+1	romani
+1	samiska
+1	finska
+1	meänkieli
+1	kondidci
+1	Manushengo
+1	demokraticne
+1	kerengo
+1	antidiskriminatcia
+1	sherutnipe
+1	integratciaki
+1	obligatci
+1	dikhimasko
+1	kapaciteta
+1	nashutne
+1	alosarimasko
+1	Europakoparlamento
+1	avas
+1	listi
+1	alosarimaski
+1	raci
+1	rapportulin
+1	ginajipe
+1	vazdino
+1	vazne
+1	institutci
+1	krisa
+1	accidenta
+1	nuklarne
+1	länsstyrelser
+1	länsstyrelserna
+1	i
+1	Uppsala
+1	Kalmar
+1	Hallands
+1	chachipe
+1	församlingar
+1	Svenska
+1	kyrkan
+1	oshaj
+1	prahome
+1	passulij
+1	praho
+1	mulo
+1	deponiris
+1	konto
+1	djanes
+1	ginadjiol
+1	pocinanas
+1	mokhel
+1	Allmän
+1	kamera
+1	boldini
+1	civilne
+1	habeski
+1	mas
+1	habesa
+1	kontrollip
+1	produculin
+1	odolen
+1	buciari
+1	pocinimaski
+1	pocinel
+1	pocin
+1	kernas
+1	gele
+1	firmaki
+1	rekonstruktcia
+1	manushendar
+1	Danmark
+1	Finland
+1	Norge
+1	Island
+1	Migrationsverket
+1	hasardan
+1	pravo
+1	notarius
+1	Titlo
+1	latin
+1	sekretari
+1	Notarius
+1	anavesa
+1	translatci
+1	sviatko
+1	borgerliga
+1	vigselförrättare
+1	ansuripe
+1	bershengo
+1	god
+1	man
+1	eller
+1	ashiol
+1	överförmyndarnämnd
+1	inspektci
+1	chorri
+1	gosto
+1	ketanesande
+1	länsstyrelsernaando
+1	meny
+1	tillstånd
+1	bidrag
+1	stöd
+1	blanketti
+1	publikatci
+1	aktuallne
+1	Rodimaske
+1	alfabetoski
+1	djanas
+1	roddes
+1	Buller
+1	bokva
+1	B
+1	Oprunes
+1	hierarktika
+1	ulaves
+1	socialne
+1	medi
+1	rigako
+1	rubrika
+1	chachi
+1	Vervas
+1	Dromesko
+1	chasongo
+1	web
+1	WAIs
+1	WCAG
+1	plattforma
+1	Webthan
+1	Anpassa
+1	ko
+1	Amaro
+1	moderne
+1	webprogramura
+1	webstandardo
+1	shutine
+1	W
+1	C
+1	versi
+1	Firefox
+1	Safari
+1	Explorer
+1	Opera
+1	Google
+1	Chrome
+1	cookie
+1	ashiavel
+1	Cookies
+1	funktci
+1	typora
+1	Chi
+1	atunchi
+1	keresa
+1	shaja
+1	pharimata
+1	sikadjiona
+1	patra
+1	Biris
+1	dokumentrua
+1	Portable
+1	Document
+1	Format
+1	PDF
+1	Acrobat
+1	Reader
+1	ivja
+1	Personuppgiftslagen
+1	pindjardo
+1	phagerdo
+1	personuppgifter
+1	konferencia
+1	Länsstyrelsensi
+1	zancil
+1	offentlighetsprincipen
+1	textura
+1	mapi
+1	illustratci
+1	upphovsrättsskyddade
+1	pushimasko
+1	logotyp
+1	källa
+1	upphovsman
+1	Firmi
+1	föriningura
+1	regionoske
+1	bucianca
+1	organizaciensa
+1	vazdimaske
+1	politiki
+1	Dromesa
+1	infra
+1	dromenca
+1	kommunikatciasa
+1	biripe
+1	kapitali
+1	firmen
+1	njeripe
+1	daszutipe
+1	reklami
+1	innovatcia
+1	mashkarutne
+1	bikinimasko
+1	servico
+1	bolti
+1	bensiniarni
+1	Konkurrensia
+1	foreske
+1	trjain
+1	Konkurrensverket
+1	Kontaktulin
+1	projektosko
+1	toven
+1	kale
+1	parnot
+1	finansia
+1	Lovengo
+1	tojipe
+1	parne
+1	deklaratci
+1	Terroristicno
+1	finanso
+1	lishimasko
+1	registratcia
+1	stiftelse
+1	bas
+1	kontaktmanush
+1	lishimaski
+1	auktorisation
+1	auktorisering
+1	väktare
+1	djukel
+1	mashienca
+1	mashiaren
+1	mashien
+1	raki
+1	musslonge
+1	licensovane
+1	mashiara
+1	benge
+1	kompenzaci
+1	pagerdjile
+1	mashiarenge
+1	profferesionalura
+1	edukatci
+1	lashe
+1	etablirulin
+1	mashiearenge
+1	turistonge
+1	Kodolen
+1	vurdonengo
+1	skroto
+1	acceptovano
+1	kommunonge
+1	atorizaci
+1	Pagerde
+1	mukle
+1	avro
+1	vurdonenge
+1	unzhule
+1	länsstyrelsen
+1	putrl
+1	lombardos
+1	shvedicko
+1	aktiebolag
+1	kompetitca
+1	kompetitcia
+1	treningo
+1	kompetitciako
+1	sikajimaske
+1	matchura
+1	marimaske
+1	sportura
+1	premissia
+1	Örebro
+1	bingo
+1	föreningo
+1	areselpe
+1	manušte
+1	manglas
+1	dukhadjiol
+1	garancia
+1	manušsi
+1	regulosko
+1	kaj
+1	garantciake
+1	nade
+1	rodas
+1	garantovano
+1	Lagen
+1	läkemedelsförmåner
+1	Tandvårds
+1	Läkemedelsförmånsverket
+1	subventicia
+1	lašipe
+1	phurengo
+1	Medicinake
+1	vramaki
+1	grupaki
+1	sačiarel
+1	FASS
+1	rihga
+1	efektno
+1	konserveringsmedel
+1	Läkemedelsverket
+1	generisk
+1	Doš
+1	Medicinska
+1	firmenge
+1	Čimin
+1	periodens
+1	vara
+1	reservovane
+1	alternatvi
+1	skatoske
+1	subventci
+1	Periodako
+1	kindas
+1	produktura
+1	atinči
+1	Högkostnadsskydd
+1	högkostnadsperiod
+1	förbrujkningsartiklar
+1	artiklura
+1	hjälpmedelskort
+1	habenata
+1	gluten
+1	intoleranso
+1	Habenata
+1	džesengi
+1	Počinel
+1	počinipe
+1	tradimaske
+1	dokumentura
+1	kodura
+1	skiritori
+1	europaki
+1	Šwaizo
+1	Europaki
+1	sikadi
+1	švedos
+1	euroa
+1	Algeria
+1	Australia
+1	Quebec
+1	Kanada
+1	kadale
+1	citizenton
+1	khetanimaski
+1	kesa
+1	egenavgifter
+1	ginadžon
+1	biologicne
+1	pheja
+1	počonimaski
+1	ulade
+1	komuteroski
+1	komputeroski
+1	personnummer
+1	khinimasko
+1	počinimaski
+1	perioda
+1	högkostnadsperioden
+1	khinde
+1	Sahj
+1	phanglo
+1	kvito
+1	högkostnad
+1	evidensia
+1	khinimata
+1	Apoteka
+1	traznon
+1	troznajven
+1	dukhadžon
+1	šuvliol
+1	ušten
+1	pašlion
+1	hirtelen
+1	feber
+1	pharadžol
+1	trumhinnan
+1	ten
+1	Magnescyl
+1	minor
+1	phenadas
+1	sprejura
+1	phandade
+1	purden
+1	khaneske
+1	pharadžilas
+1	saštilas
+1	spe
+1	inkerdas
+1	azyl
+1	našutno
+1	našaven
+1	vorbenca
+1	ilegalno
+1	deportirime
+1	garuves
+1	žuvlja
+1	žuvlikane
+1	počnes
+1	folktandvården
+1	nasvalimaske
+1	Prevenciake
+1	kamni
+1	biandžol
+1	gynokologicno
+1	cellako
+1	šaja
+1	čuddake
+1	stadiumo
+1	gynokologicne
+1	gynegologicno
+1	žuvliano
+1	bučiarni
+1	kikidono
+1	importantne
+1	Examinacia
+1	mujthaj
+1	sastčon
+1	Mačyca
+1	Livmoder
+1	Äggstock
+1	Livmoderhals
+1	Livmodertapp
+1	Slida
+1	examinaci
+1	prua
+1	gynokologosko
+1	Celako
+1	hibazi
+1	virusoski
+1	celosko
+1	šajas
+1	examinacia
+1	dešupanš
+1	fasa
+1	Akharipe
+1	adresa
+1	calaki
+1	mödravårdscentral
+1	perde
+1	papilloviruso
+1	fajma
+1	šindi
+1	total
+1	hysterektomi
+1	ci
+1	vaginaki
+1	opruni
+1	nakli
+1	Barnmorskan
+1	mödravårdscentralen
+1	paravel
+1	vaginake
+1	gynekologicne
+1	instrumentura
+1	thate
+1	thanestar
+1	plastico
+1	gladžime
+1	priba
+1	laboratoriake
+1	Mačucaki
+1	eximinacia
+1	Prubi
+1	Rekomendatcia
+1	parujimasko
+1	laboratoria
+1	mukhli
+1	resle
+1	granitca
+1	traji
+1	virusosko
+1	Testo
+1	kontrolovano
+1	papillomviruso
+1	parujimate
+1	Kontroli
+1	sikavnas
+1	akti
+1	pravie
+1	cina
+1	operatciasa
+1	hasavel
+1	sikavelke
+1	sigaki
+1	antunci
+1	mikhle
+1	garade
+1	žanglimaske
+1	muklo
+1	forskningsetisk
+1	eticno
+1	komiteto
+1	garudini
+1	romun
+1	palakodo
+1	kvalitetno
+1	paciento
+1	respekto
+1	ačardi
+1	ašilas
+1	mulas
+1	holjaren
+1	pačasa
+1	šerutno
+1	ortopedicko
+1	šerutni
+1	MAS
+1	lokhe
+1	hemsjukvård
+1	avancovanomedicinsko
+1	förtroendenämnd
+1	uco
+1	paciape
+1	finansovano
+1	Socialtjänstlagen
+1	instansura
+1	pušipe
+1	responsebilta
+1	Informatsia
+1	landstingets
+1	dikhhimasko
+1	inspektsi
+1	fokus
+1	systemfel
+1	systemoske
+1	specificno
+1	varesave
+1	kaski
+1	komun
+1	dikhle
+1	restriktsi
+1	Decizi
+1	appelatsia
+1	Buča
+1	marde
+1	bučako
+1	Socialstyreslen
+1	handlingar
+1	anen
+1	sekretess
+1	seriozne
+1	problematiki
+1	dikhhli
+1	Justitieombudsmannen
+1	Justitiekanslern
+1	protektsiake
+1	rizika
+1	initiativa
+1	lišij
+1	kvalitetit
+1	vållande
+1	till
+1	annans
+1	död
+1	krisasa
+1	nasulimasa
+1	Diskrimineringsombudsmannen
+1	manušipesko
+1	manušikano
+1	Pacientombudsmannen
+1	čaljiarel
+1	vorbisardas
+1	tordžos
+1	bušolas
+1	medecinako
+1	systemp
+1	šundel
+1	alternativako
+1	alternativno
+1	morčaki
+1	prostatabiopsi
+1	cancercelli
+1	laboritorium
+1	analysa
+1	problemosa
+1	eksaminatsia
+1	Doktoro
+1	najesa
+1	jekhultraljud
+1	morcomaskodrab
+1	nekcija
+1	mutereski
+1	muteresko
+1	Prostatako
+1	korteloski
+1	transportovo
+1	getsoske
+1	Morčiaki
+1	okazi
+1	substanso
+1	Dujto
+1	okazia
+1	glatko
+1	bišade
+1	tel
+1	Canceroski
+1	dikli
+1	skala
+1	Gleason
+1	Khetanes
+1	penicilina
+1	klinikasa
+1	tipo
+1	PK
+1	zurajvel
+1	Zhutimasko
+1	bakteriovo
+1	klafi
+1	Antibiotikako
+1	Eksaminatcia
+1	bedövning
+1	Relativno
+1	microlavemang
+1	rih
+1	nango
+1	kendevo
+1	elasticno
+1	transimetro
+1	ultraljudsändare
+1	reflekturin
+1	šutine
+1	komputero
+1	Patreto
+1	kalo
+1	šinado
+1	diametri
+1	Pusavel
+1	tarmslemhinnan
+1	por
+1	Žutimasa
+1	sušo
+1	khat
+1	oxto
+1	mutres
+1	morčake
+1	nakhle
+1	urinvägsinfektion
+1	mutereske
+1	xaladžol
+1	parni
+1	loli
+1	šuvli
+1	sasčol
+1	smittar
+1	alergicno
+1	dukhadas
+1	Inflamatcia
+1	lole
+1	anglaškola
+1	förskolan
+1	participatcia
+1	aktivitetura
+1	alergiake
+1	lipij
+1	pumbaren
+1	moren
+1	Školake
+1	bebeto
+1	sekreto
+1	kanalura
+1	kikide
+1	Thoven
+1	kindžardo
+1	Jakhenge
+1	odut
+1	dukhadi
+1	bebetos
+1	Patsientongo
+1	žakono
+1	detsizia
+1	značij
+1	alternatsi
+1	šajimata
+1	ghindis
+1	phendan
+1	tsino
+1	trubij
+1	desa
+1	avesa
+1	akutne
+1	tutar
+1	lesa
+1	trubujimata
+1	Doktora
+1	patsientongi
+1	inkerdžos
+1	vårdgaranti
+1	čito
+1	lansting
+1	patsientosko
+1	nämnd
+1	nakhlan
+1	teknika
+1	ghindosa
+1	mamografiaki
+1	preperime
+1	kollina
+1	buciara
+1	Tordžol
+1	bilddetektor
+1	užo
+1	terdiol
+1	apparato
+1	teknikasa
+1	žuvlian
+1	Žanglimaske
+1	Žuvliaki
+1	konsistenso
+1	dušo
+1	pašljiol
+1	cysta
+1	balono
+1	Kollinesko
+1	symtomo
+1	sikajipe
+1	tak
+1	lolo
+1	rana
+1	saščjiol
+1	ratvaslo
+1	parujimara
+1	kvinnohälsovården
+1	Eksaminaci
+1	kollineske
+1	čučaki
+1	tumorura
+1	arakhadžon
+1	dukhalas
+1	Nandžarel
+1	bolniciaki
+1	patretosko
+1	detektoro
+1	kusaj
+1	Inkrel
+1	paš
+1	pusaven
+1	cell
+1	remisso
+1	klimakteria
+1	Kasavo
+1	teknicno
+1	evaluatcia
+1	akhardo
+1	imlantato
+1	kompletatcia
+1	usa
+1	Ultraljud
+1	pump
+1	sastilas
+1	kod
+1	okerel
+1	šaden
+1	fošo
+1	panž
+1	Normalne
+1	Šaglipe
+1	Xasarel
+1	Čine
+1	xasaripe
+1	čino
+1	anglara
+1	xasaren
+1	pester
+1	me
+1	glaza
+1	rojasa
+1	Laši
+1	roja
+1	sakopanžto
+1	pimasa
+1	pajaslo
+1	gugle
+1	läsk
+1	saft
+1	light
+1	modersmjölkersättning
+1	kompenzatciako
+1	ris
+1	majsveling
+1	Startulin
+1	portci
+1	čiken
+1	zumi
+1	ropaja
+1	ropajengo
+1	puré
+1	frukto
+1	fullkornsveling
+1	Žukaren
+1	xabenata
+1	fibri
+1	sasčilas
+1	perimasko
+1	toaletaki
+1	khedevo
+1	paperušne
+1	platikovo
+1	semeto
+1	Kosen
+1	perne
+1	tumare
+1	pernengo
+1	kna
+1	phirel
+1	faj
+1	familjedaghem
+1	nal
+1	šaglipe
+1	limasle
+1	slem
+1	Ginav
+1	funktsionulin
+1	vårdcentrales
+1	inkerdžon
+1	automaticne
+1	aktivne
+1	listulis
+1	listovano
+1	je
+1	Phuterdo
+1	jakhengo
+1	specialista
+1	personalo
+1	medicinaki
+1	nasvalimasa
+1	dukhasa
+1	remisura
+1	remis
+1	Vårdgaranti
+1	antuči
+1	Patsientonge
+1	regioner
+1	sjukresan
+1	Pačape
+1	phuterdes
+1	principo
+1	sekretoso
+1	offentlighets
+1	sekretesslagen
+1	pacientsäkerhetslagen
+1	bučiari
+1	Maškar
+1	personalne
+1	diskutulij
+1	pacientosko
+1	kolega
+1	administrativno
+1	Tolmacura
+1	Zakonura
+1	inormatica
+1	bučiarenge
+1	uštel
+1	parta
+1	phendino
+1	individa
+1	socialoske
+1	vårdnadshavaren
+1	journalo
+1	Tuke
+1	bučarengo
+1	padžon
+1	pacienta
+1	temlica
+1	åklagarmyndigheterna
+1	traden
+1	mardžol
+1	sjukersättning
+1	försäkringskassan
+1	aksidento
+1	pacientos
+1	paciental
+1	el
+1	getosares
+1	formulina
+1	Grundo
+1	primarno
+1	barnmottagning
+1	specialis
+1	permisia
+1	vårdgarantin
+1	važne
+1	Švdedicko
+1	šunes
+1	kašuko
+1	muto
+1	koro
+1	parunčil
+1	demens
+1	diagnosa
+1	rodimaske
+1	doktoritske
+1	eksaminatsi
+1	pročiv
+1	zumado
+1	HIV
+1	parunčin
+1	pašen
+1	seres
+1	dumo
+1	čperen
+1	rodan
+1	kontaktulij
+1	godžaver
+1	Phurin
+1	manushenca
+1	sekretes
+1	tsine
+1	pšavoro
+1	stalo
+1	dukhajipe
+1	Žutimasko
+1	patientnämnd
+1	patientombudsman
+1	manušendar
+1	čaljol
+1	bučansa
+1	čaljarel
+1	kodoke
+1	myndig
+1	metoda
+1	tumenge
+1	čači
+1	gazdenge
+1	porunčimata
+1	medbestämmande
+1	FN
+1	oski
+1	Čačipe
+1	Šavoresko
+1	mognad
+1	važo
+1	funktsiako
+1	godžako
+1	eksperiensi
+1	doktorongo
+1	dada
+1	vorbinas
+1	šavoresa
+1	šavoeriski
+1	komunako
+1	inisiativa
+1	dad
+1	žanena
+1	resultatlo
+1	avdelningo
+1	eksemplura
+1	bolnicako
+1	trobujipe
+1	sitatsi
+1	perimaske
+1	spesialne
+1	med
+1	särskilda
+1	bestämmelser
+1	vård
+1	av
+1	unga
+1	LVU
+1	phandajipe
+1	LPT
+1	avoro
+1	kopia
+1	bolnicake
+1	booldes
+1	doktoresa
+1	mukhesa
+1	Familja
+1	tolmačura
+1	﻿
+1	linko
+1	tandvården
+1	bučarenge
+1	phen
+1	tolmačoske
+1	phenesa
+1	kansilatsi
+1	Tolmačura
+1	teksti
+1	šavorikane
+1	funktsionulij
+1	roven
+1	Lengo
+1	buthivar
+1	folil
+1	šajdukhal
+1	zeleno
+1	saščol
+1	pehenin
+1	saščon
+1	pašljon
+1	Cine
+1	bersele
+1	babysitter
+1	čang
+1	Bute
+1	yogurto
+1	Koksaltlösning
+1	mililitra
+1	kryddmått
+1	decilitra
+1	bomullstuss
+1	nakhesko
+1	spraj
+1	drab
+1	rebdin
+1	cores
+1	kontaktosa
+1	medecinsko
+1	pajasli
+1	Nak
+1	Magnecy
+1	Xaseski
+1	lima
+1	phuridimaske
+1	ruri
+1	luftrören
+1	efekto
+1	xasimaski
+1	informatciako
+1	kavarendar
+1	sičarel
+1	xasčin
+1	papirušune
+1	servetki
+1	Zumaven
+1	sičaren
+1	tena
+1	hunaven
+1	džala
+1	khelena
+1	Mukhen
+1	jivent
+1	ša
+1	civarako
+1	phardes
+1	jouržutipe
+1	dikhela
+1	nasavalimata
+1	Normalnoj
+1	garavel
+1	prosatacancer
+1	rutina
+1	rutinake
+1	sastiarel
+1	impotenso
+1	inkontinenso
+1	dinov
+1	parol
+1	problemoski
+1	skurtjardi
+1	prostataspecifikt
+1	antigen
+1	proteina
+1	prostatako
+1	Beršenca
+1	proteini
+1	kančesa
+1	vasteski
+1	venöst
+1	preparatci
+1	pacajimaski
+1	bolniciako
+1	analyzatci
+1	resultato
+1	prubenca
+1	referensovo
+1	Po
+1	mikrogrami
+1	kronicno
+1	infekcia
+1	urinako
+1	urinstämma
+1	konditcia
+1	sikavla
+1	inkrela
+1	mortjaki
+1	Cino
+1	žutisardas
+1	kostulin
+1	Krujal
+1	maksialno
+1	skrija
+1	šavorongo
+1	specialistura
+1	bonicia
+1	sjukgymnastika
+1	kolinesko
+1	gynekologycno
+1	vizitaki
+1	žukardas
+1	notifikatsia
+1	zafšom
+1	nasvalengi
+1	nasvlalengo
+1	akut
+1	Avel
+1	europako
+1	kostenca
+1	certifikatsia
+1	počinela
+1	importanto
+1	privat
+1	reseförsäkring
+1	hemförsäkring
+1	sjukvård
+1	högkostnadskyt
+1	kartci
+1	Lel
+1	frikort
+1	počinads
+1	dandenge
+1	mujeski
+1	hygiena
+1	decidirime
+1	landstingen
+1	Medicini
+1	Viziti
+1	mödravårds
+1	barnavårdsmottagningar
+1	MVC
+1	BVC
+1	vakcinatsi
+1	almänfarlig
+1	Smittskyddslagen
+1	spesialisto
+1	fysioterapeuto
+1	sjukgymnasto
+1	gymnasitikasa
+1	sumtomura
+1	barnavårdscentral
+1	akarhardo
+1	tsirdela
+1	aresesa
+1	jkhe
+1	region
+1	trajis
+1	gråstarrsoperatsia
+1	remisreguli
+1	egenanmälan
+1	Patsientongi
+1	Temperatura
+1	tetehara
+1	časo
+1	pehenipe
+1	mirij
+1	khanenge
+1	thang
+1	khinjarel
+1	fyzične
+1	glass
+1	krema
+1	xala
+1	šavorske
+1	izdral
+1	šil
+1	šaraven
+1	sanes
+1	pušlo
+1	čopka
+1	peravel
+1	acetylsalicylsyra
+1	Magnecyl
+1	gradisi
+1	sajekh
+1	coronaviruso
+1	december
+1	corona
+1	ljuma
+1	lunginflammation
+1	Viruso
+1	nasvalesa
+1	čihazi
+1	nyser
+1	peripe
+1	droppsmitta
+1	Symtomura
+1	phurdes
+1	šereski
+1	muskulengo
+1	kokalengi
+1	Phure
+1	phurden
+1	kronične
+1	bukhenge
+1	numero
+1	saščimaske
+1	šveditsko
+1	anglišitsko
+1	trajosko
+1	Aktualno
+1	folkhalsomyndigheten
+1	Efta
+1	protektulis
+1	saščilan
+1	Tov
+1	tato
+1	sekunder
+1	Xasnin
+1	vastesko
+1	toves
+1	azbas
+1	Xasa
+1	čihazin
+1	servetka
+1	džas
+1	inker
+1	rekomendatsia
+1	bešes
+1	pandemia
+1	eksperiensa
+1	Kina
+1	Italia
+1	perelas
+1	perdžos
+1	ašaves
+1	manušentsa
+1	trobusardanas
+1	trades
+1	kolektivno
+1	phires
+1	sali
+1	Le
+1	njamura
+1	bučantsa
+1	ektsera
+1	zutis
+1	bolnitsa
+1	žutina
+1	INFORMATION
+1	OM
+1	COVID
+1	Saščimaske
+1	Äldrelinjen
+1	Luja
+1	Paraštuj
+1	Trajosko
+1	Rizikove
+1	Uče
+1	rizikosko
+1	faktoro
+1	Manušen
+1	ratesko
+1	blodtryck
+1	hjilesko
+1	vunengo
+1	bokhengo
+1	Hormoni
+1	andreal
+1	efektulin
+1	presia
+1	puki
+1	muršorenge
+1	normlano
+1	familjine
+1	takto
+1	zuralen
+1	interessno
+1	manušesa
+1	statosa
+1	ašundžol
+1	problematicne
+1	khanikas
+1	hanžon
+1	krtlar
+1	čučake
+1	zara
+1	penis
+1	buriko
+1	Barol
+1	mustaca
+1	falka
+1	čikenasle
+1	puberteta
+1	pugniora
+1	Potho
+1	tunjarike
+1	klitoris
+1	äggstockarna
+1	akhardžon
+1	mukhimaske
+1	balonura
+1	smegma
+1	kremovo
+1	sikhajipe
+1	producerin
+1	sikhavel
+1	šavo
+1	khindi
+1	bronzove
+1	Ratasle
+1	bronzovi
+1	šutčol
+1	orgasmo
+1	kelde
+1	ačardžola
+1	buso
+1	lisabeta
+1	razij
+1	razimata
+1	lažan
+1	kanciesko
+1	producirin
+1	bliscial
+1	čikat
+1	čikenasli
+1	raja
+1	morciange
+1	pulp
+1	pike
+1	počij
+1	kdo
+1	makel
+1	deadorontosa
+1	Šeresko
+1	glsaoske
+1	struni
+1	målbrottet
+1	muršengo
+1	muršikano
+1	rešta
+1	učipe
+1	centimetri
+1	tillväxtspurt
+1	ohto
+1	inja
+1	beršeske
+1	granici
+1	systembolag
+1	sekurni
+1	depresia
+1	čak
+1	atuci
+1	gruppa
+1	njerij
+1	cinjion
+1	matjiol
+1	ghindipe
+1	serejipe
+1	muskulongi
+1	trazo
+1	butenca
+1	astardžol
+1	varisoste
+1	mato
+1	anaven
+1	konsekvensura
+1	savatone
+1	pilo
+1	Zaleži
+1	matcipe
+1	sakofalo
+1	motoro
+1	pagrel
+1	granicia
+1	phenla
+1	reakticako
+1	accidentura
+1	Seksualno
+1	pardžol
+1	hetero
+1	homo
+1	identieto
+1	biseksualno
+1	ineresura
+1	lesko
+1	kriminalo
+1	hatbrott
+1	immuna
+1	maladi
+1	Hormonako
+1	Funguso
+1	phabol
+1	eksema
+1	unji
+1	hanžj
+1	examinatcia
+1	čopko
+1	vagitoriom
+1	najenca
+1	plastikovo
+1	medicinas
+1	hanzj
+1	šutjiarel
+1	mucosa
+1	slemhinna
+1	Kaj
+1	fakta
+1	jokvar
+1	šutjarel
+1	ulej
+1	parfumo
+1	čače
+1	tate
+1	string
+1	cotton
+1	sostiangi
+1	trosskydd
+1	myt
+1	paramičia
+1	šudrarel
+1	chanžj
+1	toaletti
+1	čačimaske
+1	fungos
+1	sukro
+1	aginaslno
+1	dukhade
+1	daravne
+1	cigarura
+1	cigarilli
+1	pajenge
+1	Civari
+1	phabardi
+1	civara
+1	kemicne
+1	substansura
+1	buč
+1	Kamel
+1	independentno
+1	šudela
+1	oksygeno
+1	barile
+1	soba
+1	gasura
+1	mukhek
+1	restoranura
+1	café
+1	offentliga
+1	sičilas
+1	abstinenso
+1	adiktsia
+1	sičol
+1	positivne
+1	enavairomento
+1	duxanosa
+1	protectia
+1	seksoske
+1	analno
+1	sitciol
+1	pasulin
+1	penisura
+1	lubrikatcia
+1	khindo
+1	gumi
+1	nda
+1	plastiko
+1	stånd
+1	konodmo
+1	analo
+1	ropaj
+1	bikindžon
+1	patcki
+1	ungdomsmottagningar
+1	paso
+1	sobaki
+1	kikidžon
+1	Laše
+1	zubunoski
+1	posoci
+1	butelari
+1	posoči
+1	kalci
+1	feljastra
+1	khamasli
+1	purano
+1	šučilas
+1	reagulij
+1	lake
+1	minipiller
+1	Savi
+1	bistren
+1	hormononge
+1	Imprtantno
+1	bipacksedel
+1	Bipacksedeln
+1	packa
+1	Kodi
+1	reserva
+1	prakticno
+1	varikhaj
+1	cukroski
+1	žala
+1	štarval
+1	Preventivne
+1	cimin
+1	iregularne
+1	ratvasle
+1	Diferentno
+1	vuštensa
+1	šindžol
+1	var
+1	vuštenca
+1	putrela
+1	maladžon
+1	regulij
+1	kavreske
+1	tipso
+1	kaveresko
+1	banžarel
+1	Žal
+1	sastra
+1	dand
+1	tandställning
+1	piercing
+1	zlag
+1	keverenge
+1	čumidimata
+1	čumidino
+1	varikhasko
+1	ghadenca
+1	pacasa
+1	phabardes
+1	jekhestestar
+1	kaverestar
+1	urado
+1	hånga
+1	pozitsi
+1	tordžndos
+1	bešindos
+1	pašlol
+1	grovhångel
+1	diljaren
+1	strula
+1	Strul
+1	ano
+1	kåt
+1	nervi
+1	bango
+1	pašipe
+1	čumides
+1	Soha
+1	Savorri
+1	smakulin
+1	khant
+1	smako
+1	thodas
+1	infektsi
+1	Hångel
+1	mištipe
+1	sekunda
+1	chansi
+1	pindjarel
+1	phandel
+1	varikasa
+1	dujen
+1	mangimasa
+1	perdžlas
+1	bakteria
+1	sikadžon
+1	načon
+1	RFSU
+1	mottagningar
+1	birisardas
+1	mutreljekh
+1	tops
+1	ghinde
+1	analoski
+1	gropa
+1	prubla
+1	pusave
+1	sana
+1	suvasa
+1	manuhses
+1	kondylom
+1	jokvares
+1	telefono
+1	amal
+1	testura
+1	pacian
+1	mobba
+1	interesura
+1	sms
+1	komentara
+1	facebook
+1	blogg
+1	thaneste
+1	pačal
+1	purija
+1	lažal
+1	došalo
+1	purij
+1	mobbingo
+1	sikavno
+1	phureske
+1	studento
+1	darado
+1	skolaki
+1	varikhasašaj
+1	manuses
+1	ačarla
+1	diklas
+1	filmura
+1	ginadas
+1	gažeti
+1	Rodimata
+1	ske
+1	intereso
+1	sezualne
+1	grupptryck
+1	dedecizia
+1	decedulij
+1	kritikalno
+1	lendar
+1	kamlo
+1	čorro
+1	gitarra
+1	sitčile
+1	akordo
+1	pačivali
+1	hasardas
+1	decedulin
+1	khanikaski
+1	sos
+1	pačivori
+1	vaginako
+1	Phuteripe
+1	kanto
+1	kantura
+1	bulhol
+1	phuterdžol
+1	hinna
+1	banmorska
+1	ägglosssning
+1	klimateriaki
+1	thuli
+1	Konik
+1	žuvlorian
+1	injange
+1	beršenge
+1	čuddno
+1	šoko
+1	klassa
+1	ghidoj
+1	ladžan
+1	žukarlas
+1	amalnja
+1	diferento
+1	mililitri
+1	decilitro
+1	hamij
+1	organicne
+1	pajenca
+1	protekci
+1	jokhvarest
+1	riklig
+1	mens
+1	zurajlas
+1	ašadžol
+1	khini
+1	žuviako
+1	žuvlji
+1	gravidtetstest
+1	habeske
+1	biltci
+1	service
+1	mödravårdcentral
+1	centro
+1	streso
+1	šutciarel
+1	nasvali
+1	lašarel
+1	čučia
+1	šuvlo
+1	akardžol
+1	premenstruell
+1	spänning
+1	holjaki
+1	brigaki
+1	hucien
+1	guglipe
+1	relaxove
+1	treningura
+1	stresulij
+1	Depresirime
+1	Depresi
+1	phandavela
+1	ångesto
+1	eksemlo
+1	stressirime
+1	Ghindura
+1	seksualiteto
+1	džesa
+1	sikavne
+1	butivares
+1	afecto
+1	Ačarel
+1	rebdij
+1	pela
+1	čorres
+1	telefonicne
+1	jourura
+1	čatta
+1	maila
+1	ghinavel
+1	Kothe
+1	anonymno
+1	sko
+1	panelo
+1	ongesti
+1	phurdipe
+1	muskuli
+1	šiordžon
+1	zalipe
+1	izdrajipe
+1	s
+1	ite
+1	Ongest
+1	buciansa
+1	džesesko
+1	buten
+1	sodivar
+1	Kaveren
+1	atakura
+1	zumadas
+1	hohavel
+1	ongestok
+1	granitcia
+1	zuraloj
+1	zalij
+1	uštiel
+1	hojarniko
+1	diljajvel
+1	bušiol
+1	žukarimasko
+1	förväntansångest
+1	ongeston
+1	lašio
+1	palpalet
+1	Thana
+1	vario
+1	ačiarimatonca
+1	sig
+1	osar
+1	prestatci
+1	slabi
+1	konektsia
+1	lasjio
+1	jekhesa
+1	ael
+1	dičiol
+1	ašarel
+1	Savoren
+1	ašaripe
+1	diloj
+1	soha
+1	kere
+1	adiktcia
+1	sensetivno
+1	delikatno
+1	došarel
+1	reklama
+1	žukardo
+1	popularno
+1	Varikhon
+1	baxtalo
+1	dana
+1	manušeko
+1	šinen
+1	lestar
+1	hiri
+1	perasanca
+1	šuden
+1	phendar
+1	perasutno
+1	Trakaserier
+1	diskriminaci
+1	Kriminalno
+1	diskriminatcia
+1	prociv
+1	hasaren
+1	amalen
+1	kothej
+1	hej
+1	bisterdžile
+1	protetkcia
+1	kamle
+1	Gestagen
+1	buteste
+1	abortcia
+1	abortciaki
+1	savorende
+1	hormono
+1	lela
+1	funkcionulij
+1	graviditetstest
+1	kamla
+1	vorbimasko
+1	khasa
+1	pelas
+1	achiarel
+1	pharimasko
+1	Kasavi
+1	slovodia
+1	narkotika
+1	abort
+1	Abortsi
+1	injato
+1	modeli
+1	dešudujto
+1	late
+1	eksiminacia
+1	skrapning
+1	ašlas
+1	sovliarel
+1	operatsia
+1	sovljiardi
+1	cirdimaski
+1	mašina
+1	Lokhes
+1	minutsi
+1	pasura
+1	Duj
+1	placenta
+1	moderkaka
+1	slobo
+1	Kečij
+1	khej
+1	eksaktno
+1	barnmorskemottagning
+1	abortsiaki
+1	khanikaske
+1	žanglov
+1	dades
+1	gazdas
+1	diskusia
+1	žanela
+1	dadesa
+1	dejasa
+1	tampong
+1	najiol
+1	kahj
