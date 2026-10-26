@@ -17,11 +17,15 @@
 #
 """Convert Ávvir-json-files to the Giella xml format."""
 
+import json
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 from lxml import etree
+
+type SerializedXml = etree.Element | Sequence[SerializedXml]
 
 
 @dataclass
@@ -36,38 +40,177 @@ class AvvirAuthor:
 class AvvirTaggedText:
     """A class representing an Ávvir tagged text."""
 
+    quote_tags = ["quote"]
+    title_tags = ["faktatittel", "mellom", "title", "subtitle", "crosshead"]
     text: str
     tag: str
 
+    def to_xml(self) -> etree.Element:
+        """Convert the AvvirTaggedText to an XML element."""
+        element = etree.Element("p")
 
-def convert_article(avvir_doc: Path) -> etree.Element:
-    """Convert an Ávvir article to the giellatekno xml format.
+        if self.tag in self.quote_tags:
+            quote_element = etree.SubElement(element, "span")
+            quote_element.text = self.text
+            quote_element.set("type", "quote")
+            return element
+
+        if self.tag in self.title_tags:
+            element.set("type", "title")
+
+        element.text = self.text
+        return element
+
+
+@dataclass
+class AvvirContainer:
+    """A class representing an Ávvir container."""
+
+    main_content: list[AvvirTaggedText]
+    captions: list[AvvirTaggedText]
+    slideshows: list[AvvirTaggedText]
+    containers: list["AvvirContainer"]
+
+    def serialize(self) -> list[list[etree.Element]]:
+        """Serialize the AvvirContainer to a dictionary."""
+        return [
+            [content.to_xml() for content in self.main_content],
+            [caption.to_xml() for caption in self.captions],
+            [slideshow.to_xml() for slideshow in self.slideshows],
+            flatten([container.serialize() for container in self.containers]),
+        ]
+
+
+@dataclass
+class AvvirDocument:
+    """A class representing an Ávvir document."""
+
+    authors: list[AvvirAuthor] | None
+    title: AvvirTaggedText
+    main_content: list[AvvirTaggedText]
+    captions: list[AvvirTaggedText]
+    slideshows: list[AvvirTaggedText]
+    containers: list[AvvirContainer]
+
+    @classmethod
+    def from_json(cls, avvir_json: dict) -> "AvvirDocument":  # type: ignore
+        """Create an AvvirDocument from a JSON dictionary."""
+
+        return cls(
+            authors=extract_authors(avvir_json),  # type: ignore
+            title=extract_title(avvir_json),  # type: ignore
+            main_content=extract_main_content(avvir_json),  # type: ignore
+            captions=extract_captions(avvir_json),  # type: ignore
+            slideshows=extract_slideshows(avvir_json),  # type: ignore
+            containers=extract_containers(avvir_json),  # type: ignore
+        )
+
+    def serialize(self) -> list[list[etree.Element]]:
+        """Serialize the AvvirDocument to a dictionary."""
+        return [
+            [content.to_xml() for content in self.main_content],
+            [caption.to_xml() for caption in self.captions],
+            [slideshow.to_xml() for slideshow in self.slideshows],
+            flatten([container.serialize() for container in self.containers]),
+        ]
+
+
+def extract_title(avvir_json: dict[str, Any]) -> str:
+    """Extract the title from an Ávvir JSON dictionary.
 
     Args:
-        avvir_doc: the etree that should be manipulated.
+        avvir_json: the JSON dictionary representing the Ávvir document.
 
     Returns:
-        The resulting etree.Element after the conversion.
+        The title of the Ávvir document.
     """
-    tree = etree.Element("document")
-    body = etree.SubElement(tree, "body")  # noqa: F841
+    for content in avvir_json["data"]["content"]:  # type: ignore
+        if content["identifier"] in ["title", "crosshead"]:
+            if "content" in content and "text" in content["content"]:
+                return "".join(
+                    [
+                        text.get("insert", "")
+                        for text in content.get("content").get("text", [{}])
+                    ]
+                )
+    return ""
 
+
+def extract_authors(avvir_json: dict[str, Any]) -> list[AvvirAuthor]:
+    """Extract the authors from an Ávvir JSON dictionary."""
+    authors = [
+        convert_author(content)  # type: ignore
+        for content in avvir_json["data"]["content"]  # type: ignore
+        if content["identifier"] == "author"
+    ]
+    return authors if authors else []
+
+
+def extract_main_content(avvir_json: dict[str, Any]) -> list[AvvirTaggedText]:
+    """Extract the main content from an Ávvir JSON dictionary."""
+    main_content = [
+        convert_tagged_text(content)  # type: ignore
+        for content in avvir_json["data"]["content"]  # type: ignore
+        if content["identifier"]
+        in [
+            "faktatittel",
+            "faktatekst",
+            "mellom",
+            "title",
+            "subtitle",
+            "quote",
+            "crosshead",
+            "body",
+            "intro",
+        ]
+    ]
+    return main_content if main_content else []
+
+
+def extract_captions(avvir_json: dict[str, Any]) -> list[AvvirTaggedText]:
+    """Extract the captions from an Ávvir JSON dictionary."""
+    captions = [
+        convert_image(content)  # type: ignore
+        for content in avvir_json["data"]["content"]  # type: ignore
+        if content["identifier"] == "image"
+    ]
+    return captions if captions else []
+
+
+def extract_slideshows(avvir_json: dict[str, Any]) -> list[AvvirTaggedText]:
+    """Extract the slideshows from an Ávvir JSON dictionary."""
+    slideshows = [
+        convert_slideshow(content)  # type: ignore
+        for content in avvir_json["data"]["content"]  # type: ignore
+        if content["identifier"] == "slideshow"
+    ]
+    return slideshows if slideshows else []
+
+
+def extract_containers(avvir_json: dict[str, Any]) -> list[AvvirContainer]:
+    """Extract the containers from an Ávvir JSON dictionary."""
+    containers = [
+        convert_container(content)  # type: ignore
+        for content in avvir_json["data"]["content"]  # type: ignore
+        if content["identifier"] == "container"
+    ]
+    return containers if containers else []
+
+
+def convert2intermediate(avvir_doc: Path) -> etree.Element:
+    """Convert Ávvir json files to the giellatekno xml format."""
+    avvir_doc = AvvirDocument.from_json( # type: ignore
+        json.loads(avvir_doc.read_text(encoding="utf-8"))
+    )  # type: ignore
+    tree = etree.Element("document")
+    body = etree.SubElement(tree, "body")
+
+    for element in flatten(avvir_doc.serialize()):  # type: ignore
+        body.append(element)
     return tree
 
 
-def convert2intermediate(filename: Path) -> etree.Element:
-    """Convert Ávvir xml files to the giellatekno xml format.
-
-    The root node in an Ávvir document is article.
-    article nodes contains one or more story nodes.
-    story nodes contain one or more p nodes.
-    p nodes contain span, br and (since 2013) p nodes.
-    """
-
-    return convert_article(filename)
-
-
-def convert_author(author_dict: dict[str, Any]) -> AvvirAuthor | None:
+def convert_author(author_dict: dict[str, Any]) -> AvvirAuthor:
     """Convert an Ávvir author to AvvirAuthor.
 
     Args:
@@ -77,27 +220,25 @@ def convert_author(author_dict: dict[str, Any]) -> AvvirAuthor | None:
         The resulting AvvirAuthor object after the conversion.
     """
     fullname = author_dict.get("content", {}).get("name", [{}])[0].get("insert", "")
-    if not fullname:
-        return None
 
     name_parts = fullname.split(" ")
     return AvvirAuthor(forname=" ".join(name_parts[:-1]), surname=name_parts[-1])
 
 
-def convert_tagged_text(faktatittel_dict: dict[str, Any]) -> AvvirTaggedText:
+def convert_tagged_text(content_dict: dict[str, Any]) -> AvvirTaggedText:
     """Convert an Ávvir faktatittel to AvvirTaggedText.
 
     Args:
-        faktatittel_dict: the faktatittel of the Ávvir document.
+        content_dict: the content of the Ávvir document.
 
     Returns:
         The resulting AvvirTaggedText object after the conversion.
     """
     texts = (
         text_part.get("insert", "")
-        for text_part in faktatittel_dict.get("content", {}).get("text", [{}])
+        for text_part in content_dict.get("content", {}).get("text", [{}])
     )
-    return AvvirTaggedText(text="".join(texts), tag=faktatittel_dict["identifier"])
+    return AvvirTaggedText(text="".join(texts), tag=content_dict["identifier"])
 
 
 def convert_image(image_dict: dict[str, Any]) -> AvvirTaggedText:
@@ -136,3 +277,67 @@ def convert_slideshow(slideshow_dict: dict[str, Any]) -> AvvirTaggedText:
     return AvvirTaggedText(
         text=" ".join(texts.keys()), tag=slideshow_dict["identifier"]
     )
+
+
+def convert_container(container_dict: dict[str, Any]) -> AvvirContainer:
+    """Convert an Ávvir container to AvvirContainer.
+
+    Args:
+        container_dict: the container of the Ávvir document.
+
+    Returns:
+        The resulting AvvirContainer object after the conversion.
+    """
+    not_wanted_ids = {"embed"}
+    container_content_ids = {
+        "body",
+        "faktatekst",
+        "faktatittel",
+        "footer",
+        "image",
+        "intro",
+        "mellom",
+        "title",
+    }
+
+    known_keys = {"containers", "identifier", "content", "styles", "id"}
+    if set(container_dict.keys()) != known_keys:
+        raise ValueError(
+            "Unknown container structure. "
+            f"Got: {[key for key in container_dict.keys() if key not in known_keys]}"
+        )
+
+    return AvvirContainer(
+        main_content=[
+            convert_tagged_text(content)  # type: ignore
+            for content in container_dict.get("content", [])  # type: ignore
+            if content["identifier"] in container_content_ids
+        ],
+        captions=[
+            convert_image(content)  # type: ignore
+            for content in container_dict.get("content", [])  # type: ignore
+            if content["identifier"] == "image"
+        ],
+        slideshows=[
+            convert_slideshow(content)  # type: ignore
+            for content in container_dict.get("content", [])  # type: ignore
+            if content["identifier"] == "slideshow"
+        ],
+        containers=[
+            convert_container(content)  # type: ignore
+            for content in container_dict.get("content", [])  # type: ignore
+            if content["identifier"] == "container"
+        ],
+    )
+
+
+def flatten(items: Iterable[SerializedXml]) -> list[etree.Element]:
+    result: list[etree.Element] = []
+
+    for item in items:
+        if etree.iselement(item):
+            result.append(item)
+        else:
+            result.extend(flatten(item))
+
+    return result
