@@ -183,15 +183,6 @@ def convert_one(orig_file: CorpusPath, lazy_conversion: bool) -> None:
     ConverterManager(lazy_conversion=lazy_conversion).convert(orig_file)
 
 
-def unwrap_self_convert(arg: tuple[ConverterManager, CorpusPath], **kwarg: object):
-    """Unpack self from the arguments and call convert again.
-
-    This is due to how multiprocess works:
-    http://www.rueckstiess.net/research/snippets/show/ca1d7d90
-    """
-    return ConverterManager.convert(*arg)
-
-
 def parse_options():
     """Parse the commandline options.
 
