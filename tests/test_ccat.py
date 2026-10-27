@@ -31,6 +31,8 @@ from lxml import etree
 
 from corpustools import ccat
 
+USAGE_ERROR_EXIT_CODE = 2
+
 
 class TestCcatCLI(unittest.TestCase):
     def test_broken_pipe_is_suppressed(self):
@@ -77,13 +79,14 @@ class TestCcatCLIErrors(unittest.TestCase):
                 *args,
             ],
             capture_output=True,
+            check=False,
             env=env,
             text=True,
         )
 
     def test_missing_targets_is_an_error(self):
         result = self.run_ccat()
-        assert result.returncode == 2
+        assert result.returncode == USAGE_ERROR_EXIT_CODE
         assert result.stdout == ""
         assert "targets" in result.stderr
 
@@ -1436,7 +1439,9 @@ class TestCcatFiles(unittest.TestCase):
             assert out.getvalue() == "Hei ¶\n"
 
     def test_missing_xml_lang_on_root(self):
-        tree = etree.ElementTree(etree.XML("<document><body><p>Hei</p></body></document>"))
+        tree = etree.ElementTree(
+            etree.XML("<document><body><p>Hei</p></body></document>")
+        )
         assert ccat.get_lang(tree) is None
         assert ccat.process_file(ccat.make_options(), tree).getvalue() == "Hei ¶\n"
         assert ccat.process_file(ccat.make_options(lang="sme"), tree).getvalue() == ""
