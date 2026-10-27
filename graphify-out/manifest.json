@@ -450,8 +450,8 @@
     "semantic_hash": ""
   },
   "src/corpustools/converter.py": {
-    "mtime": 1793119109.7864978,
-    "seen": 1793119693.7780092,
+    "mtime": 1793119761.941646,
+    "seen": 1793119971.867367,
     "ast_hash": "d0fcfcf120e825efacc9487956f1d378",
     "semantic_hash": ""
   },
@@ -882,9 +882,9 @@
     "semantic_hash": ""
   },
   "tests/test_avvirdigital.py": {
-    "mtime": 1793119109.802213,
-    "seen": 1793119693.7780411,
-    "ast_hash": "b5b94ece980b7de07adb1b32ecc08e1f",
+    "mtime": 1793119838.6212757,
+    "seen": 1793119971.86741,
+    "ast_hash": "59721f843656678d76f9225256cb115c",
     "semantic_hash": ""
   },
   "tests/test_biblexmlconverter.py": {
@@ -1083,12 +1083,6 @@
     "mtime": 1793054911.0495322,
     "seen": 1793119693.778055,
     "ast_hash": "4d53371e23b490c7d3665a62153b8ed3",
-    "semantic_hash": ""
-  },
-  "dupes.txt": {
-    "mtime": 1793011827.6624043,
-    "seen": 1793119693.7780778,
-    "ast_hash": "7839afb500b9c06dc02c9e0878dea6e8",
     "semantic_hash": ""
   },
   "src/corpustools/korp_config_template/attributes/positional/deprel.yaml": {

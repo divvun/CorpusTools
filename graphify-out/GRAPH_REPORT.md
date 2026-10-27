@@ -1,16 +1,16 @@
 # Graph Report - CorpusTools  (2026-10-27)
 
 ## Corpus Check
-- 176 files · ~246,094 words
+- 176 files · ~245,803 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 251 nodes · 166 edges · 141 communities (16 shown, 125 thin omitted)
-- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 4 edges (avg confidence: 0.85)
+- 265 nodes · 197 edges · 143 communities (18 shown, 125 thin omitted)
+- Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 12 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `9fd3a9d5`
+- Built from commit: `8888141f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -92,10 +92,12 @@
 - StringIO
 - Exception
 - UnicodeDecodeError
+- test_avvirdigital.py
 - Path
 - expand
 - Element
 - CorpusPath
+- convert_author
 - Element
 - Path
 - Exception
@@ -154,27 +156,27 @@
 
 ## God Nodes (most connected - your core abstractions)
 1. `AvvirTaggedText` - 10 edges
-2. `convert_tagged_text()` - 8 edges
-3. `convert_container()` - 8 edges
-4. `remove_control_chars()` - 7 edges
-5. `extract_captions()` - 7 edges
-6. `extract_slideshows()` - 7 edges
-7. `extract_authors()` - 6 edges
-8. `extract_main_content()` - 6 edges
-9. `extract_quotes()` - 6 edges
-10. `extract_containers()` - 6 edges
+2. `convert_tagged_text()` - 10 edges
+3. `convert_author()` - 8 edges
+4. `convert_container()` - 8 edges
+5. `convert_image()` - 8 edges
+6. `convert_slideshow()` - 7 edges
+7. `extract_captions()` - 7 edges
+8. `extract_slideshows()` - 7 edges
+9. `remove_control_chars()` - 7 edges
+10. `flatten()` - 6 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `dupefinder` --semantically_similar_to--> `duperemover`  [INFERRED] [semantically similar]
-  docs/docs/scripts/dupefinder.md → docs/docs/scripts/duperemover.md
-- `move_corpus_file` --semantically_similar_to--> `remove_corpus_file`  [INFERRED] [semantically similar]
-  docs/docs/scripts/move_corpus_file.md → docs/docs/scripts/remove_corpus_file.md
-- `add_files_to_corpus` --conceptually_related_to--> `normalise_corpus_names`  [INFERRED]
-  docs/docs/scripts/add_files_to_corpus.md → docs/docs/scripts/normalise_corpus_names.md
-- `ccat` --references--> `analyse_corpus`  [EXTRACTED]
-  docs/docs/scripts/ccat.md → docs/docs/scripts/analyse_corpus.md
-- `korp_mono` --conceptually_related_to--> `analyse_corpus`  [EXTRACTED]
-  docs/docs/scripts/korp_mono.md → docs/docs/scripts/analyse_corpus.md
+- `test_control_chars_are_removed()` --calls--> `convert_tagged_text()`  [INFERRED]
+  tests/test_avvirdigital.py → src/corpustools/avvirdigital.py
+- `test_extract_faktatittel()` --calls--> `convert_tagged_text()`  [INFERRED]
+  tests/test_avvirdigital.py → src/corpustools/avvirdigital.py
+- `test_extract_image()` --calls--> `convert_image()`  [INFERRED]
+  tests/test_avvirdigital.py → src/corpustools/avvirdigital.py
+- `test_extract_slideshow()` --calls--> `convert_slideshow()`  [INFERRED]
+  tests/test_avvirdigital.py → src/corpustools/avvirdigital.py
+- `test_control_chars_are_removed_from_image_and_author()` --calls--> `convert_image()`  [INFERRED]
+  tests/test_avvirdigital.py → src/corpustools/avvirdigital.py
 
 ## Import Cycles
 - None detected.
@@ -187,19 +189,27 @@
 - **Parallel Corpus Alignment Workflow** — docs_docs_scripts_convert2xml_documentation, docs_docs_scripts_parallelize_documentation, docs_docs_scripts_reparallelize_documentation, docs_docs_scripts_tmx2html_documentation [INFERRED 0.85]
 - **Corpus to Korp Processing Pipeline** — docs_docs_scripts_convert2xml_documentation, docs_docs_scripts_analyse_corpus_documentation, docs_docs_scripts_korp_mono_documentation, docs_docs_scripts_compile_cwb_mono_documentation [INFERRED 0.95]
 
-## Communities (141 total, 125 thin omitted)
+## Communities (143 total, 125 thin omitted)
 
 ### Community 12 - "flatten"
-Cohesion: 0.13
-Nodes (14): Element, Path, SerializedXml, AvvirContainer, AvvirDocument, convert2intermediate(), flatten(), A class representing an Ávvir document. (+6 more)
+Cohesion: 0.15
+Nodes (12): Element, Path, SerializedXml, AvvirDocument, convert2intermediate(), flatten(), A class representing an Ávvir document., Serialize the AvvirDocument to a list of XML elements. (+4 more)
 
 ### Community 50 - "avvirdigital.py"
-Cohesion: 0.13
-Nodes (32): Any, AvvirAuthor, AvvirTaggedText, convert_author(), convert_container(), convert_image(), convert_slideshow(), convert_tagged_text() (+24 more)
+Cohesion: 0.15
+Nodes (28): Any, AvvirContainer, AvvirTaggedText, convert_container(), convert_image(), convert_slideshow(), convert_tagged_text(), extract_captions() (+20 more)
 
 ### Community 67 - "analyse_corpus"
 Cohesion: 0.15
 Nodes (15): add_files_to_corpus, analyse_corpus, ccat, compile_cwb_mono, convert2xml, Scripts Overview, korp_mono, make_training_corpus (+7 more)
+
+### Community 77 - "test_avvirdigital.py"
+Cohesion: 0.31
+Nodes (10): AvvirContainer, AvvirTaggedText, parametrize, _sample_container(), test_container_serialize_flattens_nested_containers(), test_control_chars_are_removed(), test_document_serialize_flattens_nested_containers(), test_extract_faktatittel() (+2 more)
+
+### Community 82 - "convert_author"
+Cohesion: 0.28
+Nodes (9): AvvirAuthor, AvvirAuthor, convert_author(), extract_authors(), Extract the authors from an Ávvir JSON dictionary., Convert an Ávvir author to AvvirAuthor. Args: fullname: the full name of the…, A class representing an Ávvir author., test_control_chars_are_removed_from_image_and_author() (+1 more)
 
 ### Community 112 - "analyse_corpus"
 Cohesion: 0.47
@@ -242,14 +252,16 @@ Nodes (3): Apertium Nightly Packages, Corpus Tools, pipx
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `flatten()` connect `flatten` to `avvirdigital.py`?**
-  _High betweenness centrality (0.005) - this node is a cross-community bridge._
+  _High betweenness centrality (0.006) - this node is a cross-community bridge._
 - **Why does `AvvirTaggedText` connect `avvirdigital.py` to `flatten`?**
-  _High betweenness centrality (0.004) - this node is a cross-community bridge._
-- **Why does `convert2intermediate()` connect `flatten` to `avvirdigital.py`?**
-  _High betweenness centrality (0.004) - this node is a cross-community bridge._
+  _High betweenness centrality (0.005) - this node is a cross-community bridge._
+- **Why does `convert_tagged_text()` connect `avvirdigital.py` to `test_avvirdigital.py`?**
+  _High betweenness centrality (0.005) - this node is a cross-community bridge._
+- **Are the 2 inferred relationships involving `convert_tagged_text()` (e.g. with `test_control_chars_are_removed()` and `test_extract_faktatittel()`) actually correct?**
+  _`convert_tagged_text()` has 2 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 2 inferred relationships involving `convert_author()` (e.g. with `test_control_chars_are_removed_from_image_and_author()` and `test_extract_author()`) actually correct?**
+  _`convert_author()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `generate_tables.sh script`, `corpustools`, `Original Corpus` to the rest of the system?**
   _38 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `flatten` be split into smaller, more focused modules?**
-  _Cohesion score 0.1323529411764706 - nodes in this community are weakly interconnected._
 - **Should `avvirdigital.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.1319073083778966 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.14942528735632185 - nodes in this community are weakly interconnected._
