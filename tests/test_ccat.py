@@ -17,10 +17,12 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
+import contextlib
 import io
 import os
 import subprocess
 import sys
+import tempfile
 import unittest
 from dataclasses import replace
 from pathlib import Path
@@ -1342,3 +1344,40 @@ class TestCcat(unittest.TestCase):
             '\t"billánit" V IV Ind Prt Sg3 @FS-ADVL> #12->0 \n"<.>"\n'
             '\t"." CLB #13->12 \n\n"<¶>"\n\t"¶" CLB #1->1 \n\n'
         )
+
+
+class TestCcatFiles(unittest.TestCase):
+    XML = (
+        '<?xml version="1.0"?><document xml:lang="sme">'
+        "<header>{header}</header><body><p>Hei</p></body></document>"
+    )
+
+    def write(self, directory, name="a.xml", header=""):
+        path = Path(directory) / name
+        path.write_text(self.XML.format(header=header), encoding="utf-8")
+        return path
+
+    def test_find_files_and_print_file_roundtrip(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.write(tmp)
+            options = ccat.make_options()
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                for filename in ccat.find_files([tmp], ".xml"):
+                    assert ccat.print_file(options, filename)
+            assert out.getvalue() == "Hei ¶\n"
+
+    def test_find_files_is_sorted(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            for name in ("b.xml", "c.xml", "a.xml"):
+                self.write(tmp, name)
+            found = [Path(f).name for f in ccat.find_files([tmp], ".xml")]
+            assert found == ["a.xml", "b.xml", "c.xml"]
+
+    def test_empty_orthography_element_is_standard_orthography(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = self.write(tmp, header="<orthography/>")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                assert ccat.print_file(ccat.make_options(), path)
+            assert out.getvalue() == "Hei ¶\n"

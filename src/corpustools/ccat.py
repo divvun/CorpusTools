@@ -472,14 +472,11 @@ def print_element(element: etree.Element, buffer: StringIO) -> None:
 def print_file(options: PrintOptions, filename: Path) -> bool:
     """Print a xml file to stdout. Returns True if something was printed,
     False otherwise."""
-    if filename.suffix != ".xml":
-        return False
-
     tree = parse_file(filename)
     text_orthography = tree.find(".//header/orthography")
     wanted_orthography = options.orthography
 
-    if text_orthography is None or text_orthography.text == "":
+    if text_orthography is None or not text_orthography.text:
         # text has standard orthography, show text if no --orthography
         # was given
         show_text = wanted_orthography is None
@@ -665,7 +662,7 @@ def parse_options():
     return args
 
 
-def find_files(targets: list[str], extension: str) -> Iterable[str]:
+def find_files(targets: list[str], extension: str) -> Iterable[Path]:
     """Search for files with extension in targets.
 
     Args:
@@ -673,17 +670,19 @@ def find_files(targets: list[str], extension: str) -> Iterable[str]:
         extension (str): interesting files has this extension.
 
     Yields:
-        (str): path to the interesting file
+        (Path): path to the interesting file, in sorted order within a directory
     """
     for target in targets:
-        if os.path.exists(target):
-            if os.path.isfile(target) and target.endswith(extension):
-                yield target
-            elif os.path.isdir(target):
-                for root, _, files in os.walk(target):
-                    for xml_file in files:
-                        if xml_file.endswith(extension):
-                            yield os.path.join(root, xml_file)
+        target_path = Path(target)
+        if target_path.is_file():
+            if target.endswith(extension):
+                yield target_path
+        elif target_path.is_dir():
+            for root, dirs, files in os.walk(target_path):
+                dirs.sort()
+                for xml_file in sorted(files):
+                    if xml_file.endswith(extension):
+                        yield Path(root) / xml_file
         else:
             print(f"{target} does not exist", file=sys.stderr)
 
