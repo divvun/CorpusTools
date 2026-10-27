@@ -21,7 +21,6 @@ import argparse
 import logging
 import os
 from concurrent.futures import Future, ProcessPoolExecutor, as_completed
-from functools import partial
 from pathlib import Path
 from typing import Iterator
 
@@ -103,7 +102,7 @@ class ConverterManager:
         failed: list[CorpusPath] = []
         with ProcessPoolExecutor(max_workers=pool_size) as pool:
             for file in self.files:
-                fut = pool.submit(partial(self.convert, file))
+                fut = pool.submit(convert_one, file, self.lazy_conversion)
                 futures[fut] = file
 
             for i, future in enumerate(as_completed(futures), start=1):
@@ -172,6 +171,16 @@ class ConverterManager:
             for c_path in self.corpus_paths(sources)
             if c_path.is_convertable(self.goldstandard)
         ]
+
+
+def convert_one(orig_file: CorpusPath, lazy_conversion: bool) -> None:
+    """Convert one file in a worker process.
+
+    This is a module level function, so that only the arguments are pickled.
+    Binding ConverterManager.convert would pickle the manager, including
+    the list of all files, for every submitted task.
+    """
+    ConverterManager(lazy_conversion=lazy_conversion).convert(orig_file)
 
 
 def unwrap_self_convert(arg: tuple[ConverterManager, CorpusPath], **kwarg: object):
