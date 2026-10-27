@@ -328,10 +328,10 @@ class Converter:
         Returns:
             (int): The length of the content in complete.
         """
-        xml_printer = ccat.XMLPrinter(all_paragraphs=True, hyph_replacement="")
-        xml_printer.etree = etree.ElementTree(complete)
-
-        return len(xml_printer.process_file().getvalue())
+        options = ccat.make_options(all_paragraphs=True, hyph_replacement="")
+        return len(
+            ccat.process_file(options, etree.ElementTree(complete)).getvalue()
+        )
 
     def write_complete(self, languageguesser: text_cat.Classifier | None) -> None:
         """Write the complete converted document to disk.

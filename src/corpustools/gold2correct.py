@@ -23,7 +23,7 @@ import logging
 from git import GitCommandError
 
 from corpustools import argparse_version, versioncontrol
-from corpustools.ccat import XMLPrinter
+from corpustools.ccat import make_options, parse_file, process_file
 from corpustools.convertermanager import collect_files, convert, sanity_check
 from corpustools.corpuspath import make_corpus_path
 from corpustools.move_files import mover
@@ -53,7 +53,6 @@ def parse_options():
 
     return args
 
-
 def main():
     """Convert goldstandard files to .correct.txt files."""
     args = parse_options()
@@ -82,9 +81,10 @@ def main():
             print(f"\nCould not convert {orig_file}")
             continue
 
-        xml_printer = XMLPrinter(all_paragraphs=True) # get all text
-        xml_printer.parse_file(orig_file.converted.absolute().as_posix())
-        text = xml_printer.process_file().getvalue().replace(" ¶", "\n")
+        options = make_options(all_paragraphs=True)  # get all text
+        text = process_file(
+            options, parse_file(orig_file.converted.absolute().as_posix())
+        ).getvalue().replace(" ¶", "\n")
 
         test_text = "".join(line.strip() for line in text.splitlines())
         if not test_text:

@@ -37,13 +37,13 @@ class TrainingCorpusMaker:
 
     Attributes:
         only_words (str): regex catching word made up of letters.
-        xml_printer (ccat.XMLPrinter): extracts the dependency analysis
+        print_options (ccat.PrintOptions): extracts the dependency analysis
             from the giella xml files.
         lang (str): the language of the training corpus.
     """
 
     only_words = regex.compile(r"\p{L}+")
-    xml_printer = ccat.XMLPrinter(dependency=True)
+    print_options = ccat.make_options(dependency=True)
 
     def __init__(self, lang):
         """Initialise the TrainingCorpusMaker class.
@@ -106,8 +106,9 @@ class TrainingCorpusMaker:
         Returns:
             (list[str]): list of the sentences
         """
-        self.xml_printer.parse_file(filename)
-        text = self.xml_printer.process_file().getvalue()
+        text = ccat.process_file(
+            self.print_options, ccat.parse_file(filename)
+        ).getvalue()
         if text.strip():
             return [sentence for sentence in self.parse_dependency(text) if sentence]
         else:

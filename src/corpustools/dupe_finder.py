@@ -49,12 +49,13 @@ class DupeFinder:
             directory (str): the directory to collect xml files from.
         """
         files = {}
-        xmlprinter = ccat.XMLPrinter(all_paragraphs=True)
+        options = ccat.make_options(all_paragraphs=True)
         for f in os.listdir(directory):
             if f.endswith(".xml"):
                 filename = os.path.join(directory, f)
-                xmlprinter.parse_file(filename)
-                files[filename] = xmlprinter.process_file().getvalue()
+                files[filename] = ccat.process_file(
+                    options, ccat.parse_file(filename)
+                ).getvalue()
 
         return files
 
