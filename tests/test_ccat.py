@@ -1407,3 +1407,9 @@ class TestCcatFiles(unittest.TestCase):
             with contextlib.redirect_stdout(out):
                 assert ccat.print_file(ccat.make_options(), path)
             assert out.getvalue() == "Hei ¶\n"
+
+    def test_missing_xml_lang_on_root(self):
+        tree = etree.ElementTree(etree.XML("<document><body><p>Hei</p></body></document>"))
+        assert ccat.get_lang(tree) is None
+        assert ccat.process_file(ccat.make_options(), tree).getvalue() == "Hei ¶\n"
+        assert ccat.process_file(ccat.make_options(lang="sme"), tree).getvalue() == ""

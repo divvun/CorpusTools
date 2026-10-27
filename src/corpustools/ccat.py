@@ -176,9 +176,9 @@ def make_options(  # noqa: PLR0913
     )
 
 
-def get_lang(tree: etree.ElementTree) -> str:
-    """Get the lang of the file."""
-    return tree.getroot().attrib["{http://www.w3.org/XML/1998/namespace}lang"]
+def get_lang(tree: etree.ElementTree) -> str | None:
+    """Get the lang of the file, or None if the root has no xml:lang."""
+    return tree.getroot().get("{http://www.w3.org/XML/1998/namespace}lang")
 
 
 def get_element_language(element: etree.Element, parentlang: str | None) -> str | None:
@@ -277,7 +277,10 @@ def collect_inline_errors(
 
 
 def collect_text(
-    options: PrintOptions, element: etree.Element, parentlang: str, buffer: StringIO
+    options: PrintOptions,
+    element: etree.Element,
+    parentlang: str | None,
+    buffer: StringIO,
 ) -> None:
     """Collect text from element, and write the contents to buffer."""
     textlist: list[str] = []
@@ -435,11 +438,12 @@ def process_file(options: PrintOptions, tree: etree.ElementTree) -> StringIO:
     ):
         print_element(disambiguation, buffer)
     else:
+        tree_lang = get_lang(tree)
         for paragraph in tree.findall(".//p"):
             if is_correct_lang(
-                options, get_element_language(paragraph, get_lang(tree))
+                options, get_element_language(paragraph, tree_lang)
             ) and visit_this_node(options, paragraph):
-                collect_text(options, paragraph, get_lang(tree), buffer)
+                collect_text(options, paragraph, tree_lang, buffer)
 
     return buffer
 
