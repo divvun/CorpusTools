@@ -794,10 +794,6 @@ def _handle_broken_pipe() -> int:
     return 1
 
 
-if __name__ == "__main__":
-    sys.exit(main())
-
-
 def ccatter(path: CorpusPath) -> str:
     """Turn an xml formatted file into clean text.
 
@@ -818,3 +814,7 @@ def ccatter(path: CorpusPath) -> str:
         return text
 
     raise UserWarning(f"Empty file {path.converted}")
+
+
+if __name__ == "__main__":
+    sys.exit(main())
