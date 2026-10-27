@@ -18,12 +18,46 @@
 #
 
 import io
+import os
+import subprocess
+import sys
 import unittest
 from dataclasses import replace
+from pathlib import Path
 
 from lxml import etree
 
 from corpustools import ccat
+
+
+class TestCcatCLI(unittest.TestCase):
+    def test_broken_pipe_is_suppressed(self):
+        source_dir = str(Path(__file__).resolve().parents[1] / "src")
+        env = os.environ.copy()
+        env["PYTHONPATH"] = os.pathsep.join(
+            filter(None, (source_dir, env.get("PYTHONPATH")))
+        )
+        for args in (["--list-orthographies"], ["--help"]):
+            with self.subTest(args=args):
+                process = subprocess.Popen(
+                    [
+                        sys.executable,
+                        "-c",
+                        "from corpustools.ccat import main; raise SystemExit(main())",
+                        *args,
+                    ],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    env=env,
+                )
+                assert process.stdout is not None
+                assert process.stderr is not None
+                process.stdout.close()
+                stderr = process.stderr.read()
+                return_code = process.wait()
+
+                assert return_code == 1
+                assert stderr == b""
 
 
 class TestCcatHyph(unittest.TestCase):
@@ -950,9 +984,7 @@ class TestCcat(unittest.TestCase):
 
     def test_get_lang(self):
         """Check that get_lang finds the main lang of the document"""
-        tree = etree.parse(
-            io.BytesIO(b'<document id="no_id" xml:lang="sme"/>')
-        )
+        tree = etree.parse(io.BytesIO(b'<document id="no_id" xml:lang="sme"/>'))
 
         assert ccat.get_lang(tree) == "sme"
 

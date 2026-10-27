@@ -22,10 +22,8 @@ import argparse
 import os
 import sys
 from dataclasses import dataclass, replace
-from functools import wraps
 from io import StringIO
 from pathlib import Path
-from traceback import print_exc
 from typing import Iterable
 
 from lxml import etree
@@ -33,40 +31,6 @@ from lxml import etree
 from corpustools import argparse_version
 from corpustools.corpuspath import CorpusPath
 from corpustools.orthographies import is_orthography_of, orthographies
-
-
-def suppress_broken_pipe_msg(function):
-    """Suppress message after a broken pipe error.
-
-    This code is fetched from:
-    http://stackoverflow.com/questions/14207708/ioerror-errno-32-broken-pipe-python
-
-    Args:
-        function (function): the function that should be wrapped by this function.
-    """
-
-    @wraps(function)
-    def wrapper(*args, **kwargs):
-        try:
-            return function(*args, **kwargs)
-        except SystemExit:
-            raise
-        except:
-            print_exc()
-            sys.exit(1)
-        finally:
-            try:
-                sys.stdout.flush()
-            finally:
-                try:
-                    sys.stdout.close()
-                finally:
-                    try:
-                        sys.stderr.flush()
-                    finally:
-                        sys.stderr.close()
-
-    return wrapper
 
 
 @dataclass(frozen=True)
@@ -525,13 +489,10 @@ def print_file(options: PrintOptions, filename: Path) -> bool:
         show_text = text_orthography.text == wanted_orthography
 
     if show_text:
-        try:
-            sys.stdout.write(
-                process_file(replace(options, filename=filename.name), tree).getvalue()
-            )
-            return True
-        except BrokenPipeError:
-            pass
+        sys.stdout.write(
+            process_file(replace(options, filename=filename.name), tree).getvalue()
+        )
+        return True
 
     return False
 
@@ -727,8 +688,7 @@ def find_files(targets: list[str], extension: str) -> Iterable[str]:
             print(f"{target} does not exist", file=sys.stderr)
 
 
-@suppress_broken_pipe_msg
-def main():
+def _main() -> None:
     """Set up the print options from the command line options.
 
     Process the given files and directories
@@ -805,8 +765,37 @@ def main():
         )
 
 
+def main() -> int:
+    try:
+        _main()
+    except SystemExit:
+        try:
+            sys.stdout.flush()
+        except BrokenPipeError:
+            return _handle_broken_pipe()
+        raise
+    except BrokenPipeError:
+        return _handle_broken_pipe()
+
+    try:
+        sys.stdout.flush()
+    except BrokenPipeError:
+        return _handle_broken_pipe()
+
+    return 0
+
+
+def _handle_broken_pipe() -> int:
+    devnull = os.open(os.devnull, os.O_WRONLY)
+    try:
+        os.dup2(devnull, sys.stdout.fileno())
+    finally:
+        os.close(devnull)
+    return 1
+
+
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
 
 
 def ccatter(path: CorpusPath) -> str:
