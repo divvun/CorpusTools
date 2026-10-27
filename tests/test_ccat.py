@@ -152,6 +152,33 @@ class TestCcatHyph(unittest.TestCase):
         buffer = ccat.process_file(options, tree)
         assert buffer.getvalue() == "mellom-tiden ¶\n"
 
+    def test_hyph_after_sibling_element(self):
+        """The text before a hyph is the tail of the previous sibling"""
+        options = ccat.make_options(hyph_replacement="-")
+        tree = etree.parse(
+            io.BytesIO(
+                b'<document id="no_id" xml:lang="nob">'
+                b"<body><p>start <em>x</em>mellom<hyph/>tiden slutt</p></body>"
+                b"</document>"
+            )
+        )
+
+        assert ccat.process_file(options, tree).getvalue() == (
+            "start xmellom-tiden slutt ¶\n"
+        )
+
+    def test_hyph_does_not_leak_across_paragraphs(self):
+        options = ccat.make_options(hyph_replacement="-")
+        tree = etree.parse(
+            io.BytesIO(
+                b'<document id="no_id" xml:lang="nob">'
+                b"<body><p>a<hyph/><em>b</em>c</p><p>d<hyph/>e</p></body>"
+                b"</document>"
+            )
+        )
+
+        assert ccat.process_file(options, tree).getvalue() == "abc ¶\nd-e ¶\n"
+
 
 class TestCcatErrormarkup(unittest.TestCase):
     """Test how ccat handles errormarkup"""

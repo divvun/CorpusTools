@@ -449,22 +449,28 @@ def process_file(options: PrintOptions, tree: etree.ElementTree) -> StringIO:
 
 
 def handle_hyph(options: PrintOptions, tree: etree.ElementTree) -> None:
-    """Replace hyph tags."""
-    hyph_tails: list[str] = []
-    for hyph in tree.findall(".//hyph"):
-        if hyph.tail is not None:
-            hyph_tails.append(hyph.tail)
+    """Replace hyph tags.
 
-        hyph_parent = hyph.getparent()
+    The replacement is inserted only between text on both sides of the hyph,
+    so consecutive or leading/trailing hyph tags produce no extra replacement.
+    """
+    for hyph in list(tree.iter("hyph")):
+        parent = hyph.getparent()
+        if parent is None:
+            continue
 
-        if hyph_parent is not None:
-            if hyph.getnext() is None:
-                if hyph_parent.text is not None:
-                    hyph_tails.insert(0, hyph_parent.text)
-                hyph_parent.text = options.hyph_replacement.join(hyph_tails)
-                hyph_tails[:] = []
+        previous = hyph.getprevious()
+        before = parent.text if previous is None else previous.tail
+        tail = hyph.tail or ""
+        replacement = options.hyph_replacement if before and tail else ""
+        joined = f"{before or ''}{replacement}{tail}"
 
-            hyph_parent.remove(hyph)
+        if previous is None:
+            parent.text = joined or None
+        else:
+            previous.tail = joined or None
+
+        parent.remove(hyph)
 
 
 def print_element(element: etree.Element, buffer: StringIO) -> None:
