@@ -114,14 +114,14 @@ class AvvirDocument:
     @classmethod
     def from_json(cls, avvir_json: dict[str, Any]) -> "AvvirDocument":
         """Create an AvvirDocument from a JSON dictionary."""
-
+        contents = avvir_json.get("data", {}).get("content", [])
         return cls(
             authors=extract_authors(avvir_json),
             title=extract_title(avvir_json),
-            main_content=extract_main_content(avvir_json),
-            captions=extract_captions(avvir_json),
-            slideshows=extract_slideshows(avvir_json),
-            containers=extract_containers(avvir_json),
+            main_content=extract_main_content(contents),
+            captions=extract_captions(contents),
+            slideshows=extract_slideshows(contents),
+            containers=extract_containers(contents),
         )
 
     def serialize(self) -> list[etree.Element]:
@@ -168,11 +168,11 @@ def extract_authors(avvir_json: dict[str, Any]) -> list[AvvirAuthor]:
     ]
 
 
-def extract_main_content(avvir_json: dict[str, Any]) -> list[AvvirTaggedText]:
+def extract_main_content(contents: list[dict[str, Any]]) -> list[AvvirTaggedText]:
     """Extract the main content from an Ávvir JSON dictionary."""
     return [
         convert_tagged_text(content)
-        for content in avvir_json["data"]["content"]
+        for content in contents
         if content["identifier"]
         in [
             "faktatittel",
@@ -188,29 +188,29 @@ def extract_main_content(avvir_json: dict[str, Any]) -> list[AvvirTaggedText]:
     ]
 
 
-def extract_captions(avvir_json: dict[str, Any]) -> list[AvvirTaggedText]:
+def extract_captions(contents: list[dict[str, Any]]) -> list[AvvirTaggedText]:
     """Extract the captions from an Ávvir JSON dictionary."""
     return [
         convert_image(content)
-        for content in avvir_json["data"]["content"]
+        for content in contents
         if content["identifier"] == "image"
     ]
 
 
-def extract_slideshows(avvir_json: dict[str, Any]) -> list[AvvirTaggedText]:
+def extract_slideshows(contents: list[dict[str, Any]]) -> list[AvvirTaggedText]:
     """Extract the slideshows from an Ávvir JSON dictionary."""
     return [
         convert_slideshow(content)
-        for content in avvir_json["data"]["content"]
+        for content in contents
         if content["identifier"] == "slideshow"
     ]
 
 
-def extract_containers(avvir_json: dict[str, Any]) -> list[AvvirContainer]:
+def extract_containers(contents: list[dict[str, Any]]) -> list[AvvirContainer]:
     """Extract the containers from an Ávvir JSON dictionary."""
     return [
         convert_container(content)
-        for content in avvir_json["data"]["content"]
+        for content in contents
         if content["identifier"] == "container"
     ]
 
@@ -346,15 +346,16 @@ def convert_container(container_dict: dict[str, Any]) -> AvvirContainer:
             f"Got: {[key for key in container_dict.keys() if key not in known_keys]}"
         )
 
+    contents = container_dict.get("containers", {}).get("main", [])
     return AvvirContainer(
         main_content=[
             convert_tagged_text(content)
-            for content in container_dict.get("content", [])
+            for content in contents
             if content["identifier"] in container_content_ids
         ],
-        captions=extract_captions(container_dict),
-        slideshows=extract_slideshows(container_dict),
-        containers=extract_containers(container_dict),
+        captions=extract_captions(contents),
+        slideshows=extract_slideshows(contents),
+        containers=extract_containers(contents),
     )
 
 
