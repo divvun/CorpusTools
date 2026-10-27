@@ -18,6 +18,7 @@
 """Convert Ávvir-json-files to the Giella xml format."""
 
 import json
+import re
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
@@ -26,6 +27,14 @@ from typing import Any, ClassVar
 from lxml import etree
 
 type SerializedXml = etree.Element | Sequence[SerializedXml]
+
+# Control characters that are not allowed in XML 1.0 (tab, LF and CR are kept)
+CONTROL_CHAR_RE = re.compile(r"[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]")
+
+
+def remove_control_chars(text: str) -> str:
+    """Remove control characters that can not be part of an XML document."""
+    return CONTROL_CHAR_RE.sub("", text)
 
 
 @dataclass
@@ -139,11 +148,13 @@ def extract_title(avvir_json: dict[str, Any]) -> str:
     for content in avvir_json["data"]["content"]:
         if content["identifier"] in ["title", "crosshead"]:
             if "content" in content and "text" in content["content"]:
-                return "".join(
-                    [
-                        text.get("insert", "")
-                        for text in content.get("content").get("text", [{}])
-                    ]
+                return remove_control_chars(
+                    "".join(
+                        [
+                            text.get("insert", "")
+                            for text in content.get("content").get("text", [{}])
+                        ]
+                    )
                 )
     return ""
 
@@ -242,7 +253,9 @@ def convert_author(author_dict: dict[str, Any]) -> AvvirAuthor:
     Returns:
         The resulting AvvirAuthor object after the conversion.
     """
-    fullname = author_dict.get("content", {}).get("name", [{}])[0].get("insert", "")
+    fullname = remove_control_chars(
+        author_dict.get("content", {}).get("name", [{}])[0].get("insert", "")
+    )
 
     name_parts = fullname.split(" ")
     return AvvirAuthor(forname=" ".join(name_parts[:-1]), surname=name_parts[-1])
@@ -261,7 +274,9 @@ def convert_tagged_text(content_dict: dict[str, Any]) -> AvvirTaggedText:
         text_part.get("insert", "")
         for text_part in content_dict.get("content", {}).get("text", [{}])
     )
-    return AvvirTaggedText(text="".join(texts), tag=content_dict["identifier"])
+    return AvvirTaggedText(
+        text=remove_control_chars("".join(texts)), tag=content_dict["identifier"]
+    )
 
 
 def convert_image(image_dict: dict[str, Any]) -> AvvirTaggedText:
@@ -277,7 +292,9 @@ def convert_image(image_dict: dict[str, Any]) -> AvvirTaggedText:
         text_part.get("insert", "")
         for text_part in image_dict.get("content", {}).get("caption", [{}])
     )
-    return AvvirTaggedText(text="".join(texts), tag=image_dict["identifier"])
+    return AvvirTaggedText(
+        text=remove_control_chars("".join(texts)), tag=image_dict["identifier"]
+    )
 
 
 def convert_slideshow(slideshow_dict: dict[str, Any]) -> AvvirTaggedText:
@@ -298,7 +315,9 @@ def convert_slideshow(slideshow_dict: dict[str, Any]) -> AvvirTaggedText:
         for text_part in images.get("content", {}).get("caption", [{}])
         if text_part.get("insert", "")
     )
-    return AvvirTaggedText(text=" ".join(texts), tag=slideshow_dict["identifier"])
+    return AvvirTaggedText(
+        text=remove_control_chars(" ".join(texts)), tag=slideshow_dict["identifier"]
+    )
 
 
 def convert_container(container_dict: dict[str, Any]) -> AvvirContainer:

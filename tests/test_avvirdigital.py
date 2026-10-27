@@ -11,6 +11,7 @@ from corpustools.avvirdigital import (
     convert_tagged_text,
 )
 
+
 @pytest.mark.parametrize(
     ("author_dict", "expected"),
     [
@@ -169,6 +170,31 @@ def test_extract_slideshow(
     slideshow_dict: dict[str, object], expected: AvvirTaggedText
 ) -> None:
     assert convert_slideshow(slideshow_dict) == expected  # type: ignore
+
+
+def test_control_chars_are_removed() -> None:
+    content_dict: dict[str, object] = {
+        "content": {"text": [{"insert": "Govva: Sara \bRisten\x00 Gaup\n"}]},
+        "id": "doc-1",
+        "identifier": "body",
+        "styles": {},
+    }
+    tagged_text = convert_tagged_text(content_dict)  # type: ignore
+
+    assert tagged_text.text == "Govva: Sara Risten Gaup\n"
+    assert tagged_text.to_xml().text == "Govva: Sara Risten Gaup\n"
+
+
+def test_control_chars_are_removed_from_image_and_author() -> None:
+    image = convert_image(
+        {"content": {"caption": [{"insert": "a\bb"}]}, "identifier": "image"}
+    )
+    author = convert_author(
+        {"content": {"name": [{"insert": "Kila \bAnti"}]}, "identifier": "author"}
+    )
+
+    assert image.text == "ab"
+    assert author == AvvirAuthor(forname="Kila", surname="Anti")
 
 
 def _sample_container(
