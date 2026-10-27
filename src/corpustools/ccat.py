@@ -702,17 +702,21 @@ def _main() -> None:
 
     # the targets argument is required when --list-orthographies is not given
     if not args.targets:
-        print("ccat: error: the following arguments are required: targets")
-        return
+        print(
+            "ccat: error: the following arguments are required: targets",
+            file=sys.stderr,
+        )
+        sys.exit(2)
 
     # error if given --orthography is not an orthography of the given lang -l
     if args.orthography is not None and args.lang is not None:
         if not is_orthography_of(args.orthography, args.lang):
             print(
                 f"ccat: error: orthography '{args.orthography}' is not an "
-                f"orthography of language '{args.lang}'"
+                f"orthography of language '{args.lang}'",
+                file=sys.stderr,
             )
-            return
+            sys.exit(2)
 
     options = make_options(
         lang=args.lang,

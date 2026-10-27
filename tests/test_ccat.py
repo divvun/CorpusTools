@@ -62,6 +62,32 @@ class TestCcatCLI(unittest.TestCase):
                 assert stderr == b""
 
 
+class TestCcatCLIErrors(unittest.TestCase):
+    def run_ccat(self, *args):
+        source_dir = str(Path(__file__).resolve().parents[1] / "src")
+        env = os.environ.copy()
+        env["PYTHONPATH"] = os.pathsep.join(
+            filter(None, (source_dir, env.get("PYTHONPATH")))
+        )
+        return subprocess.run(
+            [
+                sys.executable,
+                "-c",
+                "from corpustools.ccat import main; raise SystemExit(main())",
+                *args,
+            ],
+            capture_output=True,
+            env=env,
+            text=True,
+        )
+
+    def test_missing_targets_is_an_error(self):
+        result = self.run_ccat()
+        assert result.returncode == 2
+        assert result.stdout == ""
+        assert "targets" in result.stderr
+
+
 class TestCcatHyph(unittest.TestCase):
     """Test how ccat handles hyph"""
 
