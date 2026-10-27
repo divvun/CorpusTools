@@ -72,11 +72,11 @@ def convert_and_copy(corpus_path1: CorpusPath, corpus_path2: CorpusPath):
         corpus_path.converted.unlink(missing_ok=True)
 
     convertermanager.sanity_check()
-    converter_manager = convertermanager.ConverterManager()
-    converter_manager.collect_files(
-        [corpus_path1.orig.as_posix(), corpus_path2.orig.as_posix()]
+    convertermanager.convert_serially(
+        convertermanager.collect_files(
+            [corpus_path1.orig.as_posix(), corpus_path2.orig.as_posix()]
+        )
     )
-    converter_manager.convert_serially()
 
 
 def parse_options():

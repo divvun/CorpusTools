@@ -24,7 +24,7 @@ from git import GitCommandError
 
 from corpustools import argparse_version, versioncontrol
 from corpustools.ccat import XMLPrinter
-from corpustools.convertermanager import ConverterManager, sanity_check
+from corpustools.convertermanager import collect_files, convert, sanity_check
 from corpustools.corpuspath import make_corpus_path
 from corpustools.move_files import mover
 
@@ -61,14 +61,9 @@ def main():
     sanity_check()
 
     logging.getLogger().setLevel(logging.INFO)
-    converter_manager = ConverterManager(
-        goldstandard=True,
-    )
-
-    converter_manager.collect_files(args.sources)
     gold_files = [
         orig_file
-        for orig_file in converter_manager.files
+        for orig_file in collect_files(args.sources, goldstandard=True)
         if not orig_file.orig.name.endswith("correct.txt")
     ]
     if gold_files:
@@ -77,7 +72,7 @@ def main():
     for orig_file in gold_files:
         orig_vcs = versioncontrol.vcs(orig_file.orig_corpus_dir)
         try:
-            converter_manager.convert(orig_file)
+            convert(orig_file)
         except (AttributeError, NameError) as error:
             print(f"Conversion failed for {orig_file.orig}: {error}")
             continue

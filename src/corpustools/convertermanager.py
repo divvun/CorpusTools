@@ -11,7 +11,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2012-2025 The University of Tromsø &
+#   Copyright © 2012-2026 The University of Tromsø &
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
@@ -21,6 +21,7 @@ import argparse
 import logging
 import os
 from concurrent.futures import Future, ProcessPoolExecutor, as_completed
+from functools import cache
 from pathlib import Path
 from typing import Iterator
 
@@ -31,156 +32,119 @@ from corpustools.corpuspath import CorpusPath, make_corpus_path
 LOGGER = logging.getLogger(__name__)
 
 
-class ConverterManager:
-    """Manage the conversion of original files to corpus xml.
+@cache
+def languageguesser() -> text_cat.Classifier:
+    """Return the language guesser.
 
-    Class/static variables:
-        _languageguesser (text_cat.Classifier): Language guesser to indicate
-            languages in the converted document.
-    Attributes:
-        write_intermediate (bool): indicate whether intermediate versions
-            of the converted document should be written to disk.
-        goldstandard (bool): indicating whether goldstandard documents
-            should be converted.
-        files (list of str): list of paths to original files that should
-            be converted from original format to xml.
+    It takes a while to initialise, so it is created on first use,
+    once per process.
     """
+    return text_cat.Classifier(None)
 
-    _languageguesser = None
 
-    def languageguesser(self) -> text_cat.Classifier | None:
-        """Return our language guesser.
-        This is a class variable, but since it takes a while to initialise,
-        we don't do it until it's needed."""
-        if self._languageguesser is None:
-            ConverterManager._languageguesser = text_cat.Classifier(None)
-        return self._languageguesser
+def convert(orig_file: CorpusPath, lazy_conversion: bool = False) -> None:
+    """Convert file to corpus xml format.
 
-    def __init__(
-        self,
-        lazy_conversion: bool = False,
-        write_intermediate: bool = False,
-        goldstandard: bool = False,
-    ):
-        """Initialise the ConverterManager class.
+    Args:
+        orig_file: the path to the original file.
+        lazy_conversion: only convert if metadata have changed since last
+            conversion.
+    """
+    try:
+        conv = converter.Converter(orig_file, lazy_conversion=lazy_conversion)
+        conv.write_complete(languageguesser())
+    except (
+        util.ConversionError,
+        ValueError,
+        IndexError,
+    ) as error:
+        LOGGER.warning("Could not convert %s\n%s", orig_file.orig, error)
+        raise
 
-        Args:
-            lazy_conversion (bool): indicate whether conversion depends on the
-                fact that metadata have changed since last conversion.
-            write_intermediate (bool): indicating whether intermediate versions
-                of the converted document should be written to disk.
-            goldstandard (bool): indicating whether goldstandard documents
-                should be converted.
-        """
-        self.lazy_conversion = lazy_conversion
-        self.write_intermediate = write_intermediate
-        self.goldstandard = goldstandard
-        self.files: list[CorpusPath] = []
 
-    def convert(self, orig_file: CorpusPath):
-        """Convert file to corpus xml format.
+def convert_in_parallel(
+    files: list[CorpusPath], pool_size: int, lazy_conversion: bool = False
+) -> None:
+    """Convert files using a pool of worker processes."""
+    nfiles = len(files)
+    futures: dict[Future[None], CorpusPath] = {}  # Future -> filename
+    print(f"Starting parallel conversion with {pool_size} workers")
+    failed: list[CorpusPath] = []
+    with ProcessPoolExecutor(max_workers=pool_size) as pool:
+        for file in files:
+            fut = pool.submit(convert, file, lazy_conversion)
+            futures[fut] = file
 
-        Args:
-            orig_file: the path to the original file.
-        """
-        try:
-            conv = converter.Converter(orig_file, lazy_conversion=self.lazy_conversion)
-            conv.write_complete(self.languageguesser())
-        except (
-            util.ConversionError,
-            ValueError,
-            IndexError,
-        ) as error:
-            LOGGER.warning("Could not convert %s\n%s", orig_file.orig, error)
-            raise
-
-    def convert_in_parallel(self, pool_size: int):
-        """Convert files using the multiprocessing module."""
-        nfiles = len(self.files)
-        futures: dict[Future[None], CorpusPath] = {}  # Future -> filename
-        print(f"Starting parallel conversion with {pool_size} workers")
-        failed: list[CorpusPath] = []
-        with ProcessPoolExecutor(max_workers=pool_size) as pool:
-            for file in self.files:
-                fut = pool.submit(convert_one, file, self.lazy_conversion)
-                futures[fut] = file
-
-            for i, future in enumerate(as_completed(futures), start=1):
-                exc = future.exception()
-                filename = futures[future]
-                if exc is not None:
-                    failed.append(filename)
-                    print(f"[{i}/{nfiles} FAILED: {filename.orig}")
-                    print(exc)
-                else:
-                    print(f"[{i}/{nfiles}] done: {filename.converted}")
-
-        n_ok = nfiles - len(failed)
-        print(f"all done converting. {n_ok} files converted ok, {len(failed)} failed")
-        if failed:
-            print("the files that failed to convert are:")
-            for filename in failed:
-                print(filename.orig)
-
-    def convert_serially(self):
-        """Convert the files in one process."""
-        LOGGER.info("Starting the conversion of %d files", len(self.files))
-
-        for orig_file in self.files:
-            LOGGER.debug("converting %s", orig_file.orig)
-            try:
-                self.convert(orig_file)
-            except util.ConversionError as error:
-                LOGGER.warning("Could not convert %s\n%s", orig_file.orig, error)
-
-    def corpus_paths(self, sources: list[str]) -> Iterator[CorpusPath]:
-        """Yield all convertible files in sources.
-
-        Args:
-            sources (list of str): a list of files or directories where
-                convertable files are found.
-        Yields:
-            Convertible files found in sources.
-        """
-        LOGGER.info("Collecting files to convert")
-
-        paths = (Path(source) for source in sources)
-        for path in paths:
-            if path.is_file():
-                yield make_corpus_path(path.as_posix())
-            elif path.is_dir():
-                for xsl_file in path.rglob("*.xsl"):
-                    yield make_corpus_path(xsl_file.as_posix())
+        for i, future in enumerate(as_completed(futures), start=1):
+            exc = future.exception()
+            filename = futures[future]
+            if exc is not None:
+                failed.append(filename)
+                print(f"[{i}/{nfiles} FAILED: {filename.orig}")
+                print(exc)
             else:
-                LOGGER.error(
-                    "Can not process %s\nThis is neither a file nor a directory.",
-                    path,
-                )
+                print(f"[{i}/{nfiles}] done: {filename.converted}")
 
-    def collect_files(self, sources: list[str]):
-        """Find all convertible files in sources.
-
-        Args:
-            sources (list of str): a list of files or directories where
-                convertable files are found.
-        """
-        LOGGER.info("Collecting files to convert")
-
-        self.files = [
-            c_path
-            for c_path in self.corpus_paths(sources)
-            if c_path.is_convertable(self.goldstandard)
-        ]
+    n_ok = nfiles - len(failed)
+    print(f"all done converting. {n_ok} files converted ok, {len(failed)} failed")
+    if failed:
+        print("the files that failed to convert are:")
+        for filename in failed:
+            print(filename.orig)
 
 
-def convert_one(orig_file: CorpusPath, lazy_conversion: bool) -> None:
-    """Convert one file in a worker process.
+def convert_serially(files: list[CorpusPath], lazy_conversion: bool = False) -> None:
+    """Convert the files in one process."""
+    LOGGER.info("Starting the conversion of %d files", len(files))
 
-    This is a module level function, so that only the arguments are pickled.
-    Binding ConverterManager.convert would pickle the manager, including
-    the list of all files, for every submitted task.
+    for orig_file in files:
+        LOGGER.debug("converting %s", orig_file.orig)
+        try:
+            convert(orig_file, lazy_conversion)
+        except util.ConversionError as error:
+            LOGGER.warning("Could not convert %s\n%s", orig_file.orig, error)
+
+
+def corpus_paths(sources: list[str]) -> Iterator[CorpusPath]:
+    """Yield all convertible files in sources.
+
+    Args:
+        sources (list of str): a list of files or directories where
+            convertable files are found.
+    Yields:
+        Convertible files found in sources.
     """
-    ConverterManager(lazy_conversion=lazy_conversion).convert(orig_file)
+    LOGGER.info("Collecting files to convert")
+
+    paths = (Path(source) for source in sources)
+    for path in paths:
+        if path.is_file():
+            yield make_corpus_path(path.as_posix())
+        elif path.is_dir():
+            for xsl_file in path.rglob("*.xsl"):
+                yield make_corpus_path(xsl_file.as_posix())
+        else:
+            LOGGER.error(
+                "Can not process %s\nThis is neither a file nor a directory.",
+                path,
+            )
+
+
+def collect_files(sources: list[str], goldstandard: bool = False) -> list[CorpusPath]:
+    """Find all convertible files in sources.
+
+    Args:
+        sources (list of str): a list of files or directories where
+            convertable files are found.
+        goldstandard: also include goldstandard documents.
+    """
+    LOGGER.info("Collecting files to convert")
+
+    return [
+        c_path
+        for c_path in corpus_paths(sources)
+        if c_path.is_convertable(goldstandard)
+    ]
 
 
 def parse_options():
@@ -212,13 +176,6 @@ def parse_options():
         "--lazy-conversion",
         action="store_true",
         help="Reconvert only if metadata have changed.",
-    )
-    parser.add_argument(
-        "--write-intermediate",
-        action="store_true",
-        help="Write the intermediate XML representation \
-                        to ORIGFILE.im.xml, for debugging the XSLT.\
-                        (Has no effect if the converted file already exists.)",
     )
     parser.add_argument(
         "--goldstandard",
@@ -260,16 +217,13 @@ def main():
 
     args = parse_options()
 
-    manager = ConverterManager(
-        args.lazy_conversion, args.write_intermediate, args.goldstandard
-    )
-    manager.collect_files(args.sources)
+    files = collect_files(args.sources, args.goldstandard)
 
     try:
         if args.serial:
             LOGGER.setLevel(logging.DEBUG)
-            manager.convert_serially()
+            convert_serially(files, args.lazy_conversion)
         else:
-            manager.convert_in_parallel(args.ncpus)
+            convert_in_parallel(files, args.ncpus, args.lazy_conversion)
     except util.ExecutableMissingError as error:
         raise SystemExit(str(error)) from error

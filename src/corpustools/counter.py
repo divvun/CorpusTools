@@ -54,11 +54,10 @@ def count_files(path):
     """Count files in the given language."""
     today = date.today()
 
-    cm = convertermanager.ConverterManager(False, False)
-    cm.collect_files([path])
+    files = convertermanager.collect_files([path])
     counter = defaultdict(int)
     lacking_files = defaultdict(set)
-    for f in cm.files:
+    for f in files:
         c = converter.Converter(f)
         if os.path.exists(c.names.converted):
             counter["con"] += 1
@@ -73,7 +72,7 @@ def count_files(path):
             if os.path.exists(c.names.converted):
                 lacking_files["ana"].add(c.names.converted)
     return (
-        len(cm.files),
+        len(files),
         counter["con"],
         counter["xfst"],
         counter["hfst"],
