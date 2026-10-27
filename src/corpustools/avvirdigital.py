@@ -68,12 +68,13 @@ class AvvirTaggedText:
             quote_element = etree.SubElement(element, "span")
             quote_element.text = self.text
             quote_element.set("type", "quote")
-            return element
 
+            return element
+        
+        element.text = self.text
         if self.tag in self.title_tags:
             element.set("type", "title")
 
-        element.text = self.text
         return element
 
 
@@ -107,6 +108,7 @@ class AvvirDocument:
     authors: list[AvvirAuthor] | None
     title: str
     main_content: list[AvvirTaggedText]
+    quotes: list[AvvirTaggedText]
     captions: list[AvvirTaggedText]
     slideshows: list[AvvirTaggedText]
     containers: list[AvvirContainer]
@@ -119,6 +121,7 @@ class AvvirDocument:
             authors=extract_authors(avvir_json),
             title=extract_title(avvir_json),
             main_content=extract_main_content(contents),
+            quotes=extract_quotes(contents),
             captions=extract_captions(contents),
             slideshows=extract_slideshows(contents),
             containers=extract_containers(contents),
@@ -130,6 +133,7 @@ class AvvirDocument:
             [
                 [content.to_xml() for content in self.main_content],
                 [caption.to_xml() for caption in self.captions],
+                [quote.to_xml() for quote in self.quotes],
                 [slideshow.to_xml() for slideshow in self.slideshows],
                 flatten([container.serialize() for container in self.containers]),
             ]
@@ -180,11 +184,19 @@ def extract_main_content(contents: list[dict[str, Any]]) -> list[AvvirTaggedText
             "mellom",
             "title",
             "subtitle",
-            "quote",
             "crosshead",
             "body",
             "intro",
         ]
+    ]
+
+
+def extract_quotes(contents: list[dict[str, Any]]) -> list[AvvirTaggedText]:
+    """Extract the quotes from an Ávvir JSON dictionary."""
+    return [
+        convert_tagged_text(content)
+        for content in contents
+        if content["identifier"] == "quote"
     ]
 
 
