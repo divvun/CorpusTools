@@ -92,7 +92,7 @@ class ConverterManager:
             ValueError,
             IndexError,
         ) as error:
-            LOGGER.warning("Could not convert %s\n%s", orig_file, error)
+            LOGGER.warning("Could not convert %s\n%s", orig_file.orig, error)
             raise
 
     def convert_in_parallel(self, pool_size: int):
@@ -128,12 +128,11 @@ class ConverterManager:
         LOGGER.info("Starting the conversion of %d files", len(self.files))
 
         for orig_file in self.files:
-            LOGGER.debug("converting %s", orig_file)
+            LOGGER.debug("converting %s", orig_file.orig)
             try:
                 self.convert(orig_file)
             except util.ConversionError as error:
-                LOGGER.warning("Could not convert %s\n%s", orig_file, error)
-                print(f"Could not convert {orig_file.orig}\n{error}")
+                LOGGER.warning("Could not convert %s\n%s", orig_file.orig, error)
 
     def corpus_paths(self, sources: list[str]) -> Iterator[CorpusPath]:
         """Yield all convertible files in sources.
