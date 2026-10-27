@@ -1,6 +1,6 @@
 [project]
 name = "corpustools"
-version = "2.9.0"
+version = "3.0.0"
 description = "Manage giellalt corpora"
 authors = [
     { name = "Børre Gaup", email = "albbas@gmail.com" },
