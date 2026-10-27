@@ -252,6 +252,7 @@ def test_document_serialize_flattens_nested_containers() -> None:
         authors=None,
         title=AvvirTaggedText(text="title", tag="title").text,
         main_content=[],
+        quotes=[],
         captions=[],
         slideshows=[],
         containers=[
