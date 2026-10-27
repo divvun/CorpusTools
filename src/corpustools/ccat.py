@@ -374,7 +374,9 @@ def visit_children(
                 )
             elif visit_error_not_inline(options, child):
                 collect_not_inline_errors(options, child, textlist)
-        else:
+            else:
+                visit_nonerror_element(options, child, textlist, parentlang)
+        elif not (isinstance(element.tag, str) and element.tag.startswith("error")):
             visit_nonerror_element(
                 options, child, textlist, get_element_language(element, parentlang)
             )
