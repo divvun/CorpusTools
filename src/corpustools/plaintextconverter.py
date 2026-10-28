@@ -50,7 +50,7 @@ class PlaintextConverter(basicconverter.BasicConverter):
         return content
 
     @staticmethod
-    def strip_chars(content: str, extra="") -> str:
+    def strip_chars(content: str, extra:str="") -> str:
         """Remove the characters found in plaintext_oddities from content.
 
         Args:
@@ -97,7 +97,7 @@ class PlaintextConverter(basicconverter.BasicConverter):
         return content
 
     @staticmethod
-    def make_element(element_name: str, text: str) -> etree._Element:
+    def make_element(element_name: str, text: str) -> etree.Element:
         """Make an xml element.
 
         Args:
@@ -121,7 +121,7 @@ class PlaintextConverter(basicconverter.BasicConverter):
 
         return element
 
-    def lines2xml(self, content: io.StringIO) -> Iterable[etree._Element]:
+    def lines2xml(self, content: io.StringIO) -> Iterable[etree.Element]:
         """Transform paragraphs to etree elements.
 
         Args:
@@ -148,7 +148,7 @@ class PlaintextConverter(basicconverter.BasicConverter):
         if buffer:
             yield self.make_element("p", "".join(buffer))
 
-    def content2xml(self, content: io.StringIO) -> etree._Element:
+    def content2xml(self, content: io.StringIO) -> etree.Element:
         """Transform plaintext to an intermediate xml document.
 
         Args:
@@ -167,7 +167,7 @@ class PlaintextConverter(basicconverter.BasicConverter):
         return document
 
 
-def convert2intermediate(filename: Path) -> etree._Element:
+def convert2intermediate(filename: Path) -> etree.Element:
     """Transform plaintext to an intermediate xml document.
 
     Args:
