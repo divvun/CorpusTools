@@ -19,8 +19,6 @@
 
 import codecs
 import logging
-import os
-import os.path
 import unicodedata
 from pathlib import Path
 from typing import Callable
@@ -48,7 +46,7 @@ from corpustools import (
 )
 from corpustools.corpuspath import CorpusPath
 
-HERE = os.path.dirname(__file__)
+HERE = Path(__file__).parent
 
 logging.basicConfig(level=logging.WARNING)
 LOGGER = logging.getLogger(__name__)
@@ -59,9 +57,9 @@ def newer_group(sources: list[Path], target: Path) -> bool:
         # Target does not exist, so we say that "sources are newer"
         return True
 
-    target_mtime = os.path.getmtime(target)
+    target_mtime = target.stat().st_mtime
 
-    return any(os.path.getmtime(src) > target_mtime for src in sources)
+    return any(src.stat().st_mtime > target_mtime for src in sources)
 
 
 class Converter:
@@ -91,7 +89,7 @@ class Converter:
 
         self.metadata.set_lang_genre_xsl()
         with util.ignored(OSError):
-            os.makedirs(self.tmpdir)
+            self.tmpdir.mkdir(parents=True, exist_ok=True)
 
     @property
     def dependencies(self):
@@ -117,13 +115,13 @@ class Converter:
         ]
 
     @staticmethod
-    def get_dtd_location():
+    def get_dtd_location() -> Path:
         """Return the path to the corpus dtd file."""
-        return os.path.join(HERE, "dtd/corpus.dtd")
+        return HERE / "dtd" / "corpus.dtd"
 
     def validate_complete(self, complete: etree.Element):
         """Validate the complete document."""
-        dtd = etree.DTD(Converter.get_dtd_location())
+        dtd = etree.DTD(str(Converter.get_dtd_location()))
 
         if not dtd.validate(complete):
             self.names.log.write_text(
@@ -344,7 +342,7 @@ class Converter:
             and newer_group(self.dependencies, self.names.converted)
         ):
             with util.ignored(OSError):
-                os.makedirs(os.path.dirname(self.names.converted))
+                self.names.converted.parent.mkdir(parents=True, exist_ok=True)
 
             if self.ocr or self.standard or self.goldstandard:
                 complete = self.make_complete(languageguesser)
