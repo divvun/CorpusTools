@@ -90,9 +90,9 @@
     "semantic_hash": "4c98590474599b0fa632003cb971ba06"
   },
   "pyproject.toml": {
-    "mtime": 1793113583.3442392,
-    "seen": 1793119693.777998,
-    "ast_hash": "24f0174631efab2810d6a1b75fbc7b3d",
+    "mtime": 1793196843.2352605,
+    "seen": 1793196868.580825,
+    "ast_hash": "b8c380e4fd23855e6342e56c1cf4470d",
     "semantic_hash": ""
   },
   ".github/workflows/docs.yml": {
@@ -354,8 +354,8 @@
     "semantic_hash": ""
   },
   "src/corpustools/avvirdigital.py": {
-    "mtime": 1793119618.3587887,
-    "seen": 1793119693.778002,
+    "mtime": 1793196537.329924,
+    "seen": 1793196561.751549,
     "ast_hash": "1ad84efdc80dbae60905fed95e5820a6",
     "semantic_hash": ""
   },
@@ -390,9 +390,9 @@
     "semantic_hash": ""
   },
   "src/corpustools/ccat.py": {
-    "mtime": 1793054910.5843465,
-    "seen": 1793119693.778005,
-    "ast_hash": "502598e372d1bd864fc6a69ec6c945f8",
+    "mtime": 1793196804.9055395,
+    "seen": 1793196822.854756,
+    "ast_hash": "ac09ac26044b2dd2a3d3d3af9e051de8",
     "semantic_hash": ""
   },
   "src/corpustools/ces2homegrown.py": {
@@ -450,9 +450,9 @@
     "semantic_hash": ""
   },
   "src/corpustools/converter.py": {
-    "mtime": 1793119761.941646,
-    "seen": 1793119971.867367,
-    "ast_hash": "d0fcfcf120e825efacc9487956f1d378",
+    "mtime": 1793144145.3585477,
+    "seen": 1793144972.54395,
+    "ast_hash": "0df32be4c05be2d8312cb437aa2f8ea3",
     "semantic_hash": ""
   },
   "src/corpustools/convertermanager.py": {
@@ -465,12 +465,6 @@
     "mtime": 1793054910.5877507,
     "seen": 1793119693.7780101,
     "ast_hash": "823294f91bbc8161758d69a2ecee56e0",
-    "semantic_hash": ""
-  },
-  "src/corpustools/corpusxmlfile.py": {
-    "mtime": 1793054910.5879679,
-    "seen": 1793119693.7780108,
-    "ast_hash": "e94256462ef7f94a7647e7b6ce89b200",
     "semantic_hash": ""
   },
   "src/corpustools/counter.py": {
@@ -510,9 +504,9 @@
     "semantic_hash": ""
   },
   "src/corpustools/dupe_finder.py": {
-    "mtime": 1793054910.5902898,
-    "seen": 1793119693.778014,
-    "ast_hash": "edb423197792999d90cca93110b6ab2e",
+    "mtime": 1793144145.3615832,
+    "seen": 1793144972.543956,
+    "ast_hash": "e01bf8149bcf8c5a68f9a3da66f433c6",
     "semantic_hash": ""
   },
   "src/corpustools/epubchooser.py": {
@@ -558,9 +552,9 @@
     "semantic_hash": ""
   },
   "src/corpustools/gold2correct.py": {
-    "mtime": 1793119109.791624,
-    "seen": 1793119693.778018,
-    "ast_hash": "06303ab30d7c39bb19eb778f6316b924",
+    "mtime": 1793196804.4809923,
+    "seen": 1793196822.854773,
+    "ast_hash": "0d9082e8d4623dca196d120ed9e82846",
     "semantic_hash": ""
   },
   "src/corpustools/html_cleaner.py": {
@@ -798,9 +792,9 @@
     "semantic_hash": ""
   },
   "src/corpustools/trainingcorpusmaker.py": {
-    "mtime": 1793054910.6868815,
-    "seen": 1793119693.778035,
-    "ast_hash": "758079583c8f45fb21994cd4faa3faf3",
+    "mtime": 1793144145.3663712,
+    "seen": 1793144972.543987,
+    "ast_hash": "939435f4863f8485b23293ff3593b263",
     "semantic_hash": ""
   },
   "src/corpustools/typosfile.py": {
@@ -869,12 +863,6 @@
     "ast_hash": "bf794efc299e6443e1ea5f61e0515b7b",
     "semantic_hash": ""
   },
-  "tests/test_analyser.py": {
-    "mtime": 1793054911.0136333,
-    "seen": 1793119693.7780402,
-    "ast_hash": "e902924eb764725598f152cacb9c8957",
-    "semantic_hash": ""
-  },
   "tests/test_avvirconverter.py": {
     "mtime": 1793054911.014033,
     "seen": 1793119693.7780402,
@@ -882,8 +870,8 @@
     "semantic_hash": ""
   },
   "tests/test_avvirdigital.py": {
-    "mtime": 1793119838.6212757,
-    "seen": 1793119971.86741,
+    "mtime": 1793120024.9151955,
+    "seen": 1793136696.747259,
     "ast_hash": "59721f843656678d76f9225256cb115c",
     "semantic_hash": ""
   },
@@ -894,9 +882,9 @@
     "semantic_hash": ""
   },
   "tests/test_ccat.py": {
-    "mtime": 1793054911.015032,
-    "seen": 1793119693.778042,
-    "ast_hash": "fb71727d8fc1dfb029bc948a500ec62d",
+    "mtime": 1793196804.4170997,
+    "seen": 1793196822.854808,
+    "ast_hash": "dc8857255ea3a598bb953b40a3fc9529",
     "semantic_hash": ""
   },
   "tests/test_compare_tmx_goldstandard.py": {
@@ -915,12 +903,6 @@
     "mtime": 1793054911.0161254,
     "seen": 1793119693.7780428,
     "ast_hash": "0e69b1cea927e01c85bad33252b3fdc9",
-    "semantic_hash": ""
-  },
-  "tests/test_corpusxmlfile.py": {
-    "mtime": 1793054911.0165548,
-    "seen": 1793119693.7780428,
-    "ast_hash": "b68ac108ef70f276feb88bc2c128cd05",
     "semantic_hash": ""
   },
   "tests/test_decode.py": {
@@ -1479,6 +1461,12 @@
     "mtime": 1793054910.8707108,
     "seen": 1793119693.778108,
     "ast_hash": "5decf359ddc636095050c8ca4a31140b",
+    "semantic_hash": ""
+  },
+  "src/corpustools/pick_goldstandard.py": {
+    "mtime": 1793196804.5453417,
+    "seen": 1793196822.854787,
+    "ast_hash": "85b41142fd7dcdb83fb3b43f8e223c08",
     "semantic_hash": ""
   }
 }
