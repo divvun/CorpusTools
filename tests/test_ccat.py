@@ -58,6 +58,7 @@ class TestCcatCLI(unittest.TestCase):
                 assert process.stderr is not None
                 process.stdout.close()
                 stderr = process.stderr.read()
+                process.stderr.close()
                 return_code = process.wait()
 
                 assert return_code == 1

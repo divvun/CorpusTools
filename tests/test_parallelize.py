@@ -18,7 +18,6 @@
 #
 
 
-import codecs
 import doctest
 import os
 import unittest
@@ -174,7 +173,7 @@ class TestTmx(unittest.TestCase):
         toktmx_txt_name = os.path.join(
             HERE, "parallelize_data/aarseth2-n.htm.toktmx.as.txt"
         )
-        with codecs.open(toktmx_txt_name, encoding="utf8") as toktmx_txt:
+        with open(toktmx_txt_name, encoding="utf8", newline="") as toktmx_txt:
             string_list = toktmx_txt.read().split("\n")
 
             nob_list = []
@@ -192,7 +191,7 @@ class TestTmx(unittest.TestCase):
         toktmx_txt_name = os.path.join(
             HERE, "parallelize_data/aarseth2-n.htm.toktmx.as.txt"
         )
-        with codecs.open(toktmx_txt_name, encoding="utf8") as toktmx_txt:
+        with open(toktmx_txt_name, encoding="utf8", newline="") as toktmx_txt:
             want_list = [l for l in toktmx_txt.readlines()]
             # self.maxDiff = None
             self.assertEqual(self.tmx.tmx_to_stringlist(), want_list)

@@ -17,7 +17,6 @@
 #
 """Convert plaintext files to the Giella xml format."""
 
-import codecs
 import io
 import re
 from pathlib import Path
@@ -41,9 +40,11 @@ class PlaintextConverter(basicconverter.BasicConverter):
             (str): The decoded string
         """
         try:
-            content = codecs.open(self.orig.as_posix(), encoding="utf8").read()
+            with open(self.orig, encoding="utf8", newline="") as infile:
+                content = infile.read()
         except ValueError:
-            content = codecs.open(self.orig.as_posix(), encoding="latin1").read()
+            with open(self.orig, encoding="latin1", newline="") as infile:
+                content = infile.read()
 
         content = self.strip_chars(content.replace("\r\n", "\n"))
 

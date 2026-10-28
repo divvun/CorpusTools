@@ -18,7 +18,6 @@
 #
 """Test conversion of plaintext files."""
 
-import codecs
 import io
 import os
 
@@ -44,11 +43,12 @@ class TestPlaintextConverter(xmltester.XMLTester):
         got = plaintext.to_unicode()
 
         # Ensure that the data in want is unicode
-        file_ = codecs.open(
-            os.path.join(HERE, "converter_data/winsami2-test-utf8.txt"), encoding="utf8"
-        )
-        want = file_.read()
-        file_.close()
+        with open(
+            os.path.join(HERE, "converter_data/winsami2-test-utf8.txt"),
+            encoding="utf8",
+            newline="",
+        ) as file_:
+            want = file_.read()
 
         self.assertEqual(got, want)
 

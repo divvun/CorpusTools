@@ -44,7 +44,7 @@ class TestXslMaker(XMLTester):
         # The import href is different for each user testing, so just
         # check that it looks OK:
         import_elt = got.find(
-            "/xsl:import", namespaces={"xsl": "http://www.w3.org/1999/XSL/Transform"}
+            "./xsl:import", namespaces={"xsl": "http://www.w3.org/1999/XSL/Transform"}
         )
         self.assertTrue(import_elt.attrib["href"].startswith("file:///"))
         self.assertTrue(import_elt.attrib["href"].endswith("common.xsl"))
