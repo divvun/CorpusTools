@@ -21,11 +21,13 @@ import argparse
 import logging
 
 from git import GitCommandError
+from lxml import etree
 
 from corpustools import argparse_version, versioncontrol
-from corpustools.ccat import make_options, parse_file, process_file
+from corpustools.ccat import make_options, process_file
+from corpustools.converter import Converter
 from corpustools.convertermanager import collect_files, convert, sanity_check
-from corpustools.corpuspath import make_corpus_path
+from corpustools.corpuspath import CorpusPath, make_corpus_path
 from corpustools.move_files import mover
 
 LOGGER = logging.getLogger(__name__)
@@ -53,6 +55,43 @@ def parse_options():
 
     return args
 
+
+def move_orig_to_correct(orig_file: CorpusPath, text: str):
+    """Move the original file to a .correct.txt file.
+
+    Args:
+        orig_file: The original goldstandard file.
+        text: The text to write to the .correct.txt file.
+    """
+    correct_path = make_corpus_path(
+        orig_file.orig.with_suffix(".correct.txt").as_posix()
+    )
+    mover(
+        orig_file,
+        correct_path,
+    )
+    correct_file = orig_file.orig.with_suffix(".correct.txt")
+    correct_file.write_text(text, encoding="utf-8")
+    metadata = make_corpus_path(correct_file.as_posix()).metadata
+    metadata.set_variable("conversion_status", "correct")
+    metadata.write_file()
+
+
+def orig_to_text(orig_file: CorpusPath) -> str:
+    """Extract the text from a file.
+
+    Args:
+        orig_file: The original goldstandard file.
+
+    Returns:
+        The content of the file as a string.
+    """
+    orig_converter = Converter(orig_file)
+    tree = orig_converter.to_giella(orig_file.orig)
+    options = make_options(all_paragraphs=True)
+    return process_file(options, etree.ElementTree(tree)).getvalue().replace(" ¶", "\n")
+
+
 def main():
     """Convert goldstandard files to .correct.txt files."""
     args = parse_options()
@@ -75,18 +114,14 @@ def main():
         except (AttributeError, NameError) as error:
             print(f"Conversion failed for {orig_file.orig}: {error}")
             continue
-            
 
         if not orig_file.converted.exists():
             print(f"\nCould not convert {orig_file}")
             continue
 
-        options = make_options(all_paragraphs=True)  # get all text
-        text = process_file(
-            options, parse_file(orig_file.converted.absolute().as_posix())
-        ).getvalue().replace(" ¶", "\n")
-
+        text = orig_to_text(orig_file)
         test_text = "".join(line.strip() for line in text.splitlines())
+
         if not test_text:
             print(
                 f"\nFile {orig_file.orig} is empty after conversion, "
@@ -95,18 +130,7 @@ def main():
             continue
 
         try:
-            correct_path = make_corpus_path(
-                orig_file.orig.with_suffix(".correct.txt").as_posix()
-            )
-            mover(
-                orig_file,
-                correct_path,
-            )
-            correct_file = orig_file.orig.with_suffix(".correct.txt")
-            correct_file.write_text(text, encoding="utf-8")
-            metadata = make_corpus_path(correct_file.as_posix()).metadata
-            metadata.set_variable("conversion_status", "correct")
-            metadata.write_file()
+            move_orig_to_correct(orig_file, text)
 
         except GitCommandError as error:
             if "destination exists" in str(error):
