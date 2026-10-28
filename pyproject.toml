@@ -1,6 +1,6 @@
 [project]
 name = "corpustools"
-version = "3.0.0"
+version = "3.1.0"
 description = "Manage giellalt corpora"
 authors = [
     { name = "Børre Gaup", email = "albbas@gmail.com" },
@@ -81,7 +81,8 @@ bibel_no_aligner = "corpustools.bibel_no_aligner:main"
 bibel_no_crawler = "corpustools.bibel_no_crawler:main"
 ces_to_bibel_no = "corpustools.ces2homegrown:main"
 gold2corr = "corpustools.gold2correct:main"
-avvirdigi = "corpustools.avvirdigital:main"
+pick_goldstandard = "corpustools.pick_goldstandard:main"
+
 
 [tool.uv]
 package = true
