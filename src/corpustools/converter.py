@@ -36,7 +36,6 @@ from corpustools import (
     error_annotated_converter,
     htmlcontentconverter,
     languagedetector,
-    ocrcontentconverter,
     plaintextconverter,
     svgconverter,
     text_cat,
@@ -87,11 +86,6 @@ def is_standard(names: CorpusPath) -> bool:
     return names.metadata.get_variable("conversion_status") == "standard"
 
 
-def is_ocr(names: CorpusPath) -> bool:
-    """Return a boolean indicating if the file is convertable."""
-    return names.metadata.get_variable("conversion_status") == "ocr"
-
-
 def is_goldstandard(names: CorpusPath) -> bool:
     """Return a boolean indicating if the file is a gold standard doc."""
     return names.metadata.get_variable("conversion_status") in GOLDSTANDARD_STATUSES
@@ -137,7 +131,6 @@ def to_giella(path: Path) -> etree.Element:
         ".docx": htmlcontentconverter.convert2intermediate,
         ".epub": htmlcontentconverter.convert2intermediate,
         ".html": htmlcontentconverter.convert2intermediate,
-        ".ocr": ocrcontentconverter.convert2intermediate,
         ".odt": htmlcontentconverter.convert2intermediate,
         ".pdf": htmlcontentconverter.convert2intermediate,
         ".rtf": htmlcontentconverter.convert2intermediate,
@@ -332,7 +325,7 @@ def write_complete(
     with util.ignored(OSError):
         names.converted.parent.mkdir(parents=True, exist_ok=True)
 
-    if is_ocr(names) or is_standard(names) or is_goldstandard(names):
+    if is_standard(names) or is_goldstandard(names):
         complete = make_complete(names, languageguesser)
 
         if has_content(complete):

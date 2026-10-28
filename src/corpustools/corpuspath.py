@@ -319,7 +319,7 @@ class CorpusPath:
         if conversion_status is None:
             raise ValueError(f"No conversion_status set in {self.orig}")
 
-        return (conversion_status in ["standard", "ocr"] and not goldstandard) or (
+        return (conversion_status in ["standard"] and not goldstandard) or (
             (
                 conversion_status.startswith("correct")
                 or conversion_status == "goldstandard"
