@@ -16,84 +16,50 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-"""Test the Converter class."""
+"""Test the converter module."""
 
-
-import os
+import tempfile
+from pathlib import Path
 
 from lxml import etree
 
-from corpustools import converter, text_cat, util, xslsetter
+from corpustools import converter, util
+from corpustools.corpuspath import CorpusPath
 from tests.xmltester import XMLTester
-
-HERE = os.path.dirname(__file__)
-LANGUAGEGUESSER = text_cat.Classifier(None)
 
 
 class TestConverter(XMLTester):
-    """Test the converter class."""
+    """Test the converter functions."""
 
     def setUp(self):
-        self.converter_inside_orig = converter.Converter(
-            os.path.join(
-                HERE,
-                "converter_data/fakecorpus/orig/nob/admin/samediggi-" "article-16.html",
-            ),
-            True,
-        )
-
-    def test_get_orig(self):
-        """Get the original name."""
-        self.assertEqual(
-            self.converter_inside_orig.names.orig,
-            os.path.join(
-                HERE,
-                "converter_data/fakecorpus/orig/nob/admin/samediggi-article-" "16.html",
-            ),
-        )
-
-    def test_get_xsl(self):
-        """Get the name of the metadata file."""
-        self.assertEqual(
-            self.converter_inside_orig.names.xsl,
-            os.path.join(
-                HERE,
-                "converter_data/fakecorpus/orig/nob/admin/samediggi-"
-                "article-16.html.xsl",
-            ),
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.names = CorpusPath(
+            root=Path(self.tmp.name),
+            lang="nob",
+            filepath=Path("admin/samediggi-article-16.html"),
         )
 
     def test_get_tmpdir(self):
         """Get the temp dir."""
         self.assertEqual(
-            self.converter_inside_orig.tmpdir,
-            os.path.join(HERE, "converter_data/fakecorpus/tmp"),
+            converter.get_tmpdir(self.names),
+            Path(self.tmp.name) / "corpus-nob" / "tmp",
         )
 
-    def test_get_corpusdir(self):
-        """Get the corpus directory."""
+    def test_dependencies(self):
+        """The orig file and the metadata file are dependencies."""
         self.assertEqual(
-            self.converter_inside_orig.corpusdir.rstrip(os.path.sep),
-            os.path.join(HERE, "converter_data/fakecorpus"),
-        )
-
-    def test_get_converted_name(self):
-        """Get the name of the converted file."""
-        self.assertEqual(
-            self.converter_inside_orig.names.converted,
-            os.path.join(
-                HERE,
-                "converter_data/fakecorpus/converted/nob/admin/samediggi-"
-                "article-16.html.xml",
-            ),
+            converter.dependencies(self.names), [self.names.orig, self.names.xsl]
         )
 
     def test_validate_complete(self):
         """Check that an exception is raised if a document is invalid."""
+        self.names.log.parent.mkdir(parents=True)
         complete = etree.fromstring("<document/>")
 
         self.assertRaises(
-            util.ConversionError, self.converter_inside_orig.validate_complete, complete
+            util.ConversionError, converter.validate_complete, complete, self.names
         )
 
     def test_detect_quote_is_skipped_on_errormarkup_documents(self):
@@ -135,9 +101,7 @@ class TestConverter(XMLTester):
         """
         got = etree.fromstring(want_string)
 
-        conv = converter.Converter("orig/sme/admin/blogg_5.correct.txt")
-        conv.metadata = xslsetter.MetadataHandler(conv.names.xsl, create=True)
-        conv.metadata.set_variable("conversion_status", "correct")
-        conv.fix_document(got)
+        self.names.metadata.set_variable("conversion_status", "correct")
+        converter.fix_document(got, self.names)
 
         self.assertXmlEqual(got, etree.fromstring(want_string))

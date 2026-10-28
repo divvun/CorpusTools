@@ -25,7 +25,7 @@ from lxml import etree
 
 from corpustools import argparse_version, versioncontrol
 from corpustools.ccat import make_options, process_file
-from corpustools.converter import Converter
+from corpustools.converter import to_giella
 from corpustools.convertermanager import collect_files, convert, sanity_check
 from corpustools.corpuspath import CorpusPath, make_corpus_path
 from corpustools.move_files import mover
@@ -86,8 +86,7 @@ def orig_to_text(orig_file: CorpusPath) -> str:
     Returns:
         The content of the file as a string.
     """
-    orig_converter = Converter(orig_file)
-    tree = orig_converter.to_giella(orig_file.orig)
+    tree = to_giella(orig_file.orig)
     options = make_options(all_paragraphs=True)
     return process_file(options, etree.ElementTree(tree)).getvalue().replace(" ¶", "\n")
 

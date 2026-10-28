@@ -23,7 +23,7 @@ import os
 from collections import defaultdict
 from datetime import date
 
-from corpustools import argparse_version, converter, convertermanager
+from corpustools import argparse_version, convertermanager
 
 logging.basicConfig(level=logging.CRITICAL)
 
@@ -58,19 +58,18 @@ def count_files(path):
     counter = defaultdict(int)
     lacking_files = defaultdict(set)
     for f in files:
-        c = converter.Converter(f)
-        if os.path.exists(c.names.converted):
+        if os.path.exists(f.converted):
             counter["con"] += 1
         else:
-            lacking_files["con"].add(c.names.orig)
+            lacking_files["con"].add(f.orig)
 
         for fst in ["xfst", "hfst"]:
             todays_analysed = f"/analysed.{today}/{fst}/"
-            if os.path.exists(c.names.analysed.replace("/analysed/", todays_analysed)):
+            if os.path.exists(f.analysed.replace("/analysed/", todays_analysed)):
                 counter[fst] += 1
         else:
-            if os.path.exists(c.names.converted):
-                lacking_files["ana"].add(c.names.converted)
+            if os.path.exists(f.converted):
+                lacking_files["ana"].add(f.converted)
     return (
         len(files),
         counter["con"],

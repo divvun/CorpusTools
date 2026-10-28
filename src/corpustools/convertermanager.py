@@ -51,8 +51,7 @@ def convert(orig_file: CorpusPath, lazy_conversion: bool = False) -> None:
             conversion.
     """
     try:
-        conv = converter.Converter(orig_file, lazy_conversion=lazy_conversion)
-        conv.write_complete(languageguesser())
+        converter.write_complete(orig_file, languageguesser(), lazy_conversion)
     except (
         util.ConversionError,
         ValueError,
@@ -197,12 +196,12 @@ def parse_options():
 def sanity_check():
     """Check that needed programs and environment variables are set."""
     util.sanity_check(["pdftotext", "latex2html", "pandoc"])
-    if not os.path.isfile(converter.Converter.get_dtd_location()):
+    if not converter.get_dtd_location().is_file():
         raise util.SetupError(
             "Couldn't find {}\n"
             "Check that GTHOME points at the right directory "
             "(currently: {}).".format(
-                converter.Converter.get_dtd_location(), os.environ["GTHOME"]
+                converter.get_dtd_location(), os.environ["GTHOME"]
             )
         )
 

@@ -15,11 +15,12 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-"""This file contains classes to convert files to the Giella xml format."""
+"""This file contains functions to convert files to the Giella xml format."""
 
 import codecs
 import logging
 import unicodedata
+from functools import partial
 from pathlib import Path
 from typing import Callable
 
@@ -51,6 +52,20 @@ HERE = Path(__file__).parent
 logging.basicConfig(level=logging.WARNING)
 LOGGER = logging.getLogger(__name__)
 
+MIXED_TO_UNICODE = {
+    "e4": "ä",
+    "85": "…",  # u'\u2026' ... character.
+    "96": "–",  # u'\u2013' en-dash
+    "97": "—",  # u'\u2014' em-dash
+    "91": "‘",  # u'\u2018' left single quote
+    "92": "’",  # u'\u2019' right single quote
+    "93": "“",  # u'\u201C' left double quote
+    "94": "”",  # u'\u201D' right double quote
+    "95": "•",  # u'\u2022' bullet
+}
+
+GOLDSTANDARD_STATUSES = ["goldstandard", "correct"]
+
 
 def newer_group(sources: list[Path], target: Path) -> bool:
     if not target.exists():
@@ -62,303 +77,271 @@ def newer_group(sources: list[Path], target: Path) -> bool:
     return any(src.stat().st_mtime > target_mtime for src in sources)
 
 
-class Converter:
-    """Take care of data common to all Converter classes."""
+def dependencies(names: CorpusPath) -> list[Path]:
+    """Return files that converted files depend on."""
+    return [names.orig, names.xsl]
 
-    def __init__(
-        self,
-        filename: CorpusPath,
-        lazy_conversion: bool = False,
-        write_intermediate: bool = False,
-    ):
-        """Initialise the Converter class.
 
-        Args:
-            filename: the path to the file that should be converted
-            write_intermediate: whether intermediate versions of the
-                 converted document should be written (used for debugging purposes).
-        """
-        codecs.register_error("mixed", self.mixed_decoder)
-        self.names = filename
-        self.lazy_conversion = lazy_conversion
-        self.write_intermediate = write_intermediate
-        try:
-            self.metadata = self.names.metadata
-        except xslsetter.XsltError as error:
-            raise util.ConversionError(error) from error
+def is_standard(names: CorpusPath) -> bool:
+    """Return a boolean indicating if the file is convertable."""
+    return names.metadata.get_variable("conversion_status") == "standard"
 
-        self.metadata.set_lang_genre_xsl()
-        with util.ignored(OSError):
-            self.tmpdir.mkdir(parents=True, exist_ok=True)
 
-    @property
-    def dependencies(self):
-        """Return files that converted files depend on."""
-        return [self.names.orig, self.names.xsl]
+def is_ocr(names: CorpusPath) -> bool:
+    """Return a boolean indicating if the file is convertable."""
+    return names.metadata.get_variable("conversion_status") == "ocr"
 
-    @property
-    def standard(self):
-        """Return a boolean indicating if the file is convertable."""
-        return self.metadata.get_variable("conversion_status") == "standard"
 
-    @property
-    def ocr(self):
-        """Return a boolean indicating if the file is convertable."""
-        return self.metadata.get_variable("conversion_status") == "ocr"
+def is_goldstandard(names: CorpusPath) -> bool:
+    """Return a boolean indicating if the file is a gold standard doc."""
+    return names.metadata.get_variable("conversion_status") in GOLDSTANDARD_STATUSES
 
-    @property
-    def goldstandard(self) -> bool:
-        """Return a boolean indicating if the file is a gold standard doc."""
-        return self.metadata.get_variable("conversion_status") in [
-            "goldstandard",
-            "correct",
-        ]
 
-    @staticmethod
-    def get_dtd_location() -> Path:
-        """Return the path to the corpus dtd file."""
-        return HERE / "dtd" / "corpus.dtd"
+def get_tmpdir(names: CorpusPath) -> Path:
+    """Return the directory where temporary files should be placed."""
+    return names.converted_corpus_dir / "tmp"
 
-    def validate_complete(self, complete: etree.Element):
-        """Validate the complete document."""
-        dtd = etree.DTD(str(Converter.get_dtd_location()))
 
-        if not dtd.validate(complete):
-            self.names.log.write_text(
-                f"Error at: {str(util.lineno())}"
-                + "\n".join(str(entry) for entry in dtd.error_log)
-                + "\n".join(util.print_element(complete, 0, 4))
-            )
+def get_dtd_location() -> Path:
+    """Return the path to the corpus dtd file."""
+    return HERE / "dtd" / "corpus.dtd"
 
-            raise util.ConversionError(
-                "{}: Not valid XML. More info in the log file: {}".format(
-                    type(self).__name__, self.names.log
-                )
-            )
 
-    def to_giella(self, path: Path) -> etree.Element:
-        """Convert a document to the giella xml format.
+def validate_complete(complete: etree.Element, names: CorpusPath) -> None:
+    """Validate the complete document."""
+    dtd = etree.DTD(str(get_dtd_location()))
 
-        Args:
-            path: path to the document
-
-        Returns:
-            The converted document as an lxml Element.
-        """
-        chooser: dict[str, Callable[[Path], etree.Element]] = {
-            ".doc": htmlcontentconverter.convert2intermediate,
-            ".docx": htmlcontentconverter.convert2intermediate,
-            ".epub": htmlcontentconverter.convert2intermediate,
-            ".html": htmlcontentconverter.convert2intermediate,
-            ".ocr": ocrcontentconverter.convert2intermediate,
-            ".odt": htmlcontentconverter.convert2intermediate,
-            ".pdf": htmlcontentconverter.convert2intermediate,
-            ".rtf": htmlcontentconverter.convert2intermediate,
-            ".sfm": biblesfmconverter.convert2intermediate,
-            ".svg": svgconverter.convert2intermediate,
-            ".txt": plaintextconverter.convert2intermediate,
-            ".tex": htmlcontentconverter.convert2intermediate,
-            ".writenow": htmlcontentconverter.convert2intermediate,
-            ".usx": usxconverter.convert2intermediate,
-            ".correct.txt": error_annotated_converter.convert2intermediate,
-        }
-
-        str_path = path.absolute().as_posix()
-        if "avvir_xml" in str_path and path.suffix == ".xml":
-            return avvirconverter.convert2intermediate(path)
-        if "avvir_xml" in str_path and path.suffix == ".digital":
-            return avvirdigital.convert2intermediate(path)
-        elif str_path.endswith("bible.xml"):
-            return biblexmlconverter.convert2intermediate(path)
-        elif "udhr_" in str_path and path.suffix == ".xml":
-            return htmlcontentconverter.convert2intermediate(path)
-        elif path.name.endswith(".correct.txt"):
-            return error_annotated_converter.convert2intermediate(path)
-        else:
-            return chooser[path.suffix](path)
-
-    def transform_to_complete(self) -> etree.Element:
-        """Combine the intermediate xml document with its medatata."""
-        try:
-            intermediate = self.to_giella(self.names.orig)
-        except KeyError as error:
-            raise util.ConversionError(
-                "{} can not convert files of this format {}:".format(
-                    self.names.orig, str(error)
-                )
-            ) from error
-        try:
-            self.fix_document(intermediate)
-        except etree.XMLSyntaxError as error:
-            with open(self.names.log, "w") as logfile:
-                logfile.write(f"Error at: {str(util.lineno())}")
-
-            raise util.ConversionError(
-                f"Syntax error in: {self.names}\nError {str(error)}"
-            ) from error
-
-        try:
-            xsl_maker = xslmaker.XslMaker(self.metadata.tree)
-            complete = xsl_maker.transformer(intermediate)
-
-            return complete.getroot()
-        except etree.XSLTApplyError:
-            with open(self.names.log, "w") as logfile:
-                logfile.write(f"Error at: {str(util.lineno())}")
-
-            raise util.ConversionError(
-                f"Check the syntax in: {self.names.xsl}"
-            ) from None
-        except etree.XSLTParseError as error:
-            with open(self.names.log, "w") as logfile:
-                logfile.write(f"Error at: {str(util.lineno())}")
-
-            raise util.ConversionError(
-                f"XSLTParseError in: {self.names.xsl}\nError {str(error)}"
-            ) from error
-
-    def fix_document(self, complete: etree.Element) -> None:
-        """Fix a misc. issues found in converted document."""
-        fixer = documentfixer.DocumentFixer(complete)
-
-        fixer.fix_newstags()
-        fixer.soft_hyphen_to_hyph_tag()
-        self.metadata.set_variable("wordcount", fixer.calculate_wordcount())
-
-        if not self.goldstandard:
-            fixer.detect_quotes()
-
-        # The above line adds text to hyph, fix that
-        for hyph in complete.iter("hyph"):
-            hyph.text = None
-
-        if self.metadata.get_variable("mainlang") in [
-            "sma",
-            "sme",
-            "smj",
-            "smn",
-            "sms",
-            "nob",
-            "fin",
-            "swe",
-            "nno",
-            "dan",
-            "fkv",
-            "sju",
-            "sje",
-            "mhr",
-            "mrj",
-            "mns",
-        ]:
-            try:
-                mainlang = self.metadata.get_variable("mainlang")
-                if mainlang is not None:
-                    fixer.fix_body_encoding(mainlang)
-            except UserWarning as error:
-                util.print_frame(str(error))
-                util.print_frame(str(self.names.orig))
-
-    mixed_to_unicode = {
-        "e4": "ä",
-        "85": "…",  # u'\u2026' ... character.
-        "96": "–",  # u'\u2013' en-dash
-        "97": "—",  # u'\u2014' em-dash
-        "91": "‘",  # u'\u2018' left single quote
-        "92": "’",  # u'\u2019' right single quote
-        "93": "“",  # u'\u201C' left double quote
-        "94": "”",  # u'\u201D' right double quote
-        "95": "•",  # u'\u2022' bullet
-    }
-
-    def mixed_decoder(self, decode_error: UnicodeDecodeError) -> tuple[str, int]:
-        """Convert text to unicode."""
-        badstring = decode_error.object[decode_error.start : decode_error.end]
-        badhex = badstring.hex()
-        repl = self.mixed_to_unicode.get(badhex, "\ufffd")
-        if repl == "\ufffd":  # � unicode REPLACEMENT CHARACTER
-            LOGGER.warning(
-                "Skipped bad byte \\x%s, seen in %s", badhex, self.names.orig
-            )
-        return repl, decode_error.end
-
-    def fix_parallels(self, complete: etree.Element) -> None:
-        for parallel in complete.xpath(".//parallel_text"):
-            if not parallel.get("location"):
-                parallel.getparent().remove(parallel)
-
-    def make_complete(
-        self, language_guesser: text_cat.Classifier | None
-    ) -> etree.Element:
-        """Make a complete Giella xml file.
-
-        Combine the intermediate Giella xml file and the metadata into
-        a complete Giella xml file.
-        Fix the character encoding
-        Detect the languages in the xml file
-        """
-        complete = self.transform_to_complete()
-        self.validate_complete(complete)
-        self.fix_parallels(complete)
-        lang_detector = languagedetector.LanguageDetector(complete, language_guesser)
-        lang_detector.detect_language()
-
-        # Add whitespace to separate header, body and paragraphs
-        # and make it easier to see where the diffs are
-        header = complete.find("header")
-        if header is not None:
-            header.tail = "\n"
-        body = complete.find("body")
-        if body is not None:
-            body.text = "\n"
-        for para in complete.iter("p"):
-            para.tail = "\n"
-
-        return complete
-
-    @staticmethod
-    def has_content(complete: etree.Element) -> int:
-        """Find out if the xml document has any content.
-
-        Args:
-            complete (lxml.etree.Element): a etree element containing
-                the converted document.
-
-        Returns:
-            (int): The length of the content in complete.
-        """
-        options = ccat.make_options(all_paragraphs=True, hyph_replacement="")
-        return len(
-            ccat.process_file(options, etree.ElementTree(complete)).getvalue()
+    if not dtd.validate(complete):
+        names.log.write_text(
+            f"Error at: {str(util.lineno())}"
+            + "\n".join(str(entry) for entry in dtd.error_log)
+            + "\n".join(util.print_element(complete, 0, 4))
         )
 
-    def write_complete(self, languageguesser: text_cat.Classifier | None) -> None:
-        """Write the complete converted document to disk.
+        raise util.ConversionError(
+            f"Converter: Not valid XML. More info in the log file: {names.log}"
+        )
 
-        Args:
-            languageguesser (text.Classifier): a text.Classifier
-        """
-        if not self.lazy_conversion or (
-            self.lazy_conversion
-            and newer_group(self.dependencies, self.names.converted)
-        ):
-            with util.ignored(OSError):
-                self.names.converted.parent.mkdir(parents=True, exist_ok=True)
 
-            if self.ocr or self.standard or self.goldstandard:
-                complete = self.make_complete(languageguesser)
+def to_giella(path: Path) -> etree.Element:
+    """Convert a document to the giella xml format.
 
-                if self.has_content(complete):
-                    with open(self.names.converted, "w") as converted:
-                        print(
-                            unicodedata.normalize(
-                                "NFC", etree.tostring(complete, encoding="unicode")
-                            ),
-                            file=converted,
-                        )
-                else:
-                    LOGGER.error("%s has no text", self.names.orig)
+    Args:
+        path: path to the document
 
-    @property
-    def tmpdir(self):
-        """Return the directory where temporary files should be placed."""
-        return self.names.converted_corpus_dir / "tmp"
+    Returns:
+        The converted document as an lxml Element.
+    """
+    chooser: dict[str, Callable[[Path], etree.Element]] = {
+        ".doc": htmlcontentconverter.convert2intermediate,
+        ".docx": htmlcontentconverter.convert2intermediate,
+        ".epub": htmlcontentconverter.convert2intermediate,
+        ".html": htmlcontentconverter.convert2intermediate,
+        ".ocr": ocrcontentconverter.convert2intermediate,
+        ".odt": htmlcontentconverter.convert2intermediate,
+        ".pdf": htmlcontentconverter.convert2intermediate,
+        ".rtf": htmlcontentconverter.convert2intermediate,
+        ".sfm": biblesfmconverter.convert2intermediate,
+        ".svg": svgconverter.convert2intermediate,
+        ".txt": plaintextconverter.convert2intermediate,
+        ".tex": htmlcontentconverter.convert2intermediate,
+        ".writenow": htmlcontentconverter.convert2intermediate,
+        ".usx": usxconverter.convert2intermediate,
+        ".correct.txt": error_annotated_converter.convert2intermediate,
+    }
+
+    str_path = path.absolute().as_posix()
+    if "avvir_xml" in str_path and path.suffix == ".xml":
+        return avvirconverter.convert2intermediate(path)
+    if "avvir_xml" in str_path and path.suffix == ".digital":
+        return avvirdigital.convert2intermediate(path)
+    elif str_path.endswith("bible.xml"):
+        return biblexmlconverter.convert2intermediate(path)
+    elif "udhr_" in str_path and path.suffix == ".xml":
+        return htmlcontentconverter.convert2intermediate(path)
+    elif path.name.endswith(".correct.txt"):
+        return error_annotated_converter.convert2intermediate(path)
+    else:
+        return chooser[path.suffix](path)
+
+
+def transform_to_complete(names: CorpusPath) -> etree.Element:
+    """Combine the intermediate xml document with its medatata."""
+    try:
+        intermediate = to_giella(names.orig)
+    except KeyError as error:
+        raise util.ConversionError(
+            f"{names.orig} can not convert files of this format {str(error)}:"
+        ) from error
+    try:
+        fix_document(intermediate, names)
+    except etree.XMLSyntaxError as error:
+        with open(names.log, "w") as logfile:
+            logfile.write(f"Error at: {str(util.lineno())}")
+
+        raise util.ConversionError(
+            f"Syntax error in: {names}\nError {str(error)}"
+        ) from error
+
+    try:
+        xsl_maker = xslmaker.XslMaker(names.metadata.tree)
+        complete = xsl_maker.transformer(intermediate)
+
+        return complete.getroot()
+    except etree.XSLTApplyError:
+        with open(names.log, "w") as logfile:
+            logfile.write(f"Error at: {str(util.lineno())}")
+
+        raise util.ConversionError(f"Check the syntax in: {names.xsl}") from None
+    except etree.XSLTParseError as error:
+        with open(names.log, "w") as logfile:
+            logfile.write(f"Error at: {str(util.lineno())}")
+
+        raise util.ConversionError(
+            f"XSLTParseError in: {names.xsl}\nError {str(error)}"
+        ) from error
+
+
+def fix_document(complete: etree.Element, names: CorpusPath) -> None:
+    """Fix a misc. issues found in converted document."""
+    fixer = documentfixer.DocumentFixer(complete)
+
+    fixer.fix_newstags()
+    fixer.soft_hyphen_to_hyph_tag()
+    names.metadata.set_variable("wordcount", fixer.calculate_wordcount())
+
+    if not is_goldstandard(names):
+        fixer.detect_quotes()
+
+    # The above line adds text to hyph, fix that
+    for hyph in complete.iter("hyph"):
+        hyph.text = None
+
+    if names.metadata.get_variable("mainlang") in [
+        "sma",
+        "sme",
+        "smj",
+        "smn",
+        "sms",
+        "nob",
+        "fin",
+        "swe",
+        "nno",
+        "dan",
+        "fkv",
+        "sju",
+        "sje",
+        "mhr",
+        "mrj",
+        "mns",
+    ]:
+        try:
+            mainlang = names.metadata.get_variable("mainlang")
+            if mainlang is not None:
+                fixer.fix_body_encoding(mainlang)
+        except UserWarning as error:
+            util.print_frame(str(error))
+            util.print_frame(str(names.orig))
+
+
+def mixed_decoder(orig: Path, decode_error: UnicodeDecodeError) -> tuple[str, int]:
+    """Convert text to unicode."""
+    badstring = decode_error.object[decode_error.start : decode_error.end]
+    badhex = badstring.hex()
+    repl = MIXED_TO_UNICODE.get(badhex, "\ufffd")
+    if repl == "\ufffd":  # � unicode REPLACEMENT CHARACTER
+        LOGGER.warning("Skipped bad byte \\x%s, seen in %s", badhex, orig)
+    return repl, decode_error.end
+
+
+def fix_parallels(complete: etree.Element) -> None:
+    for parallel in complete.xpath(".//parallel_text"):
+        if not parallel.get("location"):
+            parallel.getparent().remove(parallel)
+
+
+def make_complete(
+    names: CorpusPath, language_guesser: text_cat.Classifier | None
+) -> etree.Element:
+    """Make a complete Giella xml file.
+
+    Combine the intermediate Giella xml file and the metadata into
+    a complete Giella xml file.
+    Fix the character encoding
+    Detect the languages in the xml file
+    """
+    complete = transform_to_complete(names)
+    validate_complete(complete, names)
+    fix_parallels(complete)
+    lang_detector = languagedetector.LanguageDetector(complete, language_guesser)
+    lang_detector.detect_language()
+
+    # Add whitespace to separate header, body and paragraphs
+    # and make it easier to see where the diffs are
+    header = complete.find("header")
+    if header is not None:
+        header.tail = "\n"
+    body = complete.find("body")
+    if body is not None:
+        body.text = "\n"
+    for para in complete.iter("p"):
+        para.tail = "\n"
+
+    return complete
+
+
+def has_content(complete: etree.Element) -> int:
+    """Find out if the xml document has any content.
+
+    Args:
+        complete (lxml.etree.Element): a etree element containing
+            the converted document.
+
+    Returns:
+        (int): The length of the content in complete.
+    """
+    options = ccat.make_options(all_paragraphs=True, hyph_replacement="")
+    return len(ccat.process_file(options, etree.ElementTree(complete)).getvalue())
+
+
+def write_complete(
+    names: CorpusPath,
+    languageguesser: text_cat.Classifier | None,
+    lazy_conversion: bool = False,
+) -> None:
+    """Write the complete converted document to disk.
+
+    Args:
+        names: the path to the file that should be converted
+        languageguesser: a text.Classifier
+        lazy_conversion: only convert if the dependencies are newer than the
+            converted file.
+    """
+    codecs.register_error("mixed", partial(mixed_decoder, names.orig))
+    try:
+        names.metadata.set_lang_genre_xsl()
+    except xslsetter.XsltError as error:
+        raise util.ConversionError(error) from error
+
+    with util.ignored(OSError):
+        get_tmpdir(names).mkdir(parents=True, exist_ok=True)
+
+    if lazy_conversion and not newer_group(dependencies(names), names.converted):
+        return
+
+    with util.ignored(OSError):
+        names.converted.parent.mkdir(parents=True, exist_ok=True)
+
+    if is_ocr(names) or is_standard(names) or is_goldstandard(names):
+        complete = make_complete(names, languageguesser)
+
+        if has_content(complete):
+            with open(names.converted, "w") as converted:
+                print(
+                    unicodedata.normalize(
+                        "NFC", etree.tostring(complete, encoding="unicode")
+                    ),
+                    file=converted,
+                )
+        else:
+            LOGGER.error("%s has no text", names.orig)
