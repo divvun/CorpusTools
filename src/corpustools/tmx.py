@@ -21,6 +21,7 @@
 
 import argparse
 import os
+from pathlib import Path
 
 from lxml import etree
 
@@ -29,11 +30,11 @@ from corpustools import argparse_version, corpuspath
 HERE = os.path.dirname(__file__)
 
 
-def tmx2html(filename):
+def tmx2html(filename: Path):
     """Turn a tmx file into an html file.
 
     Args:
-        filename (str): name of a tmx file
+        filename: name of a tmx file
     """
     tmx = etree.parse(filename)
     html2tmx_transformer = etree.XSLT(
