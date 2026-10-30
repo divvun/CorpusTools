@@ -281,10 +281,11 @@ def ignored(*exceptions: type[BaseException]) -> Generator[None, None, None]:
 def human_readable_filesize(num: float, suffix: str="B") -> str:
     """Returns human readable filesize"""
     # https://stackoverflow.com/questions/1094841/get-human-readable-version-of-file-size
+    kilobyte = 1024.0
     for unit in ["", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi"]:
-        if abs(num) < 1024.0:
+        if abs(num) < kilobyte:
             return f"{num:3.1f}{unit}{suffix}"
-        num /= 1024.0
+        num /= kilobyte
     return f"{num:.1f}Yi{suffix}"
 
 
