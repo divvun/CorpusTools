@@ -684,27 +684,19 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
 
         Args:
             command (list[str]): a list containing the command and
-                the arguments sent to ExternalCommandRunner.
+                the arguments sent to run_external_command.
 
         Returns:
             (bytes): byte string containing the output of the program
         """
-        runner = util.ExternalCommandRunner()
-        runner.run(command, cwd="/tmp")
-
-        if runner.returncode != 0:
-            logfile = self.orig.with_suffix(self.orig.suffix + ".log"   )
-            logfile.write_text(
-                f"stdout\n{runner.stdout}\n"
-                f"stderr\n{runner.stderr}\n"
-
-            )
+        try:
+            return util.run_external_command(command, cwd="/tmp")
+        except UserWarning as error:
+            logfile = self.orig.with_suffix(self.orig.suffix + ".log")
+            logfile.write_text(str(error), encoding="utf8")
             raise util.ConversionError(
-                    f"{command[0]} failed. More info in the log file: {logfile}"
-                )
-
-        assert runner.stdout is not None
-        return runner.stdout.decode("utf8")
+                f"{command[0]} failed. More info in the log file: {logfile}"
+            ) from error
 
     def handle_syntaxerror(self, error, lineno, invalid_input):
         """Handle an xml syntax error.
