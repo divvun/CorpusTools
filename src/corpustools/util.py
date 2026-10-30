@@ -424,12 +424,15 @@ def lang_resource_dirs(lang: str) -> list[Path]:
     ]
 
 
-def run_external_command(command: list[str], instring: str) -> str:
+def run_external_command(
+    command: list[str], instring: str = "", cwd: str | Path | None = None
+) -> str:
     """Run the command with input using subprocess.
 
     Args:
         command: a subprocess compatible command.
         instring: the input to the command.
+        cwd: the directory to run the command in.
 
     Returns:
         Analysed text.
@@ -437,10 +440,22 @@ def run_external_command(command: list[str], instring: str) -> str:
     Raises:
         UserWarning: if the command fails.
     """
-    runner = ExternalCommandRunner()
-    runner.run(command, to_stdin=instring.encode("utf8"))
+    try:
+        result = subprocess.run(
+            command,
+            input=instring.encode("utf8"),
+            capture_output=True,
+            check=False,
+            cwd=cwd,
+        )
+    except OSError:
+        raise ExecutableMissingError(
+            f"Please install {command[0]}, can not continue without it."
+        ) from None
 
-    if runner.stderr and not runner.stdout:
-        raise UserWarning(f"{' '.join(command)} failed:\n{runner.stderr}")
+    if result.stderr and not result.stdout:
+        raise UserWarning(
+            f"{' '.join(command)} failed:\n{result.stderr.decode('utf8')}"
+        )
 
-    return runner.stdout.decode("utf8")
+    return result.stdout.decode("utf8")
