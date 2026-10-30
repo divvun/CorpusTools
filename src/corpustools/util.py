@@ -278,40 +278,6 @@ def ignored(*exceptions: type[BaseException]) -> Generator[None, None, None]:
         pass
 
 
-class ExternalCommandRunner:
-    """Class to run external command through subprocess.
-
-    Attributes:
-        stdout: save the stdout of the command here.
-        stderr: save the stderr of the command here.
-        returncode: save the returncode of the command here.
-    """
-
-    def __init__(self):
-        """Initialise the ExternalCommandRunner class."""
-        self.stdout = None
-        self.stderr = None
-        self.returncode = None
-
-    def run(self, command, cwd=None, to_stdin=None):
-        """Run the command, save the result."""
-        try:
-            subp = subprocess.Popen(
-                command,
-                stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                cwd=cwd,
-            )
-        except OSError:
-            raise ExecutableMissingError(
-                f"Please install {command[0]}, can not continue without it."
-            ) from None
-
-        (self.stdout, self.stderr) = subp.communicate(to_stdin)
-        self.returncode = subp.returncode
-
-
 def human_readable_filesize(num: float, suffix: str="B") -> str:
     """Returns human readable filesize"""
     # https://stackoverflow.com/questions/1094841/get-human-readable-version-of-file-size
