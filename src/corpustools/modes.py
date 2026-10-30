@@ -18,7 +18,6 @@
 #
 """Classes and functions to handle apertium modes.xml files."""
 
-
 import os
 import sys
 
@@ -40,27 +39,33 @@ class Pipeline:
     """Make a pipeline out of modes.xml file.
 
     Attributes:
-        modename (str): a mode element from a modes.xml file.
-        giella_prefix (str): Set this variable if the installed giella files
+        modename: a mode element from a modes.xml file.
+        lang: the language that the mode is for.
+        giella_prefix: Set this variable if the installed giella files
             are not found in the standard places.
     """
 
-    def __init__(self, modename, lang, giella_prefix=None):
+    def __init__(self, modename: str, lang: str, giella_prefix: str | None = None):
         """Initialise the Pipeline class.
 
         Args:
-            modename (str): name of a mode that is expected to be found
+            modename: name of a mode that is expected to be found
                 in the modes.xml file.
-            giella_prefix (str): directory where the filenames given in the
+            lang: the language that the mode is for.
+            giella_prefix: directory where the filenames given in the
                 modes.xml file exist.
         """
         modefile = etree.parse(os.path.join(os.path.dirname(__file__), "xml/modes.xml"))
-        self.mode = modefile.find(f'.//mode[@name="{modename}"]')
+        mode = modefile.find(f'.//mode[@name="{modename}"]')
+        if mode is None:
+            raise util.ArgumentError(f"ERROR: mode {modename} not found in modes.xml")
+        self.mode: etree.Element = mode
+
         self.giella_prefix = self.valid_path(giella_prefix, lang)
         self.sanity_check()
 
     @staticmethod
-    def valid_path(giella_prefix, lang):
+    def valid_path(giella_prefix: str | None, lang: str) -> str:
         """Check if resources needed by modes exists.
 
         Args:
@@ -73,14 +78,18 @@ class Pipeline:
         Raises:
             utils.ArgumentError: if no resources are found.
         """
+        prefixes = [
+            "/usr/local",
+            "/usr",
+        ]
+        home = os.getenv("HOME")
+        if home is not None:
+            prefixes.insert(0, os.path.join(home, ".local"))
+
         if giella_prefix is not None:
             return os.path.join(giella_prefix, "share/giella", lang)
         else:
-            for prefix in [
-                os.path.join(os.getenv("HOME"), ".local"),
-                "/usr/local",
-                "/usr",
-            ]:
+            for prefix in prefixes:
                 path = os.path.join(prefix, "share/giella", lang)
                 if os.path.isdir(path) and os.listdir(path):
                     return path
@@ -88,11 +97,11 @@ class Pipeline:
         raise (util.ArgumentError(f"ERROR: found no resources for {lang}"))
 
     @staticmethod
-    def raise_unless_exists(filenames):
+    def raise_unless_exists(filenames: list[str]) -> None:
         """Raise an ArgumentError if filename does not exist.
 
         Args:
-            filenames (list of str): list of filenames harvested from the
+            filenames: list of filenames harvested from the
                 mode element.
 
         Raises:
@@ -105,17 +114,22 @@ class Pipeline:
     def sanity_check(self):
         """Check that programs and files found in a program element exist."""
         util.sanity_check(
-            [program.get("name") for program in self.mode.iter("program")]
+            [
+                name
+                for program in self.mode.iter("program")
+                if (name := program.get("name")) is not None
+            ]
         )
         self.raise_unless_exists(
             [
-                os.path.join(self.giella_prefix, file_elem.get("name"))
+                os.path.join(self.giella_prefix, file_name)
                 for file_elem in self.mode.iter("file")
+                if (file_name := file_elem.get("name")) is not None
             ]
         )
 
     @staticmethod
-    def check_error(command, error):
+    def check_error(command: list[str], error: bytes | None) -> None:
         """Print errors."""
         if error:
             print(
@@ -123,7 +137,7 @@ class Pipeline:
                 file=sys.stderr,
             )
 
-    def tag2commandpart(self, element):
+    def tag2commandpart(self, element: etree.Element) -> str:
         """Turn program elements to a command part.
 
         Args:
@@ -132,24 +146,24 @@ class Pipeline:
         Returns:
             (str): a program, a program option or a path to a file
         """
-        if element.tag == "file":
-            return os.path.join(self.giella_prefix, element.get("name"))
+        if element.tag == "file" and (name := element.get("name")) is not None:
+            return os.path.join(self.giella_prefix, name)
 
-        return element.get("name")
+        return name if (name := element.get("name")) is not None else ""
 
-    def program2command(self, program):
+    def program2command(self, program: etree.Element) -> list[str]:
         """Turn a program element to a subprocess compatible command.
 
         Args:
-            program (str): a program element
+            program: a program element
 
         Returns:
-            (list[str]): a subprocess compatible command
+            a subprocess compatible command
         """
         return [self.tag2commandpart(element) for element in program.iter()]
 
     @property
-    def commands(self):
+    def commands(self) -> list[list[str]]:
         """Make a list of subprocess compatible commands.
 
         Returns:
@@ -157,16 +171,16 @@ class Pipeline:
         """
         return [self.program2command(program) for program in self.mode.iter("program")]
 
-    def run(self, instring):
+    def run(self, instring: str) -> str:
         """Run the pipeline using input.
 
         Args:
-            instring (bytes): utf-8 encoded input to the pipeline
+            instring: utf-8 encoded input to the pipeline
 
         Returns:
-            (str): output of the pipeline
+            output of the pipeline
         """
         for command in self.commands:
             instring = util.run_external_command(command, instring)
 
-        return instring.decode("utf8")
+        return instring
