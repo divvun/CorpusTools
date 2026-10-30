@@ -18,7 +18,6 @@
 #
 """Classes and functions to sentence align two files."""
 
-
 from pathlib import Path
 from typing import Iterator
 
@@ -87,7 +86,7 @@ def make_sentences(tokenised_output: str) -> Iterator[str]:
         yield "".join(token_buffer).strip()
 
 
-def make_valid_sentences(corpus_path: CorpusPath) -> list[str]:
+def corpus_file_to_sentences(corpus_path: CorpusPath) -> list[str]:
     """Turn ccat output into full sentences.
 
     Args:
@@ -96,14 +95,26 @@ def make_valid_sentences(corpus_path: CorpusPath) -> list[str]:
     Returns:
         The ccat output has been turned into a list of full sentences.
     """
+    tokenised_output=run_external_command(
+        command="hfst-tokenise --print-all "
+        f"{get_tokeniser(corpus_path.lang)}".split(),
+        instring=ccat.ccatter(corpus_path),
+    )
+    return make_valid_sentences(tokenised_output)
+
+def make_valid_sentences(tokenised_output: str) -> list[str]:
+    """Turn tokenised output into cleaned up sentences.
+
+    Args:
+        tokenised_output: The tokenised output from the corpus file.
+
+    Returns:
+        A list of cleaned up sentences.
+    """
     return [
         " ".join([word for word in sentence.split() if word.strip()])
         for sentence in make_sentences(
-            tokenised_output=run_external_command(
-                command="hfst-tokenise --print-all "
-                f"{get_tokeniser(corpus_path.lang)}".split(),
-                instring=ccat.ccatter(corpus_path),
-            )
+            tokenised_output
         )
         if sentence.strip()
     ]
