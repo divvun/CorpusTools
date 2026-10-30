@@ -195,20 +195,6 @@ def get_lang_resource(lang, resource, fallback=None):
         return fallback
 
 
-def get_preprocess_command(lang):
-    """Get the complete proprocess command for lang.
-
-    Args:
-        lang (str): the language
-
-    Returns:
-        (list[str]): the complete preprocess command.
-    """
-    preprocess_script = os.path.join(os.environ["GTHOME"], "gt/script/preprocess")
-    sanity_check([preprocess_script])
-    abbr_fb = get_lang_resource("sme", "tools/preprocess/abbr.txt")
-    abbr = get_lang_resource(lang, "tools/preprocess/abbr.txt", abbr_fb)
-    return [preprocess_script, f"--abbr={abbr}"]
 
 
 def lineno():
@@ -268,21 +254,6 @@ def print_element(element: etree.Element, level: int, indent: int) -> list[str]:
         strings.append("\n")
 
     return strings
-
-
-def name_to_unicode(filename):
-    """Turn a filename to a unicode string.
-
-    Args:
-        filename (str): name of the file
-
-    Returns:
-        (str): A unicode string.
-    """
-    if platform.system() == "Windows":
-        return filename
-    else:
-        return filename.decode("utf-8")
 
 
 def note(msg: object) -> None:
