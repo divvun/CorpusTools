@@ -25,12 +25,11 @@ import inspect
 import operator
 import os
 import os.path
-import platform
 import subprocess
 import sys
 import time
 import traceback
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Generator
@@ -98,11 +97,11 @@ def sort_by_value(
     return sorted(table.items(), key=operator.itemgetter(1), reverse=reverse)
 
 
-def replace_all(replacements, string):
+def replace_all(replacements: list[tuple[str, str]], string: str) -> str:
     """Replace unwanted strings with wanted strings.
 
     Args:
-        replacements (list of tuple): unwanted:wanted string pairs.
+        replacements: unwanted:wanted string pairs.
         string (str): the string where replacements should be done.
 
     Returns:
@@ -114,19 +113,19 @@ def replace_all(replacements, string):
     return string
 
 
-def is_executable(fullpath):
+def is_executable(fullpath: str) -> bool:
     """Check if the program in fullpath is executable.
 
     Args:
-        fullpath (str): the path to the program or script.
+        fullpath: the path to the program or script.
 
     Returns:
-        (bool): True if fullpath contains a executable, False otherwise.
+        True if fullpath contains a executable, False otherwise.
     """
     return os.path.isfile(fullpath) and os.access(fullpath, os.X_OK)
 
 
-def path_possibilities(program):
+def path_possibilities(program: str) -> Iterator[str]:
     """Check if program is found in $PATH.
 
     Args:
@@ -141,14 +140,14 @@ def path_possibilities(program):
     )
 
 
-def executable_in_path(program):
+def executable_in_path(program: str) -> bool:
     """Check if program is in path.
 
     Args:
-        program (str): name of the program
+        program: name of the program
 
     Returns:
-        (bool): True if program is found, False otherwise.
+        True if program is found, False otherwise.
     """
     fpath, _ = os.path.split(program)
     if fpath:
@@ -160,10 +159,17 @@ def executable_in_path(program):
         )
 
 
-def sanity_check(program_list: list[str]):
+def sanity_check(program_list: list[str]) -> None:
     """Look for programs and files that are needed to do the analysis.
 
     If they don't exist, raise an exception.
+
+    Args:
+        program_list: list of programs that should be checked.
+    
+    Raises:
+        SetupError: if GTHOME is not set.
+        ExecutableMissingError: if a program is not found.
     """
     if "GTHOME" not in os.environ:
         raise SetupError(
@@ -177,7 +183,7 @@ def sanity_check(program_list: list[str]):
             )
 
 
-def get_lang_resource(lang, resource, fallback=None):
+def get_lang_resource(lang: str, resource: str, fallback:str|None=None) -> str|None:
     """Get a language resource.
 
     Args:
@@ -191,10 +197,8 @@ def get_lang_resource(lang, resource, fallback=None):
     path = os.path.join(os.environ["GTHOME"], "langs", lang, resource)
     if os.path.exists(path):
         return path
-    else:
-        return fallback
-
-
+    
+    return fallback
 
 
 def lineno():
@@ -308,7 +312,7 @@ class ExternalCommandRunner:
         self.returncode = subp.returncode
 
 
-def human_readable_filesize(num, suffix="B"):
+def human_readable_filesize(num: float, suffix: str="B") -> str:
     """Returns human readable filesize"""
     # https://stackoverflow.com/questions/1094841/get-human-readable-version-of-file-size
     for unit in ["", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi"]:
@@ -318,7 +322,7 @@ def human_readable_filesize(num, suffix="B"):
     return f"{num:.1f}Yi{suffix}"
 
 
-def human_readable_timespan(seconds):
+def human_readable_timespan(seconds:int) -> str:
     return str(datetime.timedelta(seconds=seconds))
 
 
@@ -330,7 +334,6 @@ _PARA_DEFAULT_MSG_FORMAT = (
 )
 
 
-# TODO use real types, not strings. but there is a circuar import
 def run_in_parallel(
     function: Callable[["CorpusPath"], None],
     max_workers: int,
@@ -350,10 +353,10 @@ def run_in_parallel(
     `run_in_parallel`, will be passed along to the `function`.
 
     Args:
-        function (Callable): The function to call. The first argument to
+        function: The function to call. The first argument to
             the function is the file path.
-        max_workers (int): How many worker processes to use
-        file_list (list[str]): The list of files (full paths)
+        max_workers: How many worker processes to use
+        file_list: The list of files
     """
     total_size = sum(file_sizes)
     nfiles = len(file_list)
@@ -364,7 +367,7 @@ def run_in_parallel(
         f"in parallel using {max_workers} workers"
     )
 
-    futures = {}  # future -> (filepath, filesize)
+    futures: dict[concurrent.futures.Future[Any], tuple["CorpusPath", int]] = {}
 
     try:
         with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as pool:
