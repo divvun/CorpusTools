@@ -114,22 +114,6 @@ class Pipeline:
             ]
         )
 
-    def run_external_command(self, command, instring):
-        """Run the command with input using subprocess.
-
-        Args:
-            command (list of str): a subprocess compatible command.
-            instring (bytes): the input to the command.
-
-        Returns:
-            (bytes): the output of the command
-        """
-        runner = util.ExternalCommandRunner()
-        runner.run(command, to_stdin=instring)
-        self.check_error(command, runner.stderr)
-
-        return runner.stdout
-
     @staticmethod
     def check_error(command, error):
         """Print errors."""
@@ -183,6 +167,6 @@ class Pipeline:
             (str): output of the pipeline
         """
         for command in self.commands:
-            instring = self.run_external_command(command, instring)
+            instring = util.run_external_command(command, instring)
 
         return instring.decode("utf8")
