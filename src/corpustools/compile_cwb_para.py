@@ -24,7 +24,6 @@ def analyse_tmx(corpus):
     for f in corpus.iter_files(suffix="tmx"):
         tree = ET.parse(f)
         root = tree.getroot()
-        header = root.find(".//header")
 
         tuvs = root.findall(f'.//tuv[@lang="{lang}"]')
         for tuv in tuvs:
