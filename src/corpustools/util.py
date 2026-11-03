@@ -24,7 +24,6 @@ import hashlib
 import inspect
 import operator
 import os
-import os.path
 import subprocess
 import sys
 import time
@@ -79,7 +78,7 @@ def basename_noext(fname: str, ext: str) -> str:
     Returns:
         fname without the extension.
     """
-    return os.path.basename(fname)[: -len(ext)]
+    return Path(fname).name[: -len(ext)]
 
 
 def sort_by_value(
@@ -122,7 +121,7 @@ def is_executable(fullpath: str) -> bool:
     Returns:
         True if fullpath contains a executable, False otherwise.
     """
-    return os.path.isfile(fullpath) and os.access(fullpath, os.X_OK)
+    return Path(fullpath).is_file() and os.access(fullpath, os.X_OK)
 
 
 def path_possibilities(program: str) -> Iterator[str]:
@@ -135,7 +134,7 @@ def path_possibilities(program: str) -> Iterator[str]:
         (str): possible fullpath to the program
     """
     return (
-        os.path.join(path.strip('"'), program)
+        str(Path(path.strip('"')) / program)
         for path in os.environ["PATH"].split(os.pathsep)
     )
 
@@ -149,8 +148,7 @@ def executable_in_path(program: str) -> bool:
     Returns:
         True if program is found, False otherwise.
     """
-    fpath, _ = os.path.split(program)
-    if fpath:
+    if Path(program).name != program:
         return is_executable(program)
     else:
         return any(
@@ -194,9 +192,9 @@ def get_lang_resource(lang: str, resource: str, fallback:str|None=None) -> str|N
     Returns:
         (str): path to the resource or fallback.
     """
-    path = os.path.join(os.environ["GTHOME"], "langs", lang, resource)
-    if os.path.exists(path):
-        return path
+    path = Path(os.environ["GTHOME"]) / "langs" / lang / resource
+    if path.exists():
+        return str(path)
     
     return fallback
 
