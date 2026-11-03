@@ -12,7 +12,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2013-2025 The University of Tromsø &
+#   Copyright © 2013-2026 The University of Tromsø &
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
@@ -58,10 +58,10 @@ class NrkNoCrawler(Crawler):
             A set of article ids.
         """
         json_sources = [
-            f"https://www.nrk.no/serum/api/content/json/1.11160953?start=2&limit={self.limit}",  # https://www.nrk.no/sapmi/nyheter/
-            f"https://www.nrk.no/serum/api/content/json/1.13572949?start=2&limit={self.limit}&context=items",  # https://www.nrk.no/sapmi/davvisamegillii/
-            f"https://www.nrk.no/serum/api/content/json/1.13572946?start=2&limit={self.limit}&context=items",  # https://www.nrk.no/sapmi/julevsabmaj/
-            f"https://www.nrk.no/serum/api/content/json/1.13572943?start=2&limit={self.limit}&context=items",  # https://www.nrk.no/sapmi/aaarjelsaemiengielesne/
+            f"https://www.nrk.no/serum/api/content/json/1.11160953?start=2&limit={self.limit}",  # https://www.nrk.no/sapmi/nyheter/  # noqa: E501
+            f"https://www.nrk.no/serum/api/content/json/1.13572949?start=2&limit={self.limit}&context=items",  # https://www.nrk.no/sapmi/davvisamegillii/  # noqa: E501
+            f"https://www.nrk.no/serum/api/content/json/1.13572946?start=2&limit={self.limit}&context=items",  # https://www.nrk.no/sapmi/julevsabmaj/  # noqa: E501
+            f"https://www.nrk.no/serum/api/content/json/1.13572943?start=2&limit={self.limit}&context=items",  # https://www.nrk.no/sapmi/aaarjelsaemiengielesne/  # noqa: E501
         ]
 
         responses = (requests.get(url) for url in json_sources)
@@ -117,11 +117,6 @@ class NrkNoCrawler(Crawler):
         if "html" not in content_type.lower():
             return None
 
-        tree = etree.HTML(result.text)
-
-        if tree is None:
-            return None
-
         orig_page = NrkNoPage(result.url, etree.HTML(result.text), self.corpus_parent)
 
         self.unvisited_links.update(orig_page.links)
@@ -152,7 +147,7 @@ class NrkNoCrawler(Crawler):
         pprint(self.counter)
 
     @staticmethod
-    def set_parallel_info(parallel_pages):
+    def set_parallel_info(parallel_pages: set[NrkNoPage]):
         """Set the parallels for this set of parallel pages."""
         lang_combinations = (
             (parallel_page1, parallel_page2)
@@ -181,7 +176,7 @@ class NrkNoCrawler(Crawler):
             self.vcs[page.lang].add(page.fullpath.xsl)
             self.counter[page.lang] += 1
 
-    def get_page_set(self, orig_page) -> list[NrkNoPage]:
+    def get_page_set(self, orig_page: NrkNoPage) -> set[NrkNoPage]:
         """Get parallel pages for the original page.
 
         Args:
@@ -190,12 +185,12 @@ class NrkNoCrawler(Crawler):
         Returns:
             A list of parallel pages.
         """
-        pages = [orig_page]
+        pages: list[NrkNoPage|None] = [orig_page]
         pages.extend([self.crawl_page(link) for link in orig_page.parallel_ids])
 
         # If we only have norwegian, we don't want to save any pages
         page_langs = {page.lang for page in pages if page is not None}
         if len(page_langs) == 1 and "nob" in page_langs:
-            return []
+            return set()
 
-        return [page for page in pages if page is not None]
+        return {page for page in pages if page is not None}

@@ -27,7 +27,7 @@ class NrkNoPage:
     def __init__(
         self,
         original_url: str,
-        html_element: etree._Element,
+        html_element: etree.Element,
         corpus_parent: Path,
     ):
         """Initialise the NrkNoPage class."""
@@ -39,7 +39,7 @@ class NrkNoPage:
         )
         self.article_id = self.url.split("/")[-1]
         # Only look for links on NRK sápmi pages
-        self.links = (
+        self.links: set[str] = (
             {
                 link.get("ec-id", "").replace("pp:", "")
                 for link in self.tree.findall(".//a[@ec-id]")
@@ -49,10 +49,10 @@ class NrkNoPage:
             else set()
         )
         self.fullpath = make_corpus_path(
-            self.corpus_parent
+            (self.corpus_parent
             / f"corpus-{self.lang}-orig-x-closed"
             / "news/nrk.no"
-            / f"{self.url.split('/')[-1]}.html"
+            / f"{self.url.split('/')[-1]}.html").as_posix()
         )
 
         self.set_initial_metadata()
@@ -81,7 +81,7 @@ class NrkNoPage:
         return " ".join(self.content.xpath(".//text()"))
 
     @property
-    def content(self) -> etree._Element:
+    def content(self) -> etree.Element:
         """Extract only the content that is interesting to save from the web page."""
         article_content = self.tree.find(".//article[@role='main']")
         if article_content is not None:
@@ -197,7 +197,7 @@ class NrkNoPage:
         self.fullpath.metadata.set_variable("publChannel", "https://nrk.no/sapmi")
         self.fullpath.metadata.set_variable("license_type", "standard")
 
-    def set_parallel_file(self, lang, name):
+    def set_parallel_file(self, lang: str, name: str):
         """Update metadata info on parallel files."""
         self.fullpath.metadata.set_parallel_text(lang, name)
 
