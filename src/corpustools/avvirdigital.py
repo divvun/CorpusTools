@@ -260,7 +260,7 @@ def convert_author(author_dict: dict[str, Any]) -> AvvirAuthor:
     """Convert an Ávvir author to AvvirAuthor.
 
     Args:
-        fullname: the full name of the Ávvir author.
+        author_dict: the dictionary containing the author's information.
 
     Returns:
         The resulting AvvirAuthor object after the conversion.
