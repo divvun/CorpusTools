@@ -199,10 +199,12 @@ def get_lang_resource(lang: str, resource: str, fallback:str|None=None) -> str|N
     return fallback
 
 
-def lineno():
+def lineno() -> int|None:
     """Return the current line number in our program."""
-    return inspect.currentframe().f_back.f_lineno
-
+    frame = inspect.currentframe()
+    if frame is not None and frame.f_back is not None:
+        return frame.f_back.f_lineno
+    return None
 
 def print_element(element: etree.Element, level: int, indent: int) -> list[str]:
     """Format an html document.
@@ -218,7 +220,11 @@ def print_element(element: etree.Element, level: int, indent: int) -> list[str]:
     Returns:
         formatted element as list of strings.
     """
-    tag = element.tag.replace("{http://www.w3.org/1999/xhtml}", "")
+    tag = element.tag
+    if not isinstance(tag, str):
+        return []
+    
+    tag = tag.replace("{http://www.w3.org/1999/xhtml}", "")
 
     strings: list[str] = []
     strings.append(" " * (level * indent))
@@ -226,15 +232,9 @@ def print_element(element: etree.Element, level: int, indent: int) -> list[str]:
 
     for k, v in element.attrib.items():
         strings.append(" ")
-        if isinstance(k, str):
-            strings.append(k)
-        else:
-            strings.append(k)
+        strings.append(k)
         strings.append('="')
-        if isinstance(v, str):
-            strings.append(v)
-        else:
-            strings.append(v)
+        strings.append(v)
         strings.append('"')
     strings.append(">\n")
 
@@ -244,7 +244,7 @@ def print_element(element: etree.Element, level: int, indent: int) -> list[str]:
         strings.append("\n")
 
     for child in element:
-        print_element(child, level + 1, indent, out)
+        strings.extend(print_element(child, level + 1, indent))
 
     strings.append(" " * (level * indent))
     strings.append(f"</{tag}>\n")

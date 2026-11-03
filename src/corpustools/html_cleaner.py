@@ -12,7 +12,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2013-2023 The University of Tromsø & the Norwegian Sámi Parliament
+#   Copyright © 2013-2026 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 """Script to write a nicely indented html doc.
@@ -53,4 +53,4 @@ def main():
 
     c = htmlconverter.to_html_elt(args.inhtml)
     with open(args.outhtml, "w") as outfile:
-        util.print_element(c, 0, 4, outfile)
+        outfile.write("\n".join(util.print_element(c, 0, 4)))
