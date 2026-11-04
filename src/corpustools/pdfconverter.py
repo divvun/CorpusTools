@@ -16,10 +16,12 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 """Convert pdf files to the Giella xml format."""
-import collections
+
 import re
+from collections.abc import Iterator
 from copy import deepcopy
 from pathlib import Path
+from typing import NamedTuple
 
 from lxml import etree
 
@@ -30,9 +32,9 @@ LETTER_HYPHEN_AT_END = re.compile(r".*[^\W\d_]-$", re.UNICODE)
 CONTROL_CHAR_RE = re.compile(r"[\x00-\x1F\x7F-\x9F]")
 
 
-def styles(page_style):
+def styles(page_style: str) -> dict[str, str]:
     """Turn inline css styles into a dict."""
-    styles = {}
+    styles: dict[str, str] = {}
     for style_pair in page_style.split(";"):
         if style_pair:
             values = style_pair.split(":")
@@ -41,7 +43,7 @@ def styles(page_style):
     return styles
 
 
-def merge(first, second):
+def merge(first: etree.Element, second: etree.Element) -> etree.Element:
     """Merge two paragraph elements into one."""
     if len(first):
         first[-1].tail = (
@@ -50,7 +52,7 @@ def merge(first, second):
         )
     elif second.text:
         # The tail of the second p is not important, it is always empty
-        first.text = f"{first.text  if first.text else ''}{second.text}"
+        first.text = f"{first.text if first.text else ''}{second.text}"
 
     for child in second:
         first.append(child)
@@ -58,7 +60,7 @@ def merge(first, second):
     return first
 
 
-def merge_i(first, second):
+def merge_i(first: etree.Element, second: etree.Element) -> etree.Element:
     """Merge two elements into one."""
     if len(first):
         if second.text:
@@ -78,7 +80,7 @@ def merge_i(first, second):
     return first
 
 
-def merge_children_of_p(paragraph):
+def merge_children_of_p(paragraph: etree.Element) -> etree.Element:
     if len(paragraph) > 1:
         new_paragraph = etree.Element("p")
         new_paragraph.text = paragraph.text
@@ -102,27 +104,27 @@ def merge_children_of_p(paragraph):
         return paragraph
 
 
-def is_probably_hyphenated(previous, current):
+def is_probably_hyphenated(previous: str, current: str) -> bool:
     """Find out if previous is part of a hyphenated word.
 
     Args:
-        previous (str): the previous string in front of a particular br tag
-        current (str):  the current string following a particular br tag
+        previous: the previous string in front of a particular br tag
+        current:  the current string following a particular br tag
 
     Returns:
-        (bool): True if previous is part of a hyphenated word, False otherwise
+        True if previous is part of a hyphenated word, False otherwise
     """
     previous1 = previous[-2:]
     current1 = current[:2]
 
     return (
-        LETTER_HYPHEN_AT_END.match(previous1)
-        and LETTER_AT_START.match(current1)
+        (LETTER_HYPHEN_AT_END.match(previous1) is not None)
+        and (LETTER_AT_START.match(current1) is not None)
         and current[0] == current[0].lower()
     )
 
 
-def handle_br(previous, current):
+def handle_br(previous: str, current: str) -> str:
     """Handle br tags in p elements.
 
     Args:
@@ -144,55 +146,61 @@ def handle_br(previous, current):
     return f"{previous} "
 
 
-PDFFontspec = collections.namedtuple("PDFFontspec", ["size", "family", "color"])
+PDFFontspec = NamedTuple(
+    "PDFFontspec", [("size", str), ("family", str), ("color", str)]
+)
 
 
 class PDFFontspecs:
     """Add font specs found in a pdf page to this class.
 
     Attributes:
-        pdffontspecs (dict[PDFFontspec, int]): map fontspecs to fontspec ids.
-        duplicates (dict[str, str]): map ids of duplicate fontspecs to the
+        pdffontspecs: map fontspecs to fontspec ids.
+        duplicates: map ids of duplicate fontspecs to the
             id of the first instance of this fontspec.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialise the PDFFontspecs class."""
-        self.pdffontspecs = {}
-        self.duplicates = {}
+        self.pdffontspecs: dict[PDFFontspec, str] = {}
+        self.duplicates: dict[str, str] = {}
 
-    def add_fontspec(self, xmlfontspec):
+    def add_fontspec(self, xmlfontspec: etree.Element) -> None:
         """Add a pdf2xml fontspec to this class.
 
         Args:
-            xmlfontspec (etree.Element): a PDF2XML fontspec element found in a
+            xmlfontspec: a PDF2XML fontspec element found in a
                 PDF2XML page element.
         """
         this_id = xmlfontspec.get("id")
+
+        if this_id is None:
+            return
+
         this_fontspec = PDFFontspec(
-            size=xmlfontspec.get("size"),
-            family=xmlfontspec.get("family"),
-            color=xmlfontspec.get("color"),
+            size=xmlfontspec.get("size", ""),
+            family=xmlfontspec.get("family", ""),
+            color=xmlfontspec.get("color", ""),
         )
 
-        for fontspec in list(self.pdffontspecs.keys()):
+        for fontspec, font_id in self.pdffontspecs.items():
             if fontspec == this_fontspec:
-                self.duplicates[this_id] = self.pdffontspecs[fontspec]
+                self.duplicates[this_id] = font_id
                 break
         else:
             self.pdffontspecs[this_fontspec] = this_id
 
-    def corrected_id(self, font_id):
+    def corrected_id(self, font_id: str) -> str:
         """Return a corrected id of a fontspec.
 
         Some xmlfontspecs have different id's for an identical font.
         This function makes sure identical fonts have identical id's.
 
         Args:
-            font_id (int): an integer that is the id of the fontspec.
+            font_id: a string that is the id of the fontspec.
 
         Returns:
-            (int): an integer that is the corrected id of the fontspec.
+            a string that is the corrected id of the fontspec.
         """
         if font_id in self.duplicates:
             return self.duplicates[font_id]
@@ -212,22 +220,26 @@ class PDFPageMetadata:
     """
 
     def __init__(
-        self, page_id, page_style, metadata_margins=None, metadata_inner_margins=None
+        self,
+        page_id: str,
+        page_style: str,
+        metadata_margins: dict[str, float] | None = None,
+        metadata_inner_margins: dict[str, float] | None = None,
     ):
         """Initialise the PDFPageMetadata class.
 
         Args:
-            page_id (str): the page id
-            page_style (str): the styles as a css string
-            metadata_margins (dict): a dict containing margins read
+            page_id: the page id
+            page_style: the styles as a css string
+            metadata_margins: a dict containing margins read
                 from the metadata file.
-            metadata_inner_margins (dict): a dict containing inner_margins
+            metadata_inner_margins: a dict containing inner_margins
                 read from the metadata file.
         """
-        self.page_number = int(page_id.replace("page", "").replace("-div", ""))
+        self.page_number = int(page_id.replace("page", "0").replace("-div", ""))
         style = styles(page_style)
-        self.page_height = int(style.get("height"))
-        self.page_width = int(style.get("width"))
+        self.page_height = int(style.get("height", "0"))
+        self.page_width = int(style.get("width", "4000"))
         self.metadata_margins = metadata_margins or {}
         self.metadata_inner_margins = metadata_inner_margins or {}
 
@@ -244,11 +256,11 @@ class PDFPageMetadata:
 
         return margins
 
-    def compute_margin(self, margin):
+    def compute_margin(self, margin: str) -> int:
         """Compute a margin in pixels.
 
         Args:
-            margin (str): the name of the  margin
+            margin: the name of the  margin
 
         Returns:
             (int): an int telling where the margin is on the page.
@@ -264,7 +276,9 @@ class PDFPageMetadata:
         if margin == "bottom_margin":
             return int(self.page_height - coefficient * self.page_height / 100.0)
 
-    def get_coefficient(self, margin):
+        return 0
+
+    def get_coefficient(self, margin: str) -> float:
         """Get the width of the margin in percent."""
         coefficient = 0
         if margin in list(self.metadata_margins.keys()):
@@ -358,7 +372,7 @@ class PDFPage:
 
     def __init__(
         self,
-        page_element,
+        page_element: etree.Element,
         metadata_margins=None,
         metadata_inner_margins=None,
         linespacing=None,
@@ -380,15 +394,14 @@ class PDFPage:
             metadata_inner_margins=metadata_inner_margins,
         )
 
-    def is_skip_page(self, skip_pages):
+    def is_skip_page(self, skip_pages: list[int | str]) -> bool:
         """Found out if this page should be skipped.
 
         Args:
-            skip_pages (list of mixed): list of the pages that should be
-                skipped.
+            skip_pages: list of the pages that should be skipped.
 
         Returns:
-            (bool): True if this page should be skipped, otherwise false.
+            True if this page should be skipped, otherwise false.
         """
         return (
             ("odd" in skip_pages and (self.pdf_pagemetadata.page_number % 2) == 1)
@@ -397,7 +410,7 @@ class PDFPage:
         )
 
     @staticmethod
-    def is_inside_margins(text, margins):
+    def is_inside_margins(text: etree.Element, margins: dict[str, int]) -> bool:
         """Check if t is inside the given margins.
 
         t is a text element
@@ -405,16 +418,19 @@ class PDFPage:
         if not margins:
             return False
 
-        style = styles(text.get("style"))
-        top = int(style.get("top"))
-        left = int(style.get("left"))
+        style: dict[str, str] = styles(text.get("style"))
+        top = style.get("top")
+        left = style.get("left")
+
+        if top is None or left is None:
+            return True
 
         return (
-            margins["top_margin"] < top < margins["bottom_margin"]
-            and margins["left_margin"] < left < margins["right_margin"]
+            margins["top_margin"] < int(top) < margins["bottom_margin"]
+            and margins["left_margin"] < int(left) < margins["right_margin"]
         )
 
-    def pick_valid_text_elements(self):
+    def pick_valid_text_elements(self) -> Iterator[etree.Element]:
         """Pick the wanted text elements from a page.
 
         This is the main function of this class
@@ -448,15 +464,15 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
         self.pdffontspecs = PDFFontspecs()
 
     @staticmethod
-    def strip_chars(content, extra=""):
+    def strip_chars(content: str, extra: str = "") -> str:
         """Strip unwanted chars from the document.
 
         Args:
-            content (str): the xml document that pdftohtml produces
-            extra (str): more character that should be removed
+            content: the xml document that pdftohtml produces
+            extra: more character that should be removed
 
         Returns:
-            (str): containing the modified version of the document.
+            containing the modified version of the document.
         """
         content, _ = CONTROL_CHAR_RE.subn("", content)
         if extra:
@@ -469,7 +485,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
         return content
 
     @staticmethod
-    def replace_ligatures(content):
+    def replace_ligatures(content: str) -> str:
         """Replace unwanted strings with correct replacements.
 
         Args:
@@ -523,11 +539,11 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
         return self.pdftohtml2intermediate(pdftohtmloutput)
 
     @staticmethod
-    def possibly_add_to_body(body, this_p):
+    def possibly_add_to_body(body: etree.Element, this_p: etree.Element) -> None:
         if this_p.text or len(this_p):
             body.append(this_p)
 
-    def pdftohtml2intermediate(self, pdftohtmloutput):
+    def pdftohtml2intermediate(self, pdftohtmloutput: str) -> etree.Element:
         """Convert output of pdftohtml to a corpus xml file.
 
         Returns:
@@ -544,46 +560,26 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
         try:
             parser = etree.HTMLParser()
             root_element = etree.fromstring(pdf_content.encode("utf8"), parser=parser)
+            this_p = etree.Element("p")
+            for paragraph in self.parse_pages(root_element):
+                text = paragraph.xpath("string()").strip()
+                if text:
+                    if text[0] != text[0].lower():
+                        self.possibly_add_to_body(body, merge_children_of_p(this_p))
+                        this_p = etree.Element("p")
+                    this_p = merge(this_p, paragraph)
+            self.possibly_add_to_body(body, merge_children_of_p(this_p))
+
         except etree.XMLSyntaxError as error:
             self.handle_syntaxerror(error, util.lineno(), pdf_content)
 
-        this_p = etree.Element("p")
-        for paragraph in self.parse_pages(root_element):
-            text = paragraph.xpath("string()").strip()
-            if text:
-                if text[0] != text[0].lower():
-                    self.possibly_add_to_body(body, merge_children_of_p(this_p))
-                    this_p = etree.Element("p")
-                this_p = merge(this_p, paragraph)
-
-        self.possibly_add_to_body(body, merge_children_of_p(this_p))
-
         return document
 
-    def pdftohtml2html(self, pdftohtmloutput):
-        """Convert output of pdftohtml to html (applying our regular fixes)
-
-        Returns:
-            (str): An html file as string with the content of the pdf
-                file, but without most of the metadata.
-        """
-        doc = self.pdftohtml2intermediate(pdftohtmloutput)
-        meta = etree.Element("meta")
-        meta.attrib["charset"] = "utf-8"
-        doc.insert(0, meta)
-        list(map(doc.remove, doc.findall("header")))
-        doc.tag = "html"
-        lang = self.metadata.get_variable("mainlang")
-        if lang is None or lang == "":
-            lang = "se"
-        doc.attrib["lang"] = lang
-        return etree.tostring(doc, encoding="utf8", method="html", pretty_print=True)
-
-    def parse_page(self, page):
+    def parse_page(self, page: etree.Element) -> Iterator[etree.Element]:
         """Parse the page element.
 
         Args:
-            page (Any): a pdf xml page element.
+            page: a pdf xml page element.
         """
         try:
             pdfpage = PDFPage(
@@ -593,12 +589,11 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
                 linespacing=self.metadata.linespacing,
             )
             if not pdfpage.is_skip_page(self.metadata.skip_pages):
-                # pdfpage.fix_font_id(self.pdffontspecs)
                 yield from pdfpage.pick_valid_text_elements()
         except xslsetter.XsltError as error:
             raise util.ConversionError(str(error)) from error
 
-    def parse_pages(self, root_element):
+    def parse_pages(self, root_element: etree.Element):
         """Parse the pages of the pdf xml document.
 
         Args:
@@ -611,16 +606,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
             for paragraph in self.parse_page(page)
         )
 
-    def add_fontspecs(self, page):
-        """Extract font specs found in a pdf2xml page element.
-
-        Args:
-            page (etree.Element): a pdf page
-        """
-        for xmlfontspec in page.iter("fontspec"):
-            self.pdffontspecs.add_fontspec(xmlfontspec)
-
-    def split_by_br(self, text):
+    def split_by_br(self, text: str) -> str:
         brs = text.replace("&#160;", " ").split("<br/>")
 
         if len(brs) == 1:
@@ -633,7 +619,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
 
         return "".join(strings)
 
-    def extract_text(self, command):
+    def extract_text(self, command: list[str]) -> str:
         """Extract the text from a document.
 
         Args:
@@ -652,7 +638,9 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
                 f"{command[0]} failed. More info in the log file: {logfile}"
             ) from error
 
-    def handle_syntaxerror(self, error, lineno, invalid_input):
+    def handle_syntaxerror(
+        self, error: etree.XMLSyntaxError, lineno: int, invalid_input: str
+    ) -> None:
         """Handle an xml syntax error.
 
         Args:
@@ -660,17 +648,15 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
             lineno (int): the line number in this module where the error happened.
             invalid_input (str): a string containing the invalid input.
         """
-        logfile = self.orig.with_suffix(self.orig.suffix + ".log"   )
+        logfile = self.orig.with_suffix(self.orig.suffix + ".log")
 
-        messages = [
-            f"Error at: {lineno}"
-        ]
+        messages = [f"Error at: {lineno}"]
         for entry in error.error_log:
             messages.append(f"\n{str(entry.line)}: {str(entry.column)} ")
             try:
                 messages.append(entry.message)
             except ValueError:
-                messages.append(entry.message.encode("latin1"))
+                messages.append(str(entry.message.encode("latin1")))
 
             messages.append("\n")
 

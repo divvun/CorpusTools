@@ -25,7 +25,7 @@ class SamediggiNoPage:
     def __init__(
         self,
         original_url: str,
-        html_element: etree._Element,
+        html_element: etree.Element,
         corpus_parent: Path,
         dupe_table: dict[str, Path],
     ):
@@ -49,7 +49,7 @@ class SamediggiNoPage:
 
         self.digest = make_digest(self.content_string)
         possible_dupe = dupe_table.get(self.digest, fullpath)
-        self.corpuspath = corpuspath.make_corpus_path(possible_dupe)
+        self.corpuspath = corpuspath.make_corpus_path(possible_dupe.as_posix())
         if fullpath == possible_dupe:
             self.set_initial_metadata()
         else:
