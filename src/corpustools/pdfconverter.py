@@ -396,52 +396,6 @@ class PDFPage:
             or self.pdf_pagemetadata.page_number in skip_pages
         )
 
-    @property
-    def linespacing(self):
-        """Return linespacing."""
-        if self.linespacing_dict.get("all"):
-            return self.linespacing_dict["all"]
-        elif self.linespacing_dict.get("even") and (
-            (self.pdf_pagemetadata.page_number % 2) == 0
-        ):
-            return self.linespacing_dict["even"]
-        elif self.linespacing_dict.get("odd") and (
-            (self.pdf_pagemetadata.page_number % 2) == 1
-        ):
-            return self.linespacing_dict["odd"]
-        elif self.linespacing_dict.get(self.pdf_pagemetadata.page_number):
-            return self.linespacing_dict[self.pdf_pagemetadata.page_number]
-        else:
-            return 1.5
-
-    def fix_font_id(self, pdffontspecs):
-        """Fix font id in text elements.
-
-        Sometimes the same font has different ID's. Correct that ID
-        if necessary.
-
-        Args:
-            pdffontspecs (PDFFontspecs): a PDFFontspecs instance.
-        """
-        for textelement in self.textelements:
-            correct = pdffontspecs.corrected_id(textelement.font)
-            textelement.text_elt.set("font", correct)
-
-    def remove_elements_outside_margin(self):
-        """Remove PDFTextElements from textelements if needed."""
-        margins = self.pdf_pagemetadata.compute_margins()
-        inner_margins = self.pdf_pagemetadata.compute_inner_margins()
-
-        self.textelements[:] = [
-            t for t in self.textelements if self.is_inside_margins(t, margins)
-        ]
-        if inner_margins:
-            self.textelements[:] = [
-                t
-                for t in self.textelements
-                if not self.is_inside_inner_margins(t, inner_margins)
-            ]
-
     @staticmethod
     def is_inside_margins(text, margins):
         """Check if t is inside the given margins.
