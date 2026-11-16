@@ -44,7 +44,7 @@ jobs:
             - name: Build documentation
               run: |
                   cd docs
-                  mkdocs build
+                  properdocs build
 
             - name: Upload artifact
               uses: actions/upload-pages-artifact@v5
