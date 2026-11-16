@@ -37,6 +37,7 @@ jobs:
 
             - name: Install dependencies
               run: |
+                  pip install -e .
                   cd docs
                   pip install -r requirements.txt
 
