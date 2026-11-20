@@ -132,7 +132,7 @@ def analyse(xml_path: corpuspath.CorpusPath, analyser_zpipe_path: Path) -> None:
         text=True,
         stdout=PIPE,
         stderr=PIPE,
-        check=False,
+        check=True,
     )
     if analysis_result.stderr and not analysis_result.stdout:
         raise UserWarning(
