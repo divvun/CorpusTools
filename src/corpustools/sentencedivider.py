@@ -18,11 +18,12 @@
 #
 """Classes and functions to sentence align two files."""
 
+from argparse import ArgumentParser, Namespace
 from pathlib import Path
 from typing import Iterator
 
-from corpustools import ccat
-from corpustools.corpuspath import CorpusPath
+from corpustools import argparse_version, ccat
+from corpustools.corpuspath import CorpusPath, collect_files, make_corpus_path
 from corpustools.util import ArgumentError, lang_resource_dirs, run_external_command
 
 STOPS = [";", "!", "?", ".", "..", "...", "¶", "…"]
@@ -90,7 +91,7 @@ def corpus_file_to_sentences(corpus_path: CorpusPath) -> list[str]:
     """Turn ccat output into full sentences.
 
     Args:
-        corpus_path (CorpusPath): The path to the corpus file.
+        corpus_path: The path to the corpus file.
 
     Returns:
         The ccat output has been turned into a list of full sentences.
@@ -118,3 +119,28 @@ def make_valid_sentences(tokenised_output: str) -> list[str]:
         )
         if sentence.strip()
     ]
+
+def parse_options() -> Namespace:
+    parser = ArgumentParser(
+            parents=[argparse_version.parser], description="Analyse files in parallel."
+        )
+    parser.add_argument(
+            "converted_entities",
+            nargs="+",
+            help="converted files or director(y|ies) where the converted files exist",
+        )
+    
+    return parser.parse_args()
+
+def main():
+    args = parse_options()
+    corpuspath_paths = (
+            make_corpus_path(xml_file.as_posix())
+            for xml_file in collect_files(args.converted_entities, suffix=".xml")
+        )
+
+    for corpus_path in corpuspath_paths:
+        if not corpus_path.metadata.get_variable("ocr"):
+            sentences = corpus_file_to_sentences(corpus_path)
+            print("\n".join(sentences))
+    

@@ -1,6 +1,6 @@
 [project]
 name = "corpustools"
-version = "3.1.0"
+version = "3.2.0"
 description = "Manage giellalt corpora"
 authors = [
     { name = "Børre Gaup", email = "albbas@gmail.com" },
@@ -51,6 +51,7 @@ compare_tmx_goldstandard = "corpustools.compare_tmx_goldstandard:main"
 compile_cwb_mono = "corpustools.compile_cwb_mono:main"
 compile_cwb_para = "corpustools.compile_cwb_para:main"
 convert2xml = "corpustools.convertermanager:main"
+corp2sentences = "corpustools.sentencedivider:main"
 debug_corpus = "corpustools.debug_corpus:main"
 generate_anchor_list = "corpustools.generate_anchor_list:main"
 html_cleaner = "corpustools.html_cleaner:main"
@@ -81,7 +82,6 @@ bibel_no_crawler = "corpustools.bibel_no_crawler:main"
 ces_to_bibel_no = "corpustools.ces2homegrown:main"
 gold2corr = "corpustools.gold2correct:main"
 pick_goldstandard = "corpustools.pick_goldstandard:main"
-
 
 [tool.uv]
 package = true
