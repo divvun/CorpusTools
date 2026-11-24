@@ -198,7 +198,7 @@ def analyse_serially(
             print(f"Analysis failed: {error}", file=sys.stderr)
 
 
-def parse_options():
+def parse_options() -> argparse.Namespace:
     """Parse the given options."""
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser], description="Analyse files in parallel."
