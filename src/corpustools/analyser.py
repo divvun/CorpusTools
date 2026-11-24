@@ -113,43 +113,108 @@ def find_analyser_zpipe(lang: str) -> Path | None:
     return None
 
 
-def analyse(xml_path: corpuspath.CorpusPath, analyser_zpipe_path: Path) -> None:
+# With --chunk-large-files: texts longer than this are analysed in pieces
+# of at most about this many characters, one divvun-checker run per piece.
+# divvun-checker's memory use grows with the amount of text one process
+# has analysed (about 1.6 GB for the analyser, then roughly 4 GB more per
+# MB of text for sme), so a large file can run out of memory where the
+# same text in pieces does not. The pieces' outputs, joined, are the same
+# as the output of the whole text.
+CHUNK_CHARS = 100_000
+
+
+def split_into_chunks(text: str, max_chars: int = CHUNK_CHARS) -> list[str]:
+    """Split ccat output into pieces of at most about max_chars characters.
+
+    Pieces are only cut after a paragraph end (ccat ends every paragraph
+    with " ¶" and a newline; a paragraph may contain other newlines). A
+    paragraph longer than max_chars becomes a piece of its own.
+
+    Args:
+        text: ccat output.
+        max_chars: The size a piece should stay below, if possible.
+
+    Returns:
+        The pieces; joined, they are the original text.
+    """
+    chunks: list[str] = []
+    current: list[str] = []
+    current_size = 0
+    paragraph: list[str] = []
+    for line in text.splitlines(keepends=True):
+        paragraph.append(line)
+        if not line.endswith("¶\n"):
+            continue
+        size = sum(len(part) for part in paragraph)
+        if current and current_size + size > max_chars:
+            chunks.append("".join(current))
+            current, current_size = [], 0
+        current.extend(paragraph)
+        current_size += size
+        paragraph = []
+    current.extend(paragraph)  # text after the last paragraph end, if any
+    if current:
+        chunks.append("".join(current))
+    return chunks
+
+
+def analyse(
+    xml_path: corpuspath.CorpusPath,
+    analyser_zpipe_path: Path,
+    chunk_large_files: bool = False,
+) -> None:
     """Analyse a file.
     
     
     Args:
         xml_path: The path to the file to analyse.
         analyser_zpipe_path: The path to the zpipe file to use for analysis.
+        chunk_large_files: Analyse texts longer than CHUNK_CHARS in pieces,
+            one divvun-checker run per piece, to limit memory use.
     
     Raises:
         UserWarning: If the analysis fails.
     """
     variant_name = get_modename(xml_path)
 
-    analysis_result = run(
-        f"divvun-checker -a {analyser_zpipe_path} -n {variant_name}".split(),
-        input=ccatter(xml_path),
-        text=True,
-        stdout=PIPE,
-        stderr=PIPE,
-        check=True,
+    text = ccatter(xml_path)
+    pieces = (
+        split_into_chunks(text)
+        if chunk_large_files and len(text) > CHUNK_CHARS
+        else [text]
     )
-    if analysis_result.stderr and not analysis_result.stdout:
+    stdouts: list[str] = []
+    stderrs: list[str] = []
+    for piece in pieces:
+        result = run(
+            f"divvun-checker -a {analyser_zpipe_path} -n {variant_name}".split(),
+            input=piece,
+            text=True,
+            stdout=PIPE,
+            stderr=PIPE,
+            check=True,
+        )
+        stdouts.append(result.stdout)
+        stderrs.append(result.stderr)
+    analysed_text = "".join(stdouts)
+    warnings = "".join(stderrs)
+
+    if warnings and not analysed_text:
         raise UserWarning(
-            f"divvun-checker failed for {xml_path.analysed}: {analysis_result.stderr}"
+            f"divvun-checker failed for {xml_path.analysed}: {warnings}"
         )
 
-    if analysis_result.stderr:
+    if warnings:
         print(
-            f"divvun-checker produced {len(analysis_result.stderr.splitlines())} "
+            f"divvun-checker produced {len(warnings.splitlines())} "
             f"lines of warnings to {xml_path.log}",
 
             file=sys.stderr,
         )
-        xml_path.log.write_text(analysis_result.stderr, encoding="utf-8")
+        xml_path.log.write_text(warnings, encoding="utf-8")
 
     try:
-        dependency_analysis(xml_path, analysed_text=analysis_result.stdout)
+        dependency_analysis(xml_path, analysed_text=analysed_text)
     except etree.XMLSyntaxError as error:
         print(f"Can not parse {xml_path.converted}", file=sys.stderr)
         print("The error was:", str(error), file=sys.stderr)
@@ -159,13 +224,16 @@ def analyse_in_parallel(
     file_list: list[corpuspath.CorpusPath],
     pool_size: int,
     analyser_zpipe_path: Path,
+    chunk_large_files: bool = False,
 ):
     print(f"Parallel analysis of {len(file_list)} files with {pool_size} workers")
     files_with_sizes = [(file, file.converted.stat().st_size) for file in file_list]
     files_with_sizes.sort(key=lambda item: item[1])
     files, sizes = zip(*files_with_sizes, strict=True)
     analyse_one: Callable[[corpuspath.CorpusPath], None] = partial(
-        analyse, analyser_zpipe_path=analyser_zpipe_path
+        analyse,
+        analyser_zpipe_path=analyser_zpipe_path,
+        chunk_large_files=chunk_large_files,
     )
     util.run_in_parallel(
         function=analyse_one,
@@ -178,6 +246,7 @@ def analyse_in_parallel(
 def analyse_serially(
     file_list: list[corpuspath.CorpusPath],
     analyser_zpipe_path: Path,
+    chunk_large_files: bool = False,
 ):
     """Analyse files one by one."""
     print(f"Starting the analysis of {len(file_list)} files")
@@ -193,7 +262,7 @@ def analyse_serially(
         )
         util.print_frame("*" * 79)
         try:
-            analyse(xml_file, analyser_zpipe_path)
+            analyse(xml_file, analyser_zpipe_path, chunk_large_files)
         except UserWarning as error:
             print(f"Analysis failed: {error}", file=sys.stderr)
 
@@ -220,6 +289,14 @@ def parse_options() -> argparse.Namespace:
     parser.add_argument(
         "--zpipe",
         help="Use this specific .zpipe file",
+    )
+    parser.add_argument(
+        "--chunk-large-files",
+        action="store_true",
+        help=f"Analyse texts longer than {CHUNK_CHARS} characters in pieces "
+        "(cut between paragraphs), one divvun-checker run per piece. "
+        "divvun-checker's memory use grows with the amount of text it has "
+        "analysed, so this keeps large files from running out of memory.",
     )
     parser.add_argument(
         "converted_entities",
@@ -280,9 +357,11 @@ def main():
 
     try:
         if args.serial:
-            analyse_serially(analysable_paths, analyser_path)
+            analyse_serially(analysable_paths, analyser_path, args.chunk_large_files)
         else:
-            analyse_in_parallel(analysable_paths, args.ncpus, analyser_path)
+            analyse_in_parallel(
+                analysable_paths, args.ncpus, analyser_path, args.chunk_large_files
+            )
     except util.ArgumentError as error:
         print(f"Cannot do analysis\n{str(error)}", file=sys.stderr)
         raise SystemExit(1) from error
