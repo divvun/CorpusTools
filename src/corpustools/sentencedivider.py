@@ -141,6 +141,8 @@ def main():
 
     for corpus_path in corpuspath_paths:
         if not corpus_path.metadata.get_variable("ocr"):
-            sentences = corpus_file_to_sentences(corpus_path)
-            print("\n".join(sentences))
-    
+            try:
+                for sentence in corpus_file_to_sentences(corpus_path):
+                    print(sentence)
+            except UserWarning:
+                pass
