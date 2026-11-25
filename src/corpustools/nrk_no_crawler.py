@@ -81,9 +81,6 @@ class NrkNoCrawler(Crawler):
     def get_fetched_ids(self) -> set[str]:
         """Find articles ids of fetched documents.
 
-        Args:
-            path (str): path to the directory where nrk articles are found.
-
         Returns:
             A set of strings, where the strings are ids of the
             fetched articles.

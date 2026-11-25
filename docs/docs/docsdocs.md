@@ -23,44 +23,40 @@ Just open up the index.html page in a browser to view the documentation.
 ## Writing documentation
 
 The actual _content_ of the documentation is in **docs/docs**, as markdown files.
-The table of contents is in the `docs/mkdocs.yml` file. When adding a new site,
+The table of contents is in the `docs/properdocs.yml` file. When adding a new site,
 it may be necessary to add the entry in the table of contents found in that file.
 
 ## Viewing the locally built documentation
 
 ### First time setup
 
-**mkdocs** is a python tool. Create a virtual environment, activate it, and
-install the requirements. The first and last step is only done once.
+From the repository root, create a virtual environment, activate it, and install
+the project and documentation requirements:
 
     python3 -m venv .venv
     . .venv/bin/activate
-    pip install -r -requirements.txt
+    pip install -e .
+    pip install -r docs/requirements.txt
 
 When coming back to the documentation, only the second command (`. .venv/bin/activate`),
 needs to be run.
 
 ### Running locally
 
-To run the documentation while writing, use
+From the `docs` directory, run the documentation while writing with
 
-    mkdocs serve
+    properdocs serve
 
 Then open up your browser to [http://localhost:8000](http://localhost:8000) to
 see it.
 
 To build the final documentation site locally, use
 
-    mkdocs build
+    properdocs build
 
 It ends up as a static build in the **site/** directory.
 
 ### Updating the live page
 
-To automatically build and publish the documentation on Github Pages, it's all done in a
-single command:
-
-    mkdocs gh-deploy
-
-But please make sure to also commit the updates made to the markdown files themselves
-in the main branch.
+The GitHub Actions documentation workflow builds and publishes the site when
+documentation or source changes are pushed to the main branch.

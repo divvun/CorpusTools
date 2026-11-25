@@ -667,19 +667,16 @@ def encode_corpus(
     registry_dir: Path,
     cwb_binaries_directory: Path,
 ):
-    """Run the CWB tools on the given folder that contains .vrt files, to
-    create the data/ and registry/ folder contents for a corpus.
+    """Run the CWB tools on a .vrt file to create the encoded corpus.
 
     Args:
-        vrt_directory (Path): the output directory from the previous steps,
-            that contains a .vrt file for a corpus.
+        vrt_file (Path): the .vrt file for a corpus.
         date (date): The date that we created this corpus
         lang (str): which language this corpus is in. 3-letter language code
+        data_dir (Path): directory for the encoded corpus data.
+        registry_dir (Path): directory for corpus registry files.
         cwb_binaries_directory (Path): path to where the CWB binaries are
             located
-        target_directory (Path): path to the directory where the
-            final encoded corpus resides (the directory that has subfolders
-            data/ and registry/)
     """
 
     n_sentences, first_date, last_date = read_vrt_xml(vrt_file)

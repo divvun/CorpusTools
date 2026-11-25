@@ -135,7 +135,7 @@ class SamediggiNoCrawler(crawler.Crawler):
         """Get parallel pages for the original page.
 
         Args:
-            orig_page: The original page to get parallel pages for.
+            orig_page (SamediggiNoPage): The original page to get parallel pages for.
 
         Returns:
             A list of parallel pages.
