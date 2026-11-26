@@ -90,9 +90,9 @@
     "semantic_hash": "4c98590474599b0fa632003cb971ba06"
   },
   "pyproject.toml": {
-    "mtime": 1795517766.7090702,
-    "seen": 1795517800.9656372,
-    "ast_hash": "9903de4bd1cc359b5f0ce5fdd8991045",
+    "mtime": 1795694072.2889926,
+    "seen": 1795694086.564641,
+    "ast_hash": "29a7b69a479d7a70f610ae9a7122c994",
     "semantic_hash": ""
   },
   ".github/workflows/docs.yml": {
@@ -342,15 +342,15 @@
     "semantic_hash": ""
   },
   "src/corpustools/avvirconverter.py": {
-    "mtime": 1793054910.5825472,
-    "seen": 1793119693.778002,
-    "ast_hash": "cb885691cddb976f14c40307871131fc",
+    "mtime": 1795693841.719554,
+    "seen": 1795693993.4838212,
+    "ast_hash": "442ff05040104cd44e83be2a0dca50ca",
     "semantic_hash": ""
   },
   "src/corpustools/avvirdigital.py": {
-    "mtime": 1793700438.6897159,
-    "seen": 1793701141.294286,
-    "ast_hash": "53d05432e085ebcf242577eec1e7cc11",
+    "mtime": 1795693959.8963864,
+    "seen": 1795693993.483822,
+    "ast_hash": "ef199cf9d5fac1dd99f81d1789680457",
     "semantic_hash": ""
   },
   "src/corpustools/basicconverter.py": {
@@ -372,15 +372,15 @@
     "semantic_hash": ""
   },
   "src/corpustools/biblesfmconverter.py": {
-    "mtime": 1793054910.583854,
-    "seen": 1793119693.778004,
-    "ast_hash": "1f53c532a4e6c291c6e2f267fd7e4d82",
+    "mtime": 1795693952.0037851,
+    "seen": 1795693993.483824,
+    "ast_hash": "fca6f3daa2efd90b5249663828aa7e82",
     "semantic_hash": ""
   },
   "src/corpustools/biblexmlconverter.py": {
-    "mtime": 1793054910.584101,
-    "seen": 1793119693.778005,
-    "ast_hash": "944016d6ab7a729863a4787a8a24082a",
+    "mtime": 1795693820.0853543,
+    "seen": 1795693993.483825,
+    "ast_hash": "2b18c02fb1e493f66618ea744a25a348",
     "semantic_hash": ""
   },
   "src/corpustools/ccat.py": {
@@ -432,9 +432,9 @@
     "semantic_hash": ""
   },
   "src/corpustools/convert_using_pandoc.py": {
-    "mtime": 1793054910.5865953,
-    "seen": 1793119693.7780092,
-    "ast_hash": "17d82ebadfc99ee1616101f20470fc41",
+    "mtime": 1795693811.2583888,
+    "seen": 1795693993.48383,
+    "ast_hash": "027f21d923011d37ca42084ed84cf99b",
     "semantic_hash": ""
   },
   "src/corpustools/convert_using_soffice.py": {
@@ -444,9 +444,9 @@
     "semantic_hash": ""
   },
   "src/corpustools/converter.py": {
-    "mtime": 1793376748.5166492,
-    "seen": 1793695576.8151848,
-    "ast_hash": "dd6fd7c76950ef704bb69715bd60743c",
+    "mtime": 1795693710.9763947,
+    "seen": 1795693993.483831,
+    "ast_hash": "1ebc70cdd99f586d281445ab32e6c9c1",
     "semantic_hash": ""
   },
   "src/corpustools/convertermanager.py": {
@@ -504,15 +504,15 @@
     "semantic_hash": ""
   },
   "src/corpustools/epubconverter.py": {
-    "mtime": 1793054910.5907826,
-    "seen": 1793119693.778015,
-    "ast_hash": "7053982c182ee617e21e6384520958f3",
+    "mtime": 1795693801.768519,
+    "seen": 1795693993.48384,
+    "ast_hash": "6139d198ed6c1f70c20fe2026dafae84",
     "semantic_hash": ""
   },
   "src/corpustools/error_annotated_converter.py": {
-    "mtime": 1793054910.5911717,
-    "seen": 1793119693.778015,
-    "ast_hash": "ce6613415a8bb18759b813cc8feee604",
+    "mtime": 1795693587.2416089,
+    "seen": 1795693993.48384,
+    "ast_hash": "78f86d4511ed8865617c5514f89c520e",
     "semantic_hash": ""
   },
   "src/corpustools/error_annotated_sentence.py": {
@@ -552,15 +552,15 @@
     "semantic_hash": ""
   },
   "src/corpustools/htmlcontentconverter.py": {
-    "mtime": 1793054910.5934794,
-    "seen": 1793119693.778018,
-    "ast_hash": "d2853a768f6878dd41cad6ce35f16a29",
+    "mtime": 1795694030.2346733,
+    "seen": 1795694086.564665,
+    "ast_hash": "cf8392154bf3c4983d7b90cef7dfcc84",
     "semantic_hash": ""
   },
   "src/corpustools/htmlconverter.py": {
-    "mtime": 1793054910.593812,
-    "seen": 1793119693.7780192,
-    "ast_hash": "24a5711c2f1842e00adcfcb5a4c0165c",
+    "mtime": 1795693885.4413183,
+    "seen": 1795693993.4838452,
+    "ast_hash": "7683732ce50dc6ff512ffba3ff591c13",
     "semantic_hash": ""
   },
   "src/corpustools/iso_ir_197.py": {
@@ -666,9 +666,9 @@
     "semantic_hash": ""
   },
   "src/corpustools/pdfconverter.py": {
-    "mtime": 1793785821.3582363,
-    "seen": 1793787306.168631,
-    "ast_hash": "04335481a08fc35e3e690d6d6a2bfc91",
+    "mtime": 1795692962.871427,
+    "seen": 1795693993.483857,
+    "ast_hash": "6dcc7f08e7f00616a41d637ff6bee69a",
     "semantic_hash": ""
   },
   "src/corpustools/pick_samediggi_se_docs.py": {
@@ -684,9 +684,9 @@
     "semantic_hash": ""
   },
   "src/corpustools/plaintextconverter.py": {
-    "mtime": 1793376748.723785,
-    "seen": 1793695576.815211,
-    "ast_hash": "736480a2761171887b94f25447e562c4",
+    "mtime": 1795693770.2476568,
+    "seen": 1795693993.48386,
+    "ast_hash": "f589a9dc64ba3d55d111ea2ad237763f",
     "semantic_hash": ""
   },
   "src/corpustools/realign.py": {
@@ -738,9 +738,9 @@
     "semantic_hash": ""
   },
   "src/corpustools/svgconverter.py": {
-    "mtime": 1793054910.684357,
-    "seen": 1793119693.7780328,
-    "ast_hash": "ca16daff6f4b4369ee5f64684dacd8f2",
+    "mtime": 1795693760.036587,
+    "seen": 1795693993.483865,
+    "ast_hash": "4805fae2cdae748625cebc84f773c2a0",
     "semantic_hash": ""
   },
   "src/corpustools/text_cat.py": {
@@ -786,9 +786,9 @@
     "semantic_hash": ""
   },
   "src/corpustools/usxconverter.py": {
-    "mtime": 1793054910.688175,
-    "seen": 1793119693.7780359,
-    "ast_hash": "5d013dd823d97dfb7a0e81171f66e4da",
+    "mtime": 1795693870.3944988,
+    "seen": 1795693993.48387,
+    "ast_hash": "0fddc2d3211c116f900508cbc9b84a8c",
     "semantic_hash": ""
   },
   "src/corpustools/util.py": {
@@ -810,9 +810,9 @@
     "semantic_hash": ""
   },
   "src/corpustools/xmlconverter.py": {
-    "mtime": 1793054910.6916494,
-    "seen": 1793119693.778038,
-    "ast_hash": "7b0e3aef0af20a58db4dd5433246c735",
+    "mtime": 1795693865.2036345,
+    "seen": 1795693993.483872,
+    "ast_hash": "2b62678d9bd01163139000e2a6b53c71",
     "semantic_hash": ""
   },
   "src/corpustools/xslmaker.py": {
@@ -1433,12 +1433,6 @@
     "ast_hash": "85b41142fd7dcdb83fb3b43f8e223c08",
     "semantic_hash": ""
   },
-  "oink.txt": {
-    "mtime": 1793280396.0853915,
-    "seen": 1793695576.815274,
-    "ast_hash": "a63a1f0455c706ac967d82d4f81c0ec3",
-    "semantic_hash": ""
-  },
   ".vscode/settings.json": {
     "mtime": 1794915441.3253505,
     "seen": 1795517595.0486941,
@@ -1449,12 +1443,6 @@
     "mtime": 1795517766.6479223,
     "seen": 1795517800.965734,
     "ast_hash": "9b4412c8c200224d9c09ced827233aab",
-    "semantic_hash": ""
-  },
-  "pipeline.json": {
-    "mtime": 1795524979.2742426,
-    "seen": 1795603145.856763,
-    "ast_hash": "5c6e063c4159b0216d37a5e581c3e570",
     "semantic_hash": ""
   }
 }

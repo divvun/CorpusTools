@@ -1,25 +1,25 @@
-# Graph Report - CorpusTools  (2026-11-25)
+# Graph Report - CorpusTools  (2026-11-26)
 
 ## Corpus Check
-- 171 files · ~240,393 words
+- 170 files · ~240,751 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 837 nodes · 1076 edges · 193 communities (41 shown, 152 thin omitted)
-- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 25 edges (avg confidence: 0.85)
+- 1029 nodes · 1387 edges · 200 communities (48 shown, 152 thin omitted)
+- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 28 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f1b813ee`
+- Built from commit: `9c274ebd`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - XMLTester
 - Exception
-- BookChapter
+- epubconverter.py
 - Element
-- Converter
+- HTMLBeautifier
 - Path
 - Path
 - Element
@@ -70,7 +70,7 @@
 - SamediggiNoCrawler
 - XMLTester
 - XMLTester
-- Book
+- htmlcontentconverter.py
 - XMLTester
 - ElementTree
 - Path
@@ -144,7 +144,7 @@
 - .test_visit_this_p_listitem_set
 - XMLTester
 - .test_visit_this_p_allp_set
-- gold2correct.py
+- converter.py
 - .test_process_file_title_set
 - .test_process_file_listitem_set
 - .test_get_element_language_same_as_parent
@@ -167,10 +167,10 @@
 - Exception
 - PDFPageMetadata
 - pdfconverter.py
-- CorpusPath
+- Path
 - SamediggiNoPage
 - main
-- Path
+- executable_in_path
 - pytextcat
 - Documentation Dependencies
 - PDFPage
@@ -178,8 +178,15 @@
 - to_html_elt
 - styles
 - .handle_syntaxerror
-- main
+- avvirconverter.py
 - _Element
+- biblexmlconverter.py
+- PlaintextConverter
+- biblesfmconverter.py
+- convert2intermediate
+- gold2correct.py
+- ElementTree
+- Path
 - CorpusPath
 - Corpus Repositories
 - dupefinder
@@ -206,15 +213,15 @@
 
 ## God Nodes (most connected - your core abstractions)
 1. `TestCcat` - 40 edges
-2. `Converter` - 19 edges
+2. `HTMLBeautifier` - 20 edges
 3. `PrintOptions` - 19 edges
 4. `SamediggiNoPage` - 16 edges
-5. `NrkNoPage` - 15 edges
-6. `process_file()` - 15 edges
+5. `process_file()` - 16 edges
+6. `NrkNoPage` - 15 edges
 7. `PDF2XMLConverter` - 14 edges
-8. `SamediggiNoCrawler` - 12 edges
-9. `NrkNoCrawler` - 12 edges
-10. `DupeFinder` - 12 edges
+8. `write_complete()` - 14 edges
+9. `SamediggiNoCrawler` - 12 edges
+10. `NrkNoCrawler` - 12 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `convert_tagged_text()` --calls--> `test_control_chars_are_removed()`  [INFERRED]
@@ -231,19 +238,23 @@
 ## Import Cycles
 - None detected.
 
-## Communities (193 total, 152 thin omitted)
+## Communities (200 total, 152 thin omitted)
 
-### Community 4 - "Converter"
-Cohesion: 0.07
-Nodes (20): Classifier, Converter, newer_group(), Return a boolean indicating if the file is convertable., Return a boolean indicating if the file is convertable., Return a boolean indicating if the file is a gold standard doc., Return the path to the corpus dtd file., Validate the complete document. (+12 more)
+### Community 2 - "epubconverter.py"
+Cohesion: 0.13
+Nodes (28): Book, BookChapter, MetadataHandler, chapters(), extract_content(), Element, ElementTree, Path (+20 more)
+
+### Community 4 - "HTMLBeautifier"
+Cohesion: 0.08
+Nodes (18): HTMLBeautifier, Remove cruft from svenskakyrkan.se documents. Args: content (str): the content…, Turn tags to divs. We don't care about the difference between <fieldsets>,…, Turn div like elements into div. XHTML doesn't allow (and xhtml2corpus doesn't…, Remove empty p elements., Delete empty class attributes., Remove unwanted tags from a html document. The point with this exercise is to…, Add p around text after an hX element. (+10 more)
 
 ### Community 12 - "NrkNoPage"
 Cohesion: 0.07
-Nodes (15): NrkNoPage, NrkNoUnknownPageError, This will be the content of the saved file., Find authors with the correct roles. Args: article (etree.Element): The parsed…, Raise an error if the page is not recognised., Get the id of the parallel document., Save a NRK sápmi page to the corpus., Set the metadata for the page. (+7 more)
+Nodes (13): NrkNoPage, This will be the content of the saved file., Find authors with the correct roles. Args: article (etree.Element): The parsed…, Get the id of the parallel document., Save a NRK sápmi page to the corpus., Set the metadata for the page., Update metadata info on parallel files., Save html and metadata. (+5 more)
 
 ### Community 32 - "util.py"
-Cohesion: 0.15
-Nodes (13): human_readable_filesize(), human_readable_timespan(), lineno(), note(), Replace unwanted strings with wanted strings. Args: replacements:…, Return the current line number in our program., Print msg to stderr. Args: msg (str): the message, Returns human readable filesize (+5 more)
+Cohesion: 0.11
+Nodes (18): BaseException, basename_noext(), get_lang_resource(), human_readable_filesize(), human_readable_timespan(), ignored(), note(), print_frame() (+10 more)
 
 ### Community 38 - "compile_cwb_mono.py"
 Cohesion: 0.07
@@ -251,11 +262,15 @@ Nodes (36): CompletedProcess, date, Module, abort(), Category, clean_directory()
 
 ### Community 50 - "avvirdigital.py"
 Cohesion: 0.06
-Nodes (57): Any, AvvirAuthor, AvvirContainer, AvvirTaggedText, parametrize, SerializedXml, AvvirAuthor, AvvirContainer (+49 more)
+Nodes (60): Any, AvvirAuthor, AvvirContainer, AvvirTaggedText, parametrize, SerializedXml, AvvirAuthor, AvvirContainer (+52 more)
 
 ### Community 52 - "SamediggiNoCrawler"
 Cohesion: 0.16
 Nodes (11): SamediggiNoPage, Path, Add a page to the list of parallel pages., Set the parallels for this set of parallel pages., Get parallel pages for the original page. Args: orig_page (SamediggiNoPage):…, Crawl a pageset that link gives us., Crawl samediggi.no and save html documents to the corpus., Initialise the SamediggiNoCrawler class. (+3 more)
+
+### Community 55 - "htmlcontentconverter.py"
+Cohesion: 0.08
+Nodes (28): ElementTree, Path, Convert the content of the give file to an lxml element. Args: filename: path…, to_html_elt(), add_p_instead_of_tail(), beautify_intermediate(), convert2intermediate(), Convert the content of the given file to an lxml element. Args: path: path to… (+20 more)
 
 ### Community 64 - "NrkNoCrawler"
 Cohesion: 0.18
@@ -286,8 +301,8 @@ Cohesion: 0.18
 Nodes (5): Print only errorort content Check the output of a p element containing two…, Visit only <p type=tablecell> elements when table is True, Default settings, print content of p elements Check the output of plain p…, Print only content of p elements with type=title gets output., TestCcat
 
 ### Community 89 - "PDF2XMLConverter"
-Cohesion: 0.18
-Nodes (10): PDF2XMLConverter, Element, Class to convert the xml output of pdftohtml to Giella xml. Attributes:…, Strip unwanted chars from the document. Args: content: the xml document that…, Replace unwanted strings with correct replacements. Args: content (str):…, Convert from pdf to a corpus xml file. Returns: (lxml.etree.Element): A corpus…, Convert output of pdftohtml to a corpus xml file. Returns:…, Parse the page element. Args: page: a pdf xml page element. (+2 more)
+Cohesion: 0.16
+Nodes (12): merge(), PDF2XMLConverter, Element, Class to convert the xml output of pdftohtml to Giella xml. Attributes:…, Strip unwanted chars from the document. Args: content: the xml document that…, Merge two paragraph elements into one., Replace unwanted strings with correct replacements. Args: content (str):…, Convert from pdf to a corpus xml file. Returns: (lxml.etree.Element): A corpus… (+4 more)
 
 ### Community 112 - "analyse_corpus"
 Cohesion: 0.47
@@ -305,9 +320,9 @@ Nodes (3): align_files.sh script, encode_gt_corpus.sh script, run_para_corpus_en
 Cohesion: 0.33
 Nodes (6): Base Form Relation Search, insert.py, Korp Database, _relations.sql, Settings Configuration, Word Picture Tables
 
-### Community 129 - "gold2correct.py"
-Cohesion: 0.20
-Nodes (12): main(), move_orig_to_correct(), parse_options(), Parse the commandline options. Returns: (argparse.Namespace): the parsed…, Move the original file to a .correct.txt file. Args: orig_file: The original…, Convert goldstandard files to .correct.txt files., categorise_files(), main() (+4 more)
+### Community 129 - "converter.py"
+Cohesion: 0.07
+Nodes (46): Classifier, CorpusPath, dependencies(), fix_document(), fix_parallels(), get_dtd_location(), get_tmpdir(), has_content() (+38 more)
 
 ### Community 136 - "Saxon Transformation"
 Cohesion: 0.50
@@ -330,20 +345,20 @@ Cohesion: 0.05
 Nodes (19): Test hyph tags when hyph_replacement is set to "xml, Test hyph tags when hyph_replacement is set to "-, Test the treatment of two hyph tags in a row, The text before a hyph is the tail of the previous sibling, Test how ccat handles errormarkup, Plain error element, default text flow, Nested error element, default text flow, Plain error element, one word per line output (+11 more)
 
 ### Community 149 - "Exception"
-Cohesion: 0.17
-Nodes (13): Exception, PDFEmptyPageError, Raise this exception if a pdf page is empty., ArgumentError, ConversionError, ExecutableMissingError, Look for programs and files that are needed to do the analysis. If they don't…, This exception is raised when setup is faulty. (+5 more)
+Cohesion: 0.20
+Nodes (11): Exception, NrkNoUnknownPageError, Raise an error if the page is not recognised., ArgumentError, ExecutableMissingError, Look for programs and files that are needed to do the analysis. If they don't…, This exception is raised when setup is faulty., This exception is raised when wanted executables are missing. (+3 more)
 
 ### Community 150 - "PDFPageMetadata"
 Cohesion: 0.19
 Nodes (8): PDFPageMetadata, Read pdf metadata from the metadata file into this class. Compute metadata…, Compute the margins of a page in pixels. Returns: (dict): a dict containing the…, Compute a margin in pixels. Args: margin: the name of the margin Returns:…, Get the width of the margin in percent., Compute inner margins of the document. Returns: (dict): A dict where the key is…, Compute a margin in pixels. Args: margin (str): the name of the margin Returns:…, Get the width of the margin in percent.
 
 ### Community 151 - "pdfconverter.py"
-Cohesion: 0.24
-Nodes (9): handle_br(), is_probably_hyphenated(), merge(), merge_children_of_p(), merge_i(), Find out if previous is part of a hyphenated word. Args: previous: the previous…, Handle br tags in p elements. Args: previous (str): the previous string in…, Merge two paragraph elements into one. (+1 more)
+Cohesion: 0.22
+Nodes (10): handle_br(), is_probably_hyphenated(), merge_children_of_p(), merge_i(), PDFEmptyPageError, Exception, Find out if previous is part of a hyphenated word. Args: previous: the previous…, Handle br tags in p elements. Args: previous (str): the previous string in… (+2 more)
 
-### Community 152 - "CorpusPath"
-Cohesion: 0.23
-Nodes (13): BaseException, CorpusPath, analyse(), analyse_in_parallel(), analyse_serially(), dependency_analysis(), get_modename(), Analyse a file. Args: xml_path: The path to the file to analyse.… (+5 more)
+### Community 152 - "Path"
+Cohesion: 0.17
+Nodes (19): Namespace, Path, analyse(), analyse_in_parallel(), analyse_serially(), dependency_analysis(), find_analyser_zpipe(), get_modename() (+11 more)
 
 ### Community 153 - "SamediggiNoPage"
 Cohesion: 0.07
@@ -353,9 +368,9 @@ Nodes (19): Element, Path, This will be the content of the saved file., Extract 
 Cohesion: 0.33
 Nodes (6): main(), parse_args(), Parse the commandline options. Returns: (argparse.Namespace): the parsed…, Convert an html file, and print the result to outfile., print_element(), Format an html document. This function formats html documents for readability,…
 
-### Community 155 - "Path"
-Cohesion: 0.22
-Nodes (11): Path, basename_noext(), executable_in_path(), get_lang_resource(), is_executable(), path_possibilities(), Check if the program in fullpath is executable. Args: fullpath: the path to the…, Check if program is found in $PATH. Args: program (str): name of program of… (+3 more)
+### Community 155 - "executable_in_path"
+Cohesion: 0.33
+Nodes (6): executable_in_path(), is_executable(), path_possibilities(), Check if the program in fullpath is executable. Args: fullpath: the path to the…, Check if program is found in $PATH. Args: program (str): name of program of…, Check if program is in path. Args: program: name of the program Returns: True…
 
 ### Community 158 - "PDFPage"
 Cohesion: 0.22
@@ -366,36 +381,56 @@ Cohesion: 0.25
 Nodes (5): PDFFontspecs, Add font specs found in a pdf page to this class. Attributes: pdffontspecs: map…, Initialise the PDFFontspecs class., Add a pdf2xml fontspec to this class. Args: xmlfontspec: a PDF2XML fontspec…, Return a corrected id of a fontspec. Some xmlfontspecs have different id's for…
 
 ### Community 160 - "to_html_elt"
-Cohesion: 0.40
-Nodes (4): Path, Initialise the PDF2XMLConverte class. Args: filename (str): the path to the pdf…, Convert a pdf document to the Giella xml format. Args: path (str): path to the…, to_html_elt()
+Cohesion: 0.33
+Nodes (5): ElementTree, Path, Initialise the PDF2XMLConverte class. Args: filename (str): the path to the pdf…, Convert a pdf document to the Giella xml format. Args: path (str): path to the…, to_html_elt()
 
 ### Community 161 - "styles"
 Cohesion: 0.50
 Nodes (3): Initialise the PDFPageMetadata class. Args: page_id: the page id page_style:…, Turn inline css styles into a dict., styles()
 
-### Community 163 - "main"
-Cohesion: 0.25
-Nodes (9): Namespace, find_analyser_zpipe(), main(), parse_options(), Check if resources needed by modes exists. Args: lang: the language that modes…, Parse the given options., Analyse files in the given directories., lang_resource_dirs() (+1 more)
+### Community 163 - "avvirconverter.py"
+Cohesion: 0.13
+Nodes (20): convert2intermediate(), convert_article(), convert_p(), convert_story(), convert_sub_p(), convert_subelement(), fix_quotemarks(), insert_element() (+12 more)
+
+### Community 165 - "biblexmlconverter.py"
+Cohesion: 0.14
+Nodes (19): convert2intermediate(), make_p(), process_bible(), process_book(), process_chapter(), process_p(), process_section(), process_verse() (+11 more)
+
+### Community 166 - "PlaintextConverter"
+Cohesion: 0.15
+Nodes (12): convert2intermediate(), PlaintextConverter, Element, ElementTree, Path, Make an xml element. Args: element_name: Name of the xml element text: The text…, Transform paragraphs to etree elements. Args: content: the content of the…, Transform plaintext to an intermediate xml document. Args: content: the content… (+4 more)
+
+### Community 167 - "biblesfmconverter.py"
+Cohesion: 0.16
+Nodes (16): add_text(), clean_text(), convert2intermediate(), macron_to_caron(), parse_line(), parse_sfm(), ElementTree, Path (+8 more)
+
+### Community 168 - "convert2intermediate"
+Cohesion: 0.36
+Nodes (7): char_to_span(), convert2intermediate(), ElementTree, Path, Convert usx xml files to the giellatekno xml format., remove_unwanted(), usx_to_document()
+
+### Community 169 - "gold2correct.py"
+Cohesion: 0.20
+Nodes (12): main(), move_orig_to_correct(), parse_options(), Parse the commandline options. Returns: (argparse.Namespace): the parsed…, Move the original file to a .correct.txt file. Args: orig_file: The original…, Convert goldstandard files to .correct.txt files., categorise_files(), main() (+4 more)
 
 ## Knowledge Gaps
-- **39 isolated node(s):** `generate_tables.sh script`, `corpustools`, `Original Corpus`, `Korp-ready Files`, `VRT Corpus Files` (+34 more)
+- **39 isolated node(s):** `corpustools`, `generate_tables.sh script`, `Original Corpus`, `Korp-ready Files`, `VRT Corpus Files` (+34 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **152 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
+- **Why does `HTMLBeautifier` connect `HTMLBeautifier` to `htmlcontentconverter.py`?**
+  _High betweenness centrality (0.046) - this node is a cross-community bridge._
 - **Why does `SamediggiNoPage` connect `SamediggiNoPage` to `util.py`?**
-  _High betweenness centrality (0.033) - this node is a cross-community bridge._
-- **Why does `print_element()` connect `main` to `util.py`, `ccat.py`?**
-  _High betweenness centrality (0.026) - this node is a cross-community bridge._
-- **What connects `generate_tables.sh script`, `corpustools`, `Original Corpus` to the rest of the system?**
+  _High betweenness centrality (0.034) - this node is a cross-community bridge._
+- **What connects `corpustools`, `generate_tables.sh script`, `Original Corpus` to the rest of the system?**
   _39 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `Converter` be split into smaller, more focused modules?**
-  _Cohesion score 0.06906906906906907 - nodes in this community are weakly interconnected._
+- **Should `epubconverter.py` be split into smaller, more focused modules?**
+  _Cohesion score 0.13054187192118227 - nodes in this community are weakly interconnected._
+- **Should `HTMLBeautifier` be split into smaller, more focused modules?**
+  _Cohesion score 0.08235294117647059 - nodes in this community are weakly interconnected._
 - **Should `NrkNoPage` be split into smaller, more focused modules?**
-  _Cohesion score 0.07126436781609195 - nodes in this community are weakly interconnected._
-- **Should `compile_cwb_mono.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.07020408163265306 - nodes in this community are weakly interconnected._
-- **Should `avvirdigital.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.06451612903225806 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07407407407407407 - nodes in this community are weakly interconnected._
+- **Should `util.py` be split into smaller, more focused modules?**
+  _Cohesion score 0.10952380952380952 - nodes in this community are weakly interconnected._
