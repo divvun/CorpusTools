@@ -117,16 +117,16 @@ def validate_complete(complete: etree.Element, names: CorpusPath) -> None:
         )
 
 
-def to_giella(path: Path) -> etree.Element:
+def to_giella(path: Path) -> etree.ElementTree:
     """Convert a document to the giella xml format.
 
     Args:
         path: path to the document
 
     Returns:
-        The converted document as an lxml Element.
+        The converted document as an lxml ElementTree.
     """
-    chooser: dict[str, Callable[[Path], etree.Element]] = {
+    chooser: dict[str, Callable[[Path], etree.ElementTree]] = {
         ".doc": htmlcontentconverter.convert2intermediate,
         ".docx": htmlcontentconverter.convert2intermediate,
         ".epub": htmlcontentconverter.convert2intermediate,
@@ -167,7 +167,7 @@ def transform_to_complete(names: CorpusPath) -> etree.Element:
             f"{names.orig} can not convert files of this format {str(error)}:"
         ) from error
     try:
-        fix_document(intermediate, names)
+        fix_document(intermediate.getroot(), names)
     except etree.XMLSyntaxError as error:
         with open(names.log, "w") as logfile:
             logfile.write(f"Error at: {str(util.lineno())}")

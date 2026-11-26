@@ -11,18 +11,19 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2012-2022 The University of Tromsø &
+#   Copyright © 2012-2026 The University of Tromsø &
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 """Convert files supported by pandoc to the html format."""
+
 import subprocess
 from pathlib import Path
 
 from lxml import etree, html
 
 
-def to_html_elt(filename: Path) -> etree.Element:
+def to_html_elt(filename: Path) -> etree.ElementTree:
     """Convert the content of the give file to an lxml element.
 
     Args:
@@ -32,7 +33,12 @@ def to_html_elt(filename: Path) -> etree.Element:
         An lxml element containing the html version of the given file.
     """
     html_body = subprocess.run(
-        ["pandoc", filename.as_posix()], encoding="utf-8", capture_output=True, check=False
+        ["pandoc", filename.as_posix()],
+        encoding="utf-8",
+        capture_output=True,
+        check=False,
     ).stdout
 
-    return html.document_fromstring(f"<html><body>{html_body}</body></html>")
+    return etree.ElementTree(
+        html.document_fromstring(f"<html><body>{html_body}</body></html>")
+    )

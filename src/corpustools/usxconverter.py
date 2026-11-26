@@ -11,7 +11,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2020-2023 The University of Tromsø &
+#   Copyright © 2020-2026 The University of Tromsø &
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
@@ -71,9 +71,9 @@ def usx_to_document(usx_document):
                     if not paragraph[-1].tail:
                         paragraph[-1].tail = " ".join(child.text.split())
                     else:
-                        paragraph[-1].tail = (
-                            f"{paragraph[-1].tail} {' '.join(child.text.split())}"
-                        )
+                        paragraph[
+                            -1
+                        ].tail = f"{paragraph[-1].tail} {' '.join(child.text.split())}"
                 elif not paragraph.text:
                     try:
                         paragraph.text = " ".join(child.text.split())
@@ -107,10 +107,10 @@ def usx_to_document(usx_document):
     return document
 
 
-def convert2intermediate(filename: Path) -> etree.Element:
+def convert2intermediate(filename: Path) -> etree.ElementTree:
     """Convert usx xml files to the giellatekno xml format."""
     usx_doc = etree.parse(filename).getroot()
     remove_unwanted(usx_doc)
     char_to_span(usx_doc)
 
-    return usx_to_document(usx_doc)
+    return etree.ElementTree(usx_to_document(usx_doc))

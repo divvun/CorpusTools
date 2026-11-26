@@ -70,7 +70,7 @@ class AvvirTaggedText:
             quote_element.set("type", "quote")
 
             return element
-        
+
         element.text = self.text
         if self.tag in self.title_tags:
             element.set("type", "title")
@@ -227,7 +227,7 @@ def extract_containers(contents: list[dict[str, Any]]) -> list[AvvirContainer]:
     ]
 
 
-def convert2intermediate(filepath: Path) -> etree.Element:
+def convert2intermediate(filepath: Path) -> etree.ElementTree:
     """Convert Ávvir json files to the giellatekno xml format."""
     avvir_doc = AvvirDocument.from_json(
         json.loads(filepath.read_text(encoding="utf-8"))
@@ -253,7 +253,7 @@ def convert2intermediate(filepath: Path) -> etree.Element:
     for element in avvir_doc.serialize():
         if "".join(element.itertext()).strip():
             body.append(element)
-    return tree
+    return etree.ElementTree(tree)
 
 
 def convert_author(author_dict: dict[str, Any]) -> AvvirAuthor:

@@ -23,7 +23,7 @@ from corpustools.error_annotated_sentence import parse_markup_to_sentence
 from corpustools.util import ConversionError
 
 
-def convert2intermediate(filename: Path) -> etree.Element:
+def convert2intermediate(filename: Path) -> etree.ElementTree:
     """Convert files containing error-annotated sentences to the GiellaLT xml format."""
     document = etree.Element("document")
     etree.SubElement(document, "header")
@@ -49,4 +49,4 @@ def convert2intermediate(filename: Path) -> etree.Element:
             f"Error markup parsing error, see log file {log_file}."
         ) from errors[0][2]
 
-    return document
+    return etree.ElementTree(document)

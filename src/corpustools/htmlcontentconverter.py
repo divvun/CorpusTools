@@ -11,11 +11,12 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2012-2025 The University of Tromsø &
+#   Copyright © 2012-2026 The University of Tromsø &
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 """Convert html content to the Giella xml format."""
+
 import os
 from pathlib import Path
 from typing import Callable
@@ -36,9 +37,16 @@ from corpustools import (
 HERE = Path(__file__).parent
 
 
+def to_html_elt(path: Path) -> etree.ElementTree:
+    """Convert the content of the given file to an lxml element.
 
-def to_html_elt(path: Path) -> etree.Element:
-    chooser: dict[str, Callable] = {
+    Args:
+        path: path to the document
+
+    Returns:
+        An lxml element containing the html version of the given file.
+    """
+    chooser: dict[str, Callable[[Path], etree.ElementTree]] = {
         ".doc": convert_using_soffice.to_html_elt,
         ".docx": convert_using_pandoc.to_html_elt,
         ".epub": epubconverter.to_html_elt,
@@ -158,7 +166,7 @@ class HTMLBeautifier:
             elt.tag = "div"
 
         lists_as_divs = self.soup.xpath(
-            "//*[( child::ul or child::ol ) " "and ( self::ul or self::ol )" "    ]"
+            "//*[( child::ul or child::ol ) and ( self::ul or self::ol )    ]"
         )
         for elt in lists_as_divs:
             elt.tag = "div"
@@ -198,11 +206,10 @@ class HTMLBeautifier:
                     "article-bottom-element",
                     "article-column",
                     (
-                        "article-dateline article-dateline-footer "
-                        "meta-widget-content"
+                        "article-dateline article-dateline-footer meta-widget-content"
                     ),  # nrk.no
                     (
-                        "article-dateline article-footer " "container-widget-content cf"
+                        "article-dateline article-footer container-widget-content cf"
                     ),  # nrk.no
                     "article-heading-wrapper",  # 1177.se
                     "article-info",  # regjeringen.no
@@ -257,8 +264,7 @@ class HTMLBeautifier:
                     "g100 col fc s18 sg6 sg9 sg12 menu-reference",  # nrk.no
                     "g100 col fc s18 sg6 sg9 sg12 flow-reference",  # nrk.no
                     "g11 col fl s2 sl6 sl9 sl12 sl18",  # nrk.no
-                    "g22 col fl s4 sl6 sl9 sl12 sl18 "
-                    "article-header-sidebar",  # nrk.no
+                    "g22 col fl s4 sl6 sl9 sl12 sl18 article-header-sidebar",  # nrk.no
                     "g94 col fl s17 sl18 sg6 sg9 sg12 meta-widget",  # nrk.no
                     "globmenu",  # visitstetind.no
                     "grid cf",  # nrk.no
@@ -364,10 +370,8 @@ class HTMLBeautifier:
                     "ctl00_Cookies",  # lansstyrelsen.se
                     "ctl00_FullRegion_CenterAndRightRegion_HitsControl_"
                     "ctl00_FullRegion_CenterAndRightRegion_Sorting_sortByDiv",
-                    "ctl00_LSTPlaceHolderFeedback_"
-                    "editmodepanel31",  # lansstyrelsen.se
-                    "ctl00_LSTPlaceHolderSearch_"
-                    "SearchBoxControl",  # lansstyrelsen.se
+                    "ctl00_LSTPlaceHolderFeedback_editmodepanel31",  # lansstyrelsen.se
+                    "ctl00_LSTPlaceHolderSearch_SearchBoxControl",  # lansstyrelsen.se
                     "ctl00_MidtSone_ucArtikkel_ctl00_ctl00_ctl01_divRessurser",
                     "ctl00_MidtSone_ucArtikkel_ctl00_divNavigasjon",
                     "ctl00_PlaceHolderMain_EditModePanel1",  # lansstyrelsen.se
@@ -715,7 +719,7 @@ def beautify_intermediate(intermediate):
     add_p_instead_of_tail(intermediate)
 
 
-def xhtml2intermediate(content_xml):
+def xhtml2intermediate(content_xml: etree.ElementTree) -> etree.ElementTree:
     """Convert xhtml to Giella xml.
 
     Args:
@@ -732,10 +736,10 @@ def xhtml2intermediate(content_xml):
     intermediate = transform(HTMLBeautifier(content_xml).beautify())
     beautify_intermediate(intermediate)
 
-    return intermediate.getroot()
+    return etree.ElementTree(intermediate.getroot())
 
 
-def convert2intermediate(filename: Path)->etree.Element:
+def convert2intermediate(filename: Path) -> etree.ElementTree:
     """Convert a webpage to Giella xml.
 
     Args:

@@ -11,7 +11,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2012-2023 The University of Tromsø &
+#   Copyright © 2012-2026 The University of Tromsø &
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
@@ -25,7 +25,7 @@ from lxml import etree
 HERE = os.path.dirname(__file__)
 
 
-def convert2intermediate(filename: Path) -> etree.Element:
+def convert2intermediate(filename: Path) -> etree.ElementTree:
     """Transform svg to an intermediate xml document.
 
     Args:
@@ -36,4 +36,4 @@ def convert2intermediate(filename: Path) -> etree.Element:
     doc = etree.parse(filename)
     intermediate = transform(doc)
 
-    return intermediate.getroot()
+    return etree.ElementTree(intermediate.getroot())

@@ -11,11 +11,12 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2012-2023 The University of Tromsø &
+#   Copyright © 2012-2026 The University of Tromsø &
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 """Convert html files to the Giella xml format."""
+
 import re
 from pathlib import Path
 
@@ -23,10 +24,10 @@ from lxml import etree, html
 
 
 class HTMLError(Exception):
-    """Raise this error in this module."""
+    """Raised when there is an error in the HTML conversion process."""
 
 
-def remove_declared_encoding(content):
+def remove_declared_encoding(content: str) -> str:
     """Remove declared decoding.
 
     lxml explodes if we send a decoded Unicode string with an
@@ -46,7 +47,7 @@ def remove_declared_encoding(content):
     return re.sub(xml_encoding_declaration_re, "", content)
 
 
-def to_html_elt(filename: Path) -> html.HtmlElement:
+def to_html_elt(filename: Path) -> etree.ElementTree:
     """Return the content of the html doc as a string.
 
     Args:
@@ -58,9 +59,11 @@ def to_html_elt(filename: Path) -> html.HtmlElement:
     for encoding in ["utf-8", "windows-1252", "latin1"]:
         try:
             with open(filename, encoding=encoding) as file_:
-                parser = etree.HTMLParser(remove_comments=True)
-                return html.document_fromstring(
-                    remove_declared_encoding(file_.read()), parser=parser
+                parser = html.HTMLParser(remove_comments=True)
+                return etree.ElementTree(
+                    html.document_fromstring(
+                        remove_declared_encoding(file_.read()), parser=parser
+                    )
                 )
         except UnicodeDecodeError:
             pass

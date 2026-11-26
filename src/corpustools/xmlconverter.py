@@ -11,11 +11,12 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2020-2023 The University of Tromsø &
+#   Copyright © 2020-2026 The University of Tromsø &
 #                    the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 """Convert udhr files to the Giella xml format."""
+
 import os
 from pathlib import Path
 
@@ -24,9 +25,9 @@ from lxml import etree
 HERE = os.path.dirname(__file__)
 
 
-def to_html_elt(filename: Path) -> etree.Element:
+def to_html_elt(filename: Path) -> etree.ElementTree:
     """Turn a udhr xml file to giella xml."""
     udhr_tree = etree.parse(filename)
     udhr_transformer = etree.XSLT(etree.parse(os.path.join(HERE, "xslt/udhr2html.xsl")))
 
-    return udhr_transformer(udhr_tree).getroot()
+    return etree.ElementTree(udhr_transformer(udhr_tree).getroot())

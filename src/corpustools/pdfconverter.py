@@ -623,11 +623,11 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
         """Extract the text from a document.
 
         Args:
-            command (list[str]): a list containing the command and
+            command: a list containing the command and
                 the arguments sent to run_external_command.
 
         Returns:
-            (bytes): byte string containing the output of the program
+            the extracted text
         """
         try:
             return util.run_external_command(command, cwd="/tmp")
@@ -668,7 +668,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
         )
 
 
-def to_html_elt(path: Path) -> etree.Element:
+def to_html_elt(path: Path) -> etree.ElementTree:
     """Convert a pdf document to the Giella xml format.
 
     Args:
@@ -678,4 +678,4 @@ def to_html_elt(path: Path) -> etree.Element:
         (lxml.etree.Element): the root element of the Giella xml document
     """
     converter = PDF2XMLConverter(path)
-    return converter.convert2intermediate()
+    return etree.ElementTree(converter.convert2intermediate())

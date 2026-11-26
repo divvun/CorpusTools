@@ -17,8 +17,8 @@
 #
 """Convert bible sfm (usfm) files to the Giella xml format."""
 
-from pathlib import Path
 import re
+from pathlib import Path
 
 from lxml import etree
 
@@ -177,8 +177,8 @@ def parse_sfm(lines):
     return document
 
 
-def convert2intermediate(filename: Path) -> etree.Element:
+def convert2intermediate(filename: Path) -> etree.ElementTree:
     """Convert an sfm file to the intermediate Giella xml format."""
 
     with open(filename, encoding="utf-8") as sfm_file:
-        return parse_sfm(sfm_file)
+        return etree.ElementTree(parse_sfm(sfm_file))

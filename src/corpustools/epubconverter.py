@@ -11,7 +11,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2012-2025 The University of Tromsø &
+#   Copyright © 2012-2026 The University of Tromsø &
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
@@ -36,7 +36,7 @@ from corpustools.util import ConversionError
 from corpustools.xslsetter import MetadataHandler
 
 
-def read_chapter(chapter: BookChapter) -> etree._Element:
+def read_chapter(chapter: BookChapter) -> etree.Element:
     """Read the contents of a epub_file chapter.
 
     Args:
@@ -54,7 +54,7 @@ def read_chapter(chapter: BookChapter) -> etree._Element:
         raise ConversionError(error) from error
 
 
-def chapters(book: Book, metadata: MetadataHandler) -> Iterator[etree._Element]:
+def chapters(book: Book, metadata: MetadataHandler) -> Iterator[etree.Element]:
     """Get the all linear chapters of the epub book.
 
     Args:
@@ -74,7 +74,7 @@ def chapters(book: Book, metadata: MetadataHandler) -> Iterator[etree._Element]:
                 yield chapterbody
 
 
-def extract_content(filename: Path, metadata: MetadataHandler) -> etree._Element:
+def extract_content(filename: Path, metadata: MetadataHandler) -> etree.Element:
     """Extract content from the epub file.
 
     Args:
@@ -96,14 +96,14 @@ def extract_content(filename: Path, metadata: MetadataHandler) -> etree._Element
     return html
 
 
-def remove_ranges(metadata: MetadataHandler, html: etree._Element) -> None:
+def remove_ranges(metadata: MetadataHandler, html: etree.Element) -> None:
     """Remove ranges of html elements."""
     if metadata.skip_elements:
         for pairs in metadata.skip_elements:
             remove_range(pairs[0], pairs[1], html)
 
 
-def to_html_elt(filename: Path) -> etree._Element:
+def to_html_elt(filename: Path) -> etree.ElementTree:
     """Append all chapter bodies as divs to an html file.
 
     Returns:
@@ -120,11 +120,11 @@ def to_html_elt(filename: Path) -> etree._Element:
             "Check that skip_elements in the metadata file has the correct format"
         ) from error
 
-    return html
+    return etree.ElementTree(html)
 
 
 def remove_siblings_shorten_path(
-    parts: list[str], content: etree._Element, preceding: bool = False
+    parts: list[str], content: etree.Element, preceding: bool = False
 ) -> list[str]:
     """Remove all siblings before or after an element.
 
@@ -150,7 +150,7 @@ def remove_siblings_shorten_path(
 
 
 def shorten_longest_path(
-    path1: str, path2: str, content: etree._Element
+    path1: str, path2: str, content: etree.Element
 ) -> tuple[list[str], list[str]]:
     """Remove elements from the longest path.
 
@@ -182,7 +182,7 @@ def shorten_longest_path(
 
 
 def remove_trees_1(
-    path1: str, path2: str, content: etree._Element
+    path1: str, path2: str, content: etree.Element
 ) -> tuple[list[str], list[str]]:
     """Remove tree nodes that do not have the same parents.
 
@@ -209,7 +209,7 @@ def remove_trees_1(
     return starts, ends
 
 
-def remove_trees_2(starts: list[str], ends: list[str], content: etree._Element) -> None:
+def remove_trees_2(starts: list[str], ends: list[str], content: etree.Element) -> None:
     """Remove tree nodes that have the same parents.
 
     Now that the parents of starts and ends are equal, remove the last
@@ -235,7 +235,7 @@ def remove_trees_2(starts: list[str], ends: list[str], content: etree._Element) 
                 parent.remove(sibling)
 
 
-def remove_first_element(path1: str, content: etree._Element) -> None:
+def remove_first_element(path1: str, content: etree.Element) -> None:
     """Remove the first element in the range.
 
     Args:
@@ -251,7 +251,7 @@ def remove_first_element(path1: str, content: etree._Element) -> None:
             parent.remove(first_start)
 
 
-def remove_range(path1: str, path2: str, content: etree._Element) -> None:
+def remove_range(path1: str, path2: str, content: etree.Element) -> None:
     """Remove a range of elements from an xhtml document.
 
     Args:
