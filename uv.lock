@@ -175,7 +175,7 @@ wheels = [
 
 [[package]]
 name = "corpustools"
-version = "3.2.0"
+version = "3.2.2"
 source = { editable = "." }
 dependencies = [
     { name = "epub" },

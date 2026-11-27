@@ -90,9 +90,9 @@
     "semantic_hash": "4c98590474599b0fa632003cb971ba06"
   },
   "pyproject.toml": {
-    "mtime": 1795694072.2889926,
-    "seen": 1795694086.564641,
-    "ast_hash": "29a7b69a479d7a70f610ae9a7122c994",
+    "mtime": 1795778572.5955572,
+    "seen": 1795778625.5563111,
+    "ast_hash": "8292ee2f773b2e4c4969541a29e23c80",
     "semantic_hash": ""
   },
   ".github/workflows/docs.yml": {
@@ -630,15 +630,15 @@
     "semantic_hash": ""
   },
   "src/corpustools/nrk_no_crawler.py": {
-    "mtime": 1795603198.7534297,
-    "seen": 1795603237.428035,
-    "ast_hash": "a1a9971ffb12eacafff3ef5d52cf3f9c",
+    "mtime": 1795778464.5702434,
+    "seen": 1795778500.8299022,
+    "ast_hash": "d3a00b35da4801aced23424b11bed8f6",
     "semantic_hash": ""
   },
   "src/corpustools/nrk_no_page.py": {
-    "mtime": 1793700736.0232081,
-    "seen": 1793701141.294315,
-    "ast_hash": "66129a3fec534e17e5600569478d30b1",
+    "mtime": 1795771994.1227105,
+    "seen": 1795775932.904516,
+    "ast_hash": "abaf6138c8b71577e0169c43c694532a",
     "semantic_hash": ""
   },
   "src/corpustools/one-off-functions.py": {
@@ -660,9 +660,9 @@
     "semantic_hash": ""
   },
   "src/corpustools/parallelize.py": {
-    "mtime": 1793376748.857212,
-    "seen": 1793695576.815207,
-    "ast_hash": "8ace47de439bd7ae08ecf2900f9e073e",
+    "mtime": 1795777678.8912175,
+    "seen": 1795778458.64414,
+    "ast_hash": "1aa34081a9320aad06a1bbff46485905",
     "semantic_hash": ""
   },
   "src/corpustools/pdfconverter.py": {
@@ -1443,6 +1443,18 @@
     "mtime": 1795517766.6479223,
     "seen": 1795517800.965734,
     "ast_hash": "9b4412c8c200224d9c09ced827233aab",
+    "semantic_hash": ""
+  },
+  "src/corpustools/sjekk_nrk.py": {
+    "mtime": 1795775641.1476662,
+    "seen": 1795775932.904526,
+    "ast_hash": "456f63367c12571a212c7498f2ecc167",
+    "semantic_hash": ""
+  },
+  "src/corpustools/pluff.md": {
+    "mtime": 1795776803.1419559,
+    "seen": 1795778458.644213,
+    "ast_hash": "e96af8f03f6c857ab2448a52620cde91",
     "semantic_hash": ""
   }
 }

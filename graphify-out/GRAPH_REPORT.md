@@ -1,16 +1,16 @@
-# Graph Report - CorpusTools  (2026-11-26)
+# Graph Report - CorpusTools  (2026-11-27)
 
 ## Corpus Check
-- 170 files · ~240,751 words
+- 172 files · ~246,618 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1029 nodes · 1387 edges · 200 communities (48 shown, 152 thin omitted)
+- 1042 nodes · 1413 edges · 199 communities (48 shown, 151 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 28 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `9c274ebd`
+- Built from commit: `04af2649`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -84,7 +84,7 @@
 - Enum
 - analyse_corpus
 - ccat.py
-- GenerateAnchorList
+- parallelize.py
 - HtmlElement
 - ParseResult
 - Pattern
@@ -167,7 +167,6 @@
 - Exception
 - PDFPageMetadata
 - pdfconverter.py
-- Path
 - SamediggiNoPage
 - main
 - executable_in_path
@@ -238,23 +237,23 @@
 ## Import Cycles
 - None detected.
 
-## Communities (200 total, 152 thin omitted)
+## Communities (199 total, 151 thin omitted)
 
 ### Community 2 - "epubconverter.py"
-Cohesion: 0.13
-Nodes (28): Book, BookChapter, MetadataHandler, chapters(), extract_content(), Element, ElementTree, Path (+20 more)
+Cohesion: 0.12
+Nodes (30): Book, BookChapter, MetadataHandler, chapters(), extract_content(), Element, ElementTree, Path (+22 more)
 
 ### Community 4 - "HTMLBeautifier"
 Cohesion: 0.08
 Nodes (18): HTMLBeautifier, Remove cruft from svenskakyrkan.se documents. Args: content (str): the content…, Turn tags to divs. We don't care about the difference between <fieldsets>,…, Turn div like elements into div. XHTML doesn't allow (and xhtml2corpus doesn't…, Remove empty p elements., Delete empty class attributes., Remove unwanted tags from a html document. The point with this exercise is to…, Add p around text after an hX element. (+10 more)
 
 ### Community 12 - "NrkNoPage"
-Cohesion: 0.07
-Nodes (13): NrkNoPage, This will be the content of the saved file., Find authors with the correct roles. Args: article (etree.Element): The parsed…, Get the id of the parallel document., Save a NRK sápmi page to the corpus., Set the metadata for the page., Update metadata info on parallel files., Save html and metadata. (+5 more)
+Cohesion: 0.09
+Nodes (12): NrkNoPage, This will be the content of the saved file., Find authors with the correct roles. Args: article (etree.Element): The parsed…, Get the id of the parallel document., Save a NRK sápmi page to the corpus., Set the metadata for the page., Update metadata info on parallel files., Save html and metadata. (+4 more)
 
 ### Community 32 - "util.py"
-Cohesion: 0.11
-Nodes (18): BaseException, basename_noext(), get_lang_resource(), human_readable_filesize(), human_readable_timespan(), ignored(), note(), print_frame() (+10 more)
+Cohesion: 0.13
+Nodes (15): basename_noext(), get_lang_resource(), human_readable_filesize(), human_readable_timespan(), note(), Replace unwanted strings with wanted strings. Args: replacements:…, Get a language resource. Args: lang (str): the language of the resource.…, Print msg to stderr. Args: msg (str): the message (+7 more)
 
 ### Community 38 - "compile_cwb_mono.py"
 Cohesion: 0.07
@@ -273,7 +272,7 @@ Cohesion: 0.08
 Nodes (28): ElementTree, Path, Convert the content of the give file to an lxml element. Args: filename: path…, to_html_elt(), add_p_instead_of_tail(), beautify_intermediate(), convert2intermediate(), Convert the content of the given file to an lxml element. Args: path: path to… (+20 more)
 
 ### Community 64 - "NrkNoCrawler"
-Cohesion: 0.18
+Cohesion: 0.15
 Nodes (9): Crawler, NrkNoPage, NrkNoCrawler, Collect links from a page., Set the parallels for this set of parallel pages., Get parallel pages for the original page. Args: orig_page: The original page to…, Collect pages from nrk.no., Get article ids from NRK Sápmi. Returns: A set of article ids. (+1 more)
 
 ### Community 67 - "analyse_corpus"
@@ -283,6 +282,10 @@ Nodes (12): add_files_to_corpus, analyse_corpus, ccat, compile_cwb_mono, convert
 ### Community 68 - "ccat.py"
 Cohesion: 0.07
 Nodes (60): Element, ElementTree, ccatter(), collect_inline_errors(), collect_not_inline_errors(), collect_text(), corrected_texts(), error_not_inline() (+52 more)
+
+### Community 69 - "parallelize.py"
+Cohesion: 0.22
+Nodes (13): GenerateAnchorList, get_dictionary(), get_filepair(), is_translated_from_lang2(), main(), make_dict(), parallelise_file(), parse_options() (+5 more)
 
 ### Community 74 - "sentencedivider.py"
 Cohesion: 0.20
@@ -321,8 +324,8 @@ Cohesion: 0.33
 Nodes (6): Base Form Relation Search, insert.py, Korp Database, _relations.sql, Settings Configuration, Word Picture Tables
 
 ### Community 129 - "converter.py"
-Cohesion: 0.07
-Nodes (46): Classifier, CorpusPath, dependencies(), fix_document(), fix_parallels(), get_dtd_location(), get_tmpdir(), has_content() (+38 more)
+Cohesion: 0.05
+Nodes (64): BaseException, Classifier, CorpusPath, Namespace, Path, analyse(), analyse_in_parallel(), analyse_serially() (+56 more)
 
 ### Community 136 - "Saxon Transformation"
 Cohesion: 0.50
@@ -345,8 +348,8 @@ Cohesion: 0.05
 Nodes (19): Test hyph tags when hyph_replacement is set to "xml, Test hyph tags when hyph_replacement is set to "-, Test the treatment of two hyph tags in a row, The text before a hyph is the tail of the previous sibling, Test how ccat handles errormarkup, Plain error element, default text flow, Nested error element, default text flow, Plain error element, one word per line output (+11 more)
 
 ### Community 149 - "Exception"
-Cohesion: 0.20
-Nodes (11): Exception, NrkNoUnknownPageError, Raise an error if the page is not recognised., ArgumentError, ExecutableMissingError, Look for programs and files that are needed to do the analysis. If they don't…, This exception is raised when setup is faulty., This exception is raised when wanted executables are missing. (+3 more)
+Cohesion: 0.17
+Nodes (12): Exception, NrkNoUnknownPageError, Raise an error if the page is not recognised., Extract only the content that is interesting to save from the web page., ArgumentError, ExecutableMissingError, Look for programs and files that are needed to do the analysis. If they don't…, This exception is raised when setup is faulty. (+4 more)
 
 ### Community 150 - "PDFPageMetadata"
 Cohesion: 0.19
@@ -355,10 +358,6 @@ Nodes (8): PDFPageMetadata, Read pdf metadata from the metadata file into this c
 ### Community 151 - "pdfconverter.py"
 Cohesion: 0.22
 Nodes (10): handle_br(), is_probably_hyphenated(), merge_children_of_p(), merge_i(), PDFEmptyPageError, Exception, Find out if previous is part of a hyphenated word. Args: previous: the previous…, Handle br tags in p elements. Args: previous (str): the previous string in… (+2 more)
-
-### Community 152 - "Path"
-Cohesion: 0.17
-Nodes (19): Namespace, Path, analyse(), analyse_in_parallel(), analyse_serially(), dependency_analysis(), find_analyser_zpipe(), get_modename() (+11 more)
 
 ### Community 153 - "SamediggiNoPage"
 Cohesion: 0.07
@@ -409,28 +408,28 @@ Cohesion: 0.36
 Nodes (7): char_to_span(), convert2intermediate(), ElementTree, Path, Convert usx xml files to the giellatekno xml format., remove_unwanted(), usx_to_document()
 
 ### Community 169 - "gold2correct.py"
-Cohesion: 0.20
-Nodes (12): main(), move_orig_to_correct(), parse_options(), Parse the commandline options. Returns: (argparse.Namespace): the parsed…, Move the original file to a .correct.txt file. Args: orig_file: The original…, Convert goldstandard files to .correct.txt files., categorise_files(), main() (+4 more)
+Cohesion: 0.18
+Nodes (14): main(), move_orig_to_correct(), orig_to_text(), parse_options(), Parse the commandline options. Returns: (argparse.Namespace): the parsed…, Move the original file to a .correct.txt file. Args: orig_file: The original…, Extract the text from a file. Args: orig_file: The original goldstandard file.…, Convert goldstandard files to .correct.txt files. (+6 more)
 
 ## Knowledge Gaps
 - **39 isolated node(s):** `corpustools`, `generate_tables.sh script`, `Original Corpus`, `Korp-ready Files`, `VRT Corpus Files` (+34 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **152 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **151 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `HTMLBeautifier` connect `HTMLBeautifier` to `htmlcontentconverter.py`?**
-  _High betweenness centrality (0.046) - this node is a cross-community bridge._
-- **Why does `SamediggiNoPage` connect `SamediggiNoPage` to `util.py`?**
+- **Why does `NrkNoPage` connect `NrkNoPage` to `NrkNoCrawler`, `Exception`?**
+  _High betweenness centrality (0.045) - this node is a cross-community bridge._
+- **Why does `PDF2XMLConverter` connect `PDF2XMLConverter` to `to_html_elt`, `.handle_syntaxerror`, `pdfconverter.py`?**
   _High betweenness centrality (0.034) - this node is a cross-community bridge._
+- **Why does `HTMLBeautifier` connect `HTMLBeautifier` to `htmlcontentconverter.py`?**
+  _High betweenness centrality (0.029) - this node is a cross-community bridge._
 - **What connects `corpustools`, `generate_tables.sh script`, `Original Corpus` to the rest of the system?**
   _39 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `epubconverter.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.13054187192118227 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.12043010752688173 - nodes in this community are weakly interconnected._
 - **Should `HTMLBeautifier` be split into smaller, more focused modules?**
   _Cohesion score 0.08235294117647059 - nodes in this community are weakly interconnected._
 - **Should `NrkNoPage` be split into smaller, more focused modules?**
-  _Cohesion score 0.07407407407407407 - nodes in this community are weakly interconnected._
-- **Should `util.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.10952380952380952 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08695652173913043 - nodes in this community are weakly interconnected._

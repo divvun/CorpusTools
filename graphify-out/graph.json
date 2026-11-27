@@ -17,19 +17,6 @@
       "source_location": "L16"
     },
     {
-      "id": "src_corpustools_util_conversionerror",
-      "label": "ConversionError",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 129,
-      "community_name": "converter.py",
-      "file_type": "code",
-      "norm_label": "conversionerror",
-      "source_file": "src/corpustools/util.py",
-      "source_location": "L54"
-    },
-    {
       "id": "tests_test_ccat_testccatcli",
       "label": "TestCcatCLI",
       "_callable": true,
@@ -223,6 +210,19 @@
       "norm_label": "plaintextconverter",
       "source_file": "src/corpustools/plaintextconverter.py",
       "source_location": "L30"
+    },
+    {
+      "id": "src_corpustools_util_conversionerror",
+      "label": "ConversionError",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "epubconverter.py",
+      "file_type": "code",
+      "norm_label": "conversionerror",
+      "source_file": "src/corpustools/util.py",
+      "source_location": "L54"
     },
     {
       "id": "src_corpustools_compile_cwb_mono_category",
@@ -541,18 +541,6 @@
       "source_location": "L66"
     },
     {
-      "id": "src_corpustools_nrk_no_page_nrknopage_content",
-      "label": ".content()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "NrkNoPage",
-      "file_type": "code",
-      "norm_label": ".content()",
-      "source_file": "src/corpustools/nrk_no_page.py",
-      "source_location": "L84"
-    },
-    {
       "id": "src_corpustools_nrk_no_page_nrknopage_content_string",
       "label": ".content_string()",
       "_callable": true,
@@ -709,6 +697,102 @@
       "source_location": "L702"
     },
     {
+      "id": "src_corpustools_analyser_analyse",
+      "label": "analyse()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 129,
+      "community_name": "converter.py",
+      "file_type": "code",
+      "norm_label": "analyse()",
+      "source_file": "src/corpustools/analyser.py",
+      "source_location": "L116"
+    },
+    {
+      "id": "src_corpustools_analyser_analyse_in_parallel",
+      "label": "analyse_in_parallel()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 129,
+      "community_name": "converter.py",
+      "file_type": "code",
+      "norm_label": "analyse_in_parallel()",
+      "source_file": "src/corpustools/analyser.py",
+      "source_location": "L158"
+    },
+    {
+      "id": "src_corpustools_analyser_analyse_serially",
+      "label": "analyse_serially()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 129,
+      "community_name": "converter.py",
+      "file_type": "code",
+      "norm_label": "analyse_serially()",
+      "source_file": "src/corpustools/analyser.py",
+      "source_location": "L178"
+    },
+    {
+      "id": "src_corpustools_analyser_dependency_analysis",
+      "label": "dependency_analysis()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 129,
+      "community_name": "converter.py",
+      "file_type": "code",
+      "norm_label": "dependency_analysis()",
+      "source_file": "src/corpustools/analyser.py",
+      "source_location": "L59"
+    },
+    {
+      "id": "src_corpustools_analyser_find_analyser_zpipe",
+      "label": "find_analyser_zpipe()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 129,
+      "community_name": "converter.py",
+      "file_type": "code",
+      "norm_label": "find_analyser_zpipe()",
+      "source_file": "src/corpustools/analyser.py",
+      "source_location": "L99"
+    },
+    {
+      "id": "src_corpustools_analyser_get_modename",
+      "label": "get_modename()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 129,
+      "community_name": "converter.py",
+      "file_type": "code",
+      "norm_label": "get_modename()",
+      "source_file": "src/corpustools/analyser.py",
+      "source_location": "L37"
+    },
+    {
+      "id": "src_corpustools_analyser_main",
+      "label": "main()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 129,
+      "community_name": "converter.py",
+      "file_type": "code",
+      "norm_label": "main()",
+      "source_file": "src/corpustools/analyser.py",
+      "source_location": "L233"
+    },
+    {
+      "id": "src_corpustools_analyser_parse_options",
+      "label": "parse_options()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 129,
+      "community_name": "converter.py",
+      "file_type": "code",
+      "norm_label": "parse_options()",
+      "source_file": "src/corpustools/analyser.py",
+      "source_location": "L201"
+    },
+    {
       "id": "src_corpustools_converter_dependencies",
       "label": "dependencies()",
       "_callable": true,
@@ -767,18 +851,6 @@
       "norm_label": "get_tmpdir()",
       "source_file": "src/corpustools/converter.py",
       "source_location": "L94"
-    },
-    {
-      "id": "src_corpustools_converter_has_content",
-      "label": "has_content()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 129,
-      "community_name": "converter.py",
-      "file_type": "code",
-      "norm_label": "has_content()",
-      "source_file": "src/corpustools/converter.py",
-      "source_location": "L286"
     },
     {
       "id": "src_corpustools_converter_is_goldstandard",
@@ -913,6 +985,30 @@
       "source_location": "L28"
     },
     {
+      "id": "src_corpustools_util_ignored",
+      "label": "ignored()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 129,
+      "community_name": "converter.py",
+      "file_type": "code",
+      "norm_label": "ignored()",
+      "source_file": "src/corpustools/util.py",
+      "source_location": "L271"
+    },
+    {
+      "id": "src_corpustools_util_lang_resource_dirs",
+      "label": "lang_resource_dirs()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 129,
+      "community_name": "converter.py",
+      "file_type": "code",
+      "norm_label": "lang_resource_dirs()",
+      "source_file": "src/corpustools/util.py",
+      "source_location": "L410"
+    },
+    {
       "id": "src_corpustools_util_lineno",
       "label": "lineno()",
       "_callable": true,
@@ -923,6 +1019,18 @@
       "norm_label": "lineno()",
       "source_file": "src/corpustools/util.py",
       "source_location": "L202"
+    },
+    {
+      "id": "src_corpustools_util_print_frame",
+      "label": "print_frame()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 129,
+      "community_name": "converter.py",
+      "file_type": "code",
+      "norm_label": "print_frame()",
+      "source_file": "src/corpustools/util.py",
+      "source_location": "L58"
     },
     {
       "id": "tests_test_ccat_testccat_test_process_file_title_set",
@@ -1345,6 +1453,18 @@
       "source_location": "L931"
     },
     {
+      "id": "src_corpustools_nrk_no_page_nrknopage_content",
+      "label": ".content()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 149,
+      "community_name": "Exception",
+      "file_type": "code",
+      "norm_label": ".content()",
+      "source_file": "src/corpustools/nrk_no_page.py",
+      "source_location": "L84"
+    },
+    {
       "id": "src_corpustools_util_sanity_check",
       "label": "sanity_check()",
       "_callable": true,
@@ -1475,114 +1595,6 @@
       "norm_label": "merge_i()",
       "source_file": "src/corpustools/pdfconverter.py",
       "source_location": "L63"
-    },
-    {
-      "id": "src_corpustools_analyser_analyse",
-      "label": "analyse()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 152,
-      "community_name": "Path",
-      "file_type": "code",
-      "norm_label": "analyse()",
-      "source_file": "src/corpustools/analyser.py",
-      "source_location": "L116"
-    },
-    {
-      "id": "src_corpustools_analyser_analyse_in_parallel",
-      "label": "analyse_in_parallel()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 152,
-      "community_name": "Path",
-      "file_type": "code",
-      "norm_label": "analyse_in_parallel()",
-      "source_file": "src/corpustools/analyser.py",
-      "source_location": "L158"
-    },
-    {
-      "id": "src_corpustools_analyser_analyse_serially",
-      "label": "analyse_serially()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 152,
-      "community_name": "Path",
-      "file_type": "code",
-      "norm_label": "analyse_serially()",
-      "source_file": "src/corpustools/analyser.py",
-      "source_location": "L178"
-    },
-    {
-      "id": "src_corpustools_analyser_dependency_analysis",
-      "label": "dependency_analysis()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 152,
-      "community_name": "Path",
-      "file_type": "code",
-      "norm_label": "dependency_analysis()",
-      "source_file": "src/corpustools/analyser.py",
-      "source_location": "L59"
-    },
-    {
-      "id": "src_corpustools_analyser_find_analyser_zpipe",
-      "label": "find_analyser_zpipe()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 152,
-      "community_name": "Path",
-      "file_type": "code",
-      "norm_label": "find_analyser_zpipe()",
-      "source_file": "src/corpustools/analyser.py",
-      "source_location": "L99"
-    },
-    {
-      "id": "src_corpustools_analyser_get_modename",
-      "label": "get_modename()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 152,
-      "community_name": "Path",
-      "file_type": "code",
-      "norm_label": "get_modename()",
-      "source_file": "src/corpustools/analyser.py",
-      "source_location": "L37"
-    },
-    {
-      "id": "src_corpustools_analyser_main",
-      "label": "main()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 152,
-      "community_name": "Path",
-      "file_type": "code",
-      "norm_label": "main()",
-      "source_file": "src/corpustools/analyser.py",
-      "source_location": "L233"
-    },
-    {
-      "id": "src_corpustools_analyser_parse_options",
-      "label": "parse_options()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 152,
-      "community_name": "Path",
-      "file_type": "code",
-      "norm_label": "parse_options()",
-      "source_file": "src/corpustools/analyser.py",
-      "source_location": "L201"
-    },
-    {
-      "id": "src_corpustools_util_lang_resource_dirs",
-      "label": "lang_resource_dirs()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 152,
-      "community_name": "Path",
-      "file_type": "code",
-      "norm_label": "lang_resource_dirs()",
-      "source_file": "src/corpustools/util.py",
-      "source_location": "L410"
     },
     {
       "id": "src_corpustools_samediggi_no_page_samedigginopage_basename",
@@ -2413,6 +2425,18 @@
       "source_location": "L59"
     },
     {
+      "id": "src_corpustools_gold2correct_orig_to_text",
+      "label": "orig_to_text()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 169,
+      "community_name": "gold2correct.py",
+      "file_type": "code",
+      "norm_label": "orig_to_text()",
+      "source_file": "src/corpustools/gold2correct.py",
+      "source_location": "L80"
+    },
+    {
       "id": "src_corpustools_gold2correct_parse_options",
       "label": "parse_options()",
       "_callable": true,
@@ -2641,18 +2665,6 @@
       "source_location": "L290"
     },
     {
-      "id": "src_corpustools_util_ignored",
-      "label": "ignored()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "util.py",
-      "file_type": "code",
-      "norm_label": "ignored()",
-      "source_file": "src/corpustools/util.py",
-      "source_location": "L271"
-    },
-    {
       "id": "src_corpustools_util_note",
       "label": "note()",
       "_callable": true,
@@ -2663,18 +2675,6 @@
       "norm_label": "note()",
       "source_file": "src/corpustools/util.py",
       "source_location": "L261"
-    },
-    {
-      "id": "src_corpustools_util_print_frame",
-      "label": "print_frame()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "util.py",
-      "file_type": "code",
-      "norm_label": "print_frame()",
-      "source_file": "src/corpustools/util.py",
-      "source_location": "L58"
     },
     {
       "id": "src_corpustools_util_replace_all",
@@ -3886,7 +3886,7 @@
       "file_type": "code",
       "norm_label": ".crawl_pageset()",
       "source_file": "src/corpustools/nrk_no_crawler.py",
-      "source_location": "L161"
+      "source_location": "L176"
     },
     {
       "id": "src_corpustools_nrk_no_crawler_nrknocrawler_crawl_site",
@@ -3898,7 +3898,7 @@
       "file_type": "code",
       "norm_label": ".crawl_site()",
       "source_file": "src/corpustools/nrk_no_crawler.py",
-      "source_location": "L123"
+      "source_location": "L138"
     },
     {
       "id": "src_corpustools_nrk_no_crawler_nrknocrawler_fetchable_ids",
@@ -3946,7 +3946,7 @@
       "file_type": "code",
       "norm_label": ".get_page_set()",
       "source_file": "src/corpustools/nrk_no_crawler.py",
-      "source_location": "L176"
+      "source_location": "L191"
     },
     {
       "id": "src_corpustools_nrk_no_crawler_nrknocrawler_init",
@@ -3970,7 +3970,7 @@
       "file_type": "code",
       "norm_label": ".set_parallel_info()",
       "source_file": "src/corpustools/nrk_no_crawler.py",
-      "source_location": "L147"
+      "source_location": "L162"
     },
     {
       "id": "src_corpustools_ccat_ccatter",
@@ -4297,16 +4297,112 @@
       "source_location": "L368"
     },
     {
-      "id": "src_corpustools_gold2correct_orig_to_text",
-      "label": "orig_to_text()",
+      "id": "src_corpustools_converter_has_content",
+      "label": "has_content()",
       "_callable": true,
       "_origin": "ast",
       "community": 68,
       "community_name": "ccat.py",
       "file_type": "code",
-      "norm_label": "orig_to_text()",
-      "source_file": "src/corpustools/gold2correct.py",
-      "source_location": "L80"
+      "norm_label": "has_content()",
+      "source_file": "src/corpustools/converter.py",
+      "source_location": "L286"
+    },
+    {
+      "id": "src_corpustools_parallelize_get_dictionary",
+      "label": "get_dictionary()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 69,
+      "community_name": "parallelize.py",
+      "file_type": "code",
+      "norm_label": "get_dictionary()",
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L122"
+    },
+    {
+      "id": "src_corpustools_parallelize_get_filepair",
+      "label": "get_filepair()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 69,
+      "community_name": "parallelize.py",
+      "file_type": "code",
+      "norm_label": "get_filepair()",
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L129"
+    },
+    {
+      "id": "src_corpustools_parallelize_is_translated_from_lang2",
+      "label": "is_translated_from_lang2()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 69,
+      "community_name": "parallelize.py",
+      "file_type": "code",
+      "norm_label": "is_translated_from_lang2()",
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L112"
+    },
+    {
+      "id": "src_corpustools_parallelize_main",
+      "label": "main()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 69,
+      "community_name": "parallelize.py",
+      "file_type": "code",
+      "norm_label": "main()",
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L200"
+    },
+    {
+      "id": "src_corpustools_parallelize_make_dict",
+      "label": "make_dict()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 69,
+      "community_name": "parallelize.py",
+      "file_type": "code",
+      "norm_label": "make_dict()",
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L77"
+    },
+    {
+      "id": "src_corpustools_parallelize_parallelise_file",
+      "label": "parallelise_file()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 69,
+      "community_name": "parallelize.py",
+      "file_type": "code",
+      "norm_label": "parallelise_file()",
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L87"
+    },
+    {
+      "id": "src_corpustools_parallelize_parse_options",
+      "label": "parse_options()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 69,
+      "community_name": "parallelize.py",
+      "file_type": "code",
+      "norm_label": "parse_options()",
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L163"
+    },
+    {
+      "id": "src_corpustools_parallelize_setup_anchors",
+      "label": "setup_anchors()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 69,
+      "community_name": "parallelize.py",
+      "file_type": "code",
+      "norm_label": "setup_anchors()",
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L43"
     },
     {
       "id": "src_corpustools_sentencedivider_corpus_file_to_sentences",
@@ -5279,28 +5375,6 @@
       "source_location": "L594"
     },
     {
-      "id": "src_corpustools_nrk_no_crawler",
-      "label": "nrk_no_crawler.py",
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "NrkNoPage",
-      "file_type": "code",
-      "norm_label": "nrk_no_crawler.py",
-      "source_file": "src/corpustools/nrk_no_crawler.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_corpustools_nrk_no_page",
-      "label": "nrk_no_page.py",
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "NrkNoPage",
-      "file_type": "code",
-      "norm_label": "nrk_no_page.py",
-      "source_file": "src/corpustools/nrk_no_page.py",
-      "source_location": "L1"
-    },
-    {
       "id": "src_corpustools_nrk_no_page_rationale_104",
       "label": "This will be the content of the saved file.",
       "_origin": "ast",
@@ -5420,17 +5494,6 @@
       "norm_label": "get all the text inside 'body'.",
       "source_file": "src/corpustools/nrk_no_page.py",
       "source_location": "L80"
-    },
-    {
-      "id": "src_corpustools_nrk_no_page_rationale_85",
-      "label": "Extract only the content that is interesting to save from the web page.",
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "NrkNoPage",
-      "file_type": "rationale",
-      "norm_label": "extract only the content that is interesting to save from the web page.",
-      "source_file": "src/corpustools/nrk_no_page.py",
-      "source_location": "L85"
     },
     {
       "id": "corpustools_test_test_htmlcontentconverter_py_expand",
@@ -5576,6 +5639,17 @@
       "source_location": "L703"
     },
     {
+      "id": "baseexception",
+      "label": "BaseException",
+      "_origin": "ast",
+      "community": 129,
+      "community_name": "converter.py",
+      "file_type": "code",
+      "norm_label": "baseexception",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "classifier",
       "label": "Classifier",
       "_origin": "ast",
@@ -5596,6 +5670,39 @@
       "norm_label": "corpuspath",
       "source_file": "",
       "source_location": ""
+    },
+    {
+      "id": "namespace",
+      "label": "Namespace",
+      "_origin": "ast",
+      "community": 129,
+      "community_name": "converter.py",
+      "file_type": "code",
+      "norm_label": "namespace",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "path",
+      "label": "Path",
+      "_origin": "ast",
+      "community": 129,
+      "community_name": "converter.py",
+      "file_type": "code",
+      "norm_label": "path",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "src_corpustools_analyser",
+      "label": "analyser.py",
+      "_origin": "ast",
+      "community": 129,
+      "community_name": "converter.py",
+      "file_type": "code",
+      "norm_label": "analyser.py",
+      "source_file": "src/corpustools/analyser.py",
+      "source_location": "L1"
     },
     {
       "id": "src_corpustools_converter",
@@ -5719,6 +5826,83 @@
       "source_location": ""
     },
     {
+      "id": "src_corpustools_analyser_rationale_100",
+      "label": "Check if resources needed by modes exists. Args: lang: the language that modes\u2026",
+      "_origin": "ast",
+      "community": 129,
+      "community_name": "converter.py",
+      "file_type": "rationale",
+      "norm_label": "check if resources needed by modes exists. args: lang: the language that modes...",
+      "source_file": "src/corpustools/analyser.py",
+      "source_location": "L100"
+    },
+    {
+      "id": "src_corpustools_analyser_rationale_117",
+      "label": "Analyse a file. Args: xml_path: The path to the file to analyse.\u2026",
+      "_origin": "ast",
+      "community": 129,
+      "community_name": "converter.py",
+      "file_type": "rationale",
+      "norm_label": "analyse a file. args: xml_path: the path to the file to analyse....",
+      "source_file": "src/corpustools/analyser.py",
+      "source_location": "L117"
+    },
+    {
+      "id": "src_corpustools_analyser_rationale_182",
+      "label": "Analyse files one by one.",
+      "_origin": "ast",
+      "community": 129,
+      "community_name": "converter.py",
+      "file_type": "rationale",
+      "norm_label": "analyse files one by one.",
+      "source_file": "src/corpustools/analyser.py",
+      "source_location": "L182"
+    },
+    {
+      "id": "src_corpustools_analyser_rationale_202",
+      "label": "Parse the given options.",
+      "_origin": "ast",
+      "community": 129,
+      "community_name": "converter.py",
+      "file_type": "rationale",
+      "norm_label": "parse the given options.",
+      "source_file": "src/corpustools/analyser.py",
+      "source_location": "L202"
+    },
+    {
+      "id": "src_corpustools_analyser_rationale_234",
+      "label": "Analyse files in the given directories.",
+      "_origin": "ast",
+      "community": 129,
+      "community_name": "converter.py",
+      "file_type": "rationale",
+      "norm_label": "analyse files in the given directories.",
+      "source_file": "src/corpustools/analyser.py",
+      "source_location": "L234"
+    },
+    {
+      "id": "src_corpustools_analyser_rationale_38",
+      "label": "Get the modename depending on the CorpusPath",
+      "_origin": "ast",
+      "community": 129,
+      "community_name": "converter.py",
+      "file_type": "rationale",
+      "norm_label": "get the modename depending on the corpuspath",
+      "source_file": "src/corpustools/analyser.py",
+      "source_location": "L38"
+    },
+    {
+      "id": "src_corpustools_analyser_rationale_60",
+      "label": "Insert dependency analysis into the body.",
+      "_origin": "ast",
+      "community": 129,
+      "community_name": "converter.py",
+      "file_type": "rationale",
+      "norm_label": "insert dependency analysis into the body.",
+      "source_file": "src/corpustools/analyser.py",
+      "source_location": "L60"
+    },
+    {
       "id": "src_corpustools_converter_rationale_100",
       "label": "Return the path to the corpus dtd file.",
       "_origin": "ast",
@@ -5794,17 +5978,6 @@
       "norm_label": "make a complete giella xml file. combine the intermediate giella xml file and...",
       "source_file": "src/corpustools/converter.py",
       "source_location": "L259"
-    },
-    {
-      "id": "src_corpustools_converter_rationale_287",
-      "label": "Find out if the xml document has any content. Args: complete\u2026",
-      "_origin": "ast",
-      "community": 129,
-      "community_name": "converter.py",
-      "file_type": "rationale",
-      "norm_label": "find out if the xml document has any content. args: complete...",
-      "source_file": "src/corpustools/converter.py",
-      "source_location": "L287"
     },
     {
       "id": "src_corpustools_converter_rationale_305",
@@ -5895,15 +6068,15 @@
       "source_location": "L203"
     },
     {
-      "id": "src_corpustools_util_rationale_55",
-      "label": "Raise this exception when conversions error occur.",
+      "id": "src_corpustools_util_rationale_411",
+      "label": "Return the list of directories to search for language model resources. Args:\u2026",
       "_origin": "ast",
       "community": 129,
       "community_name": "converter.py",
       "file_type": "rationale",
-      "norm_label": "raise this exception when conversions error occur.",
+      "norm_label": "return the list of directories to search for language model resources. args:...",
       "source_file": "src/corpustools/util.py",
-      "source_location": "L55"
+      "source_location": "L411"
     },
     {
       "id": "corpustools_htmlcontentconverter_py_element",
@@ -6318,6 +6491,17 @@
       "source_location": "L11"
     },
     {
+      "id": "src_corpustools_nrk_no_page_rationale_85",
+      "label": "Extract only the content that is interesting to save from the web page.",
+      "_origin": "ast",
+      "community": 149,
+      "community_name": "Exception",
+      "file_type": "rationale",
+      "norm_label": "extract only the content that is interesting to save from the web page.",
+      "source_file": "src/corpustools/nrk_no_page.py",
+      "source_location": "L85"
+    },
+    {
       "id": "src_corpustools_util_rationale_161",
       "label": "Look for programs and files that are needed to do the analysis. If they don't\u2026",
       "_origin": "ast",
@@ -6514,127 +6698,6 @@
       "norm_label": "merge two elements into one.",
       "source_file": "src/corpustools/pdfconverter.py",
       "source_location": "L64"
-    },
-    {
-      "id": "namespace",
-      "label": "Namespace",
-      "_origin": "ast",
-      "community": 152,
-      "community_name": "Path",
-      "file_type": "code",
-      "norm_label": "namespace",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "path",
-      "label": "Path",
-      "_origin": "ast",
-      "community": 152,
-      "community_name": "Path",
-      "file_type": "code",
-      "norm_label": "path",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "src_corpustools_analyser",
-      "label": "analyser.py",
-      "_origin": "ast",
-      "community": 152,
-      "community_name": "Path",
-      "file_type": "code",
-      "norm_label": "analyser.py",
-      "source_file": "src/corpustools/analyser.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_corpustools_analyser_rationale_100",
-      "label": "Check if resources needed by modes exists. Args: lang: the language that modes\u2026",
-      "_origin": "ast",
-      "community": 152,
-      "community_name": "Path",
-      "file_type": "rationale",
-      "norm_label": "check if resources needed by modes exists. args: lang: the language that modes...",
-      "source_file": "src/corpustools/analyser.py",
-      "source_location": "L100"
-    },
-    {
-      "id": "src_corpustools_analyser_rationale_117",
-      "label": "Analyse a file. Args: xml_path: The path to the file to analyse.\u2026",
-      "_origin": "ast",
-      "community": 152,
-      "community_name": "Path",
-      "file_type": "rationale",
-      "norm_label": "analyse a file. args: xml_path: the path to the file to analyse....",
-      "source_file": "src/corpustools/analyser.py",
-      "source_location": "L117"
-    },
-    {
-      "id": "src_corpustools_analyser_rationale_182",
-      "label": "Analyse files one by one.",
-      "_origin": "ast",
-      "community": 152,
-      "community_name": "Path",
-      "file_type": "rationale",
-      "norm_label": "analyse files one by one.",
-      "source_file": "src/corpustools/analyser.py",
-      "source_location": "L182"
-    },
-    {
-      "id": "src_corpustools_analyser_rationale_202",
-      "label": "Parse the given options.",
-      "_origin": "ast",
-      "community": 152,
-      "community_name": "Path",
-      "file_type": "rationale",
-      "norm_label": "parse the given options.",
-      "source_file": "src/corpustools/analyser.py",
-      "source_location": "L202"
-    },
-    {
-      "id": "src_corpustools_analyser_rationale_234",
-      "label": "Analyse files in the given directories.",
-      "_origin": "ast",
-      "community": 152,
-      "community_name": "Path",
-      "file_type": "rationale",
-      "norm_label": "analyse files in the given directories.",
-      "source_file": "src/corpustools/analyser.py",
-      "source_location": "L234"
-    },
-    {
-      "id": "src_corpustools_analyser_rationale_38",
-      "label": "Get the modename depending on the CorpusPath",
-      "_origin": "ast",
-      "community": 152,
-      "community_name": "Path",
-      "file_type": "rationale",
-      "norm_label": "get the modename depending on the corpuspath",
-      "source_file": "src/corpustools/analyser.py",
-      "source_location": "L38"
-    },
-    {
-      "id": "src_corpustools_analyser_rationale_60",
-      "label": "Insert dependency analysis into the body.",
-      "_origin": "ast",
-      "community": 152,
-      "community_name": "Path",
-      "file_type": "rationale",
-      "norm_label": "insert dependency analysis into the body.",
-      "source_file": "src/corpustools/analyser.py",
-      "source_location": "L60"
-    },
-    {
-      "id": "src_corpustools_util_rationale_411",
-      "label": "Return the list of directories to search for language model resources. Args:\u2026",
-      "_origin": "ast",
-      "community": 152,
-      "community_name": "Path",
-      "file_type": "rationale",
-      "norm_label": "return the list of directories to search for language model resources. args:...",
-      "source_file": "src/corpustools/util.py",
-      "source_location": "L411"
     },
     {
       "id": "src_corpustools_samediggi_no_page_py_element",
@@ -7693,6 +7756,17 @@
       "source_location": "L60"
     },
     {
+      "id": "src_corpustools_gold2correct_rationale_81",
+      "label": "Extract the text from a file. Args: orig_file: The original goldstandard file.\u2026",
+      "_origin": "ast",
+      "community": 169,
+      "community_name": "gold2correct.py",
+      "file_type": "rationale",
+      "norm_label": "extract the text from a file. args: orig_file: the original goldstandard file....",
+      "source_file": "src/corpustools/gold2correct.py",
+      "source_location": "L81"
+    },
+    {
       "id": "src_corpustools_gold2correct_rationale_96",
       "label": "Convert goldstandard files to .correct.txt files.",
       "_origin": "ast",
@@ -8001,6 +8075,17 @@
       "source_location": "L78"
     },
     {
+      "id": "src_corpustools_util_rationale_55",
+      "label": "Raise this exception when conversions error occur.",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "epubconverter.py",
+      "file_type": "rationale",
+      "norm_label": "raise this exception when conversions error occur.",
+      "source_file": "src/corpustools/util.py",
+      "source_location": "L55"
+    },
+    {
       "id": "corpustools_test_test_epubconverter_py_xmltester",
       "label": "XMLTester",
       "_origin": "ast",
@@ -8240,7 +8325,7 @@
       "source_file": "pyproject.toml",
       "source_location": "L1",
       "type": "package",
-      "version": "3.2.1"
+      "version": "3.2.2"
     },
     {
       "id": "corpustools_ocrconverter_py_path",
@@ -8371,17 +8456,6 @@
       "community_name": "Path",
       "file_type": "code",
       "norm_label": "path",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "baseexception",
-      "label": "BaseException",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "util.py",
-      "file_type": "code",
-      "norm_label": "baseexception",
       "source_file": "",
       "source_location": ""
     },
@@ -9915,6 +9989,28 @@
       "source_location": ""
     },
     {
+      "id": "src_corpustools_nrk_no_crawler",
+      "label": "nrk_no_crawler.py",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "NrkNoCrawler",
+      "file_type": "code",
+      "norm_label": "nrk_no_crawler.py",
+      "source_file": "src/corpustools/nrk_no_crawler.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_corpustools_nrk_no_page",
+      "label": "nrk_no_page.py",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "NrkNoCrawler",
+      "file_type": "code",
+      "norm_label": "nrk_no_page.py",
+      "source_file": "src/corpustools/nrk_no_page.py",
+      "source_location": "L1"
+    },
+    {
       "id": "src_corpustools_nrk_no_crawler_rationale_100",
       "label": "Collect links from a page.",
       "_origin": "ast",
@@ -9926,7 +10022,7 @@
       "source_location": "L100"
     },
     {
-      "id": "src_corpustools_nrk_no_crawler_rationale_148",
+      "id": "src_corpustools_nrk_no_crawler_rationale_163",
       "label": "Set the parallels for this set of parallel pages.",
       "_origin": "ast",
       "community": 64,
@@ -9934,10 +10030,10 @@
       "file_type": "rationale",
       "norm_label": "set the parallels for this set of parallel pages.",
       "source_file": "src/corpustools/nrk_no_crawler.py",
-      "source_location": "L148"
+      "source_location": "L163"
     },
     {
-      "id": "src_corpustools_nrk_no_crawler_rationale_177",
+      "id": "src_corpustools_nrk_no_crawler_rationale_192",
       "label": "Get parallel pages for the original page. Args: orig_page: The original page to\u2026",
       "_origin": "ast",
       "community": 64,
@@ -9945,7 +10041,7 @@
       "file_type": "rationale",
       "norm_label": "get parallel pages for the original page. args: orig_page: the original page to...",
       "source_file": "src/corpustools/nrk_no_crawler.py",
-      "source_location": "L177"
+      "source_location": "L192"
     },
     {
       "id": "src_corpustools_nrk_no_crawler_rationale_36",
@@ -10344,26 +10440,81 @@
       "source_location": "L98"
     },
     {
-      "id": "src_corpustools_gold2correct_rationale_81",
-      "label": "Extract the text from a file. Args: orig_file: The original goldstandard file.\u2026",
+      "id": "src_corpustools_converter_rationale_287",
+      "label": "Find out if the xml document has any content. Args: complete\u2026",
       "_origin": "ast",
       "community": 68,
       "community_name": "ccat.py",
       "file_type": "rationale",
-      "norm_label": "extract the text from a file. args: orig_file: the original goldstandard file....",
-      "source_file": "src/corpustools/gold2correct.py",
-      "source_location": "L81"
+      "norm_label": "find out if the xml document has any content. args: complete...",
+      "source_file": "src/corpustools/converter.py",
+      "source_location": "L287"
     },
     {
       "id": "generateanchorlist",
       "label": "GenerateAnchorList",
       "_origin": "ast",
       "community": 69,
-      "community_name": "GenerateAnchorList",
+      "community_name": "parallelize.py",
       "file_type": "code",
       "norm_label": "generateanchorlist",
       "source_file": "",
       "source_location": ""
+    },
+    {
+      "id": "src_corpustools_parallelize",
+      "label": "parallelize.py",
+      "_origin": "ast",
+      "community": 69,
+      "community_name": "parallelize.py",
+      "file_type": "code",
+      "norm_label": "parallelize.py",
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_corpustools_parallelize_rationale_113",
+      "label": "Find out if the given doc is translated from lang2.",
+      "_origin": "ast",
+      "community": 69,
+      "community_name": "parallelize.py",
+      "file_type": "rationale",
+      "norm_label": "find out if the given doc is translated from lang2.",
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L113"
+    },
+    {
+      "id": "src_corpustools_parallelize_rationale_164",
+      "label": "Parse the commandline options. Returns: (argparse.Namespace): the parsed\u2026",
+      "_origin": "ast",
+      "community": 69,
+      "community_name": "parallelize.py",
+      "file_type": "rationale",
+      "norm_label": "parse the commandline options. returns: (argparse.namespace): the parsed...",
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L164"
+    },
+    {
+      "id": "src_corpustools_parallelize_rationale_46",
+      "label": "Setup anchor file. Args: lang1 (str): language 1 lang2 (str): language 2\u2026",
+      "_origin": "ast",
+      "community": 69,
+      "community_name": "parallelize.py",
+      "file_type": "rationale",
+      "norm_label": "setup anchor file. args: lang1 (str): language 1 lang2 (str): language 2...",
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L46"
+    },
+    {
+      "id": "src_corpustools_parallelize_rationale_92",
+      "label": "Align sentences of two parallel files.",
+      "_origin": "ast",
+      "community": 69,
+      "community_name": "parallelize.py",
+      "file_type": "rationale",
+      "norm_label": "align sentences of two parallel files.",
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L92"
     },
     {
       "id": "corpustools_documentfixer_py_element",
@@ -14720,7 +14871,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/corpustools/nrk_no_crawler.py",
-      "source_location": "L117",
+      "source_location": "L126",
       "weight": 1.0
     },
     {
@@ -14732,7 +14883,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/corpustools/nrk_no_crawler.py",
-      "source_location": "L162",
+      "source_location": "L177",
       "weight": 1.0
     },
     {
@@ -14744,7 +14895,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/corpustools/nrk_no_crawler.py",
-      "source_location": "L167",
+      "source_location": "L182",
       "weight": 1.0
     },
     {
@@ -14756,7 +14907,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/corpustools/nrk_no_crawler.py",
-      "source_location": "L169",
+      "source_location": "L184",
       "weight": 1.0
     },
     {
@@ -14768,7 +14919,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/corpustools/nrk_no_crawler.py",
-      "source_location": "L129",
+      "source_location": "L144",
       "weight": 1.0
     },
     {
@@ -14792,7 +14943,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/corpustools/nrk_no_crawler.py",
-      "source_location": "L186",
+      "source_location": "L201",
       "weight": 1.0
     },
     {
@@ -14841,6 +14992,102 @@
       "context": "call",
       "source_file": "src/corpustools/nrk_no_page.py",
       "source_location": "L58",
+      "weight": 1.0
+    },
+    {
+      "source": "src_corpustools_parallelize_get_dictionary",
+      "target": "src_corpustools_parallelize_make_dict",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L124",
+      "weight": 1.0
+    },
+    {
+      "source": "src_corpustools_parallelize_get_filepair",
+      "target": "src_corpustools_parallelize_is_translated_from_lang2",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L133",
+      "weight": 1.0
+    },
+    {
+      "source": "src_corpustools_parallelize_main",
+      "target": "src_corpustools_parallelize_parse_options",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L202",
+      "weight": 1.0
+    },
+    {
+      "source": "src_corpustools_parallelize_main",
+      "target": "src_corpustools_parallelize_get_filepair",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L215",
+      "weight": 1.0
+    },
+    {
+      "source": "src_corpustools_parallelize_main",
+      "target": "src_corpustools_parallelize_parallelise_file",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L220",
+      "weight": 1.0
+    },
+    {
+      "source": "src_corpustools_parallelize_main",
+      "target": "src_corpustools_parallelize_get_dictionary",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L224",
+      "weight": 1.0
+    },
+    {
+      "source": "src_corpustools_parallelize_make_dict",
+      "target": "src_corpustools_parallelize_setup_anchors",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L79",
+      "weight": 1.0
+    },
+    {
+      "source": "src_corpustools_parallelize_parallelise_file",
+      "target": "src_corpustools_sentencedivider_corpus_file_to_sentences",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L99",
       "weight": 1.0
     },
     {
@@ -16256,7 +16503,7 @@
       "confidence_score": 1.0,
       "context": "generic_arg",
       "source_file": "src/corpustools/nrk_no_crawler.py",
-      "source_location": "L176",
+      "source_location": "L191",
       "weight": 1.0
     },
     {
@@ -16268,7 +16515,19 @@
       "confidence_score": 1.0,
       "context": "generic_arg",
       "source_file": "src/corpustools/nrk_no_crawler.py",
-      "source_location": "L147",
+      "source_location": "L162",
+      "weight": 1.0
+    },
+    {
+      "source": "src_corpustools_parallelize_get_filepair",
+      "target": "corpuspath",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "generic_arg",
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L129",
       "weight": 1.0
     },
     {
@@ -17688,6 +17947,30 @@
       "weight": 1.0
     },
     {
+      "source": "src_corpustools_parallelize_is_translated_from_lang2",
+      "target": "corpuspath",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "parameter_type",
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L112",
+      "weight": 1.0
+    },
+    {
+      "source": "src_corpustools_parallelize_parallelise_file",
+      "target": "corpuspath",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "parameter_type",
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L87",
+      "weight": 1.0
+    },
+    {
       "source": "src_corpustools_pdfconverter_pdf2xmlconverter_handle_syntaxerror",
       "target": "xmlsyntaxerror",
       "relation": "references",
@@ -18240,6 +18523,18 @@
       "weight": 1.0
     },
     {
+      "source": "src_corpustools_parallelize_setup_anchors",
+      "target": "generateanchorlist",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "return_type",
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L43",
+      "weight": 1.0
+    },
+    {
       "source": "src_corpustools_pdfconverter_merge",
       "target": "src_corpustools_pdfconverter_py_element",
       "relation": "references",
@@ -18693,6 +18988,30 @@
       "context": "submodule_import",
       "source_file": "src/corpustools/htmlcontentconverter.py",
       "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "src_corpustools_parallelize",
+      "target": "src_corpustools_sentencedivider",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "submodule_import",
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "src_corpustools_parallelize",
+      "target": "src_corpustools_util",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "submodule_import",
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L30",
       "weight": 1.0
     },
     {
@@ -20592,6 +20911,94 @@
       "weight": 1.0
     },
     {
+      "source": "src_corpustools_parallelize",
+      "target": "src_corpustools_parallelize_is_translated_from_lang2",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L112",
+      "weight": 1.0
+    },
+    {
+      "source": "src_corpustools_parallelize",
+      "target": "src_corpustools_parallelize_get_dictionary",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L122",
+      "weight": 1.0
+    },
+    {
+      "source": "src_corpustools_parallelize",
+      "target": "src_corpustools_parallelize_get_filepair",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L129",
+      "weight": 1.0
+    },
+    {
+      "source": "src_corpustools_parallelize",
+      "target": "src_corpustools_parallelize_parse_options",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L163",
+      "weight": 1.0
+    },
+    {
+      "source": "src_corpustools_parallelize",
+      "target": "src_corpustools_parallelize_main",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L200",
+      "weight": 1.0
+    },
+    {
+      "source": "src_corpustools_parallelize",
+      "target": "src_corpustools_parallelize_setup_anchors",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L43",
+      "weight": 1.0
+    },
+    {
+      "source": "src_corpustools_parallelize",
+      "target": "src_corpustools_parallelize_make_dict",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L77",
+      "weight": 1.0
+    },
+    {
+      "source": "src_corpustools_parallelize",
+      "target": "src_corpustools_parallelize_parallelise_file",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L87",
+      "weight": 1.0
+    },
+    {
       "source": "src_corpustools_pdfconverter",
       "target": "src_corpustools_pdfconverter_is_probably_hyphenated",
       "relation": "contains",
@@ -21908,7 +22315,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/corpustools/nrk_no_crawler.py",
-      "source_location": "L123",
+      "source_location": "L138",
       "weight": 1.0
     },
     {
@@ -21919,7 +22326,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/corpustools/nrk_no_crawler.py",
-      "source_location": "L147",
+      "source_location": "L162",
       "weight": 1.0
     },
     {
@@ -21930,7 +22337,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/corpustools/nrk_no_crawler.py",
-      "source_location": "L161",
+      "source_location": "L176",
       "weight": 1.0
     },
     {
@@ -21941,7 +22348,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/corpustools/nrk_no_crawler.py",
-      "source_location": "L176",
+      "source_location": "L191",
       "weight": 1.0
     },
     {
@@ -25234,25 +25641,25 @@
       "weight": 1.0
     },
     {
-      "source": "src_corpustools_nrk_no_crawler_rationale_148",
+      "source": "src_corpustools_nrk_no_crawler_rationale_163",
       "target": "src_corpustools_nrk_no_crawler_nrknocrawler_set_parallel_info",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/corpustools/nrk_no_crawler.py",
-      "source_location": "L148",
+      "source_location": "L163",
       "weight": 1.0
     },
     {
-      "source": "src_corpustools_nrk_no_crawler_rationale_177",
+      "source": "src_corpustools_nrk_no_crawler_rationale_192",
       "target": "src_corpustools_nrk_no_crawler_nrknocrawler_get_page_set",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/corpustools/nrk_no_crawler.py",
-      "source_location": "L177",
+      "source_location": "L192",
       "weight": 1.0
     },
     {
@@ -25429,6 +25836,50 @@
       "confidence_score": 1.0,
       "source_file": "src/corpustools/nrk_no_page.py",
       "source_location": "L85",
+      "weight": 1.0
+    },
+    {
+      "source": "src_corpustools_parallelize_rationale_113",
+      "target": "src_corpustools_parallelize_is_translated_from_lang2",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L113",
+      "weight": 1.0
+    },
+    {
+      "source": "src_corpustools_parallelize_rationale_164",
+      "target": "src_corpustools_parallelize_parse_options",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L164",
+      "weight": 1.0
+    },
+    {
+      "source": "src_corpustools_parallelize_rationale_46",
+      "target": "src_corpustools_parallelize_setup_anchors",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L46",
+      "weight": 1.0
+    },
+    {
+      "source": "src_corpustools_parallelize_rationale_92",
+      "target": "src_corpustools_parallelize_parallelise_file",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/corpustools/parallelize.py",
+      "source_location": "L92",
       "weight": 1.0
     },
     {
@@ -27910,5 +28361,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "9c274ebd8febae1d567be99c1bde83985a7a0a70"
+  "built_at_commit": "04af26496ff0fecada296393bd4c6e72e254b0b2"
 }
