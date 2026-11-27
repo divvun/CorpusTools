@@ -96,8 +96,8 @@ def parallelise_file(
 
     aligner = AlignmentModel(
         sentences_tuple=(
-            sentencedivider.corpusfile_to_sentences(source_lang_file),
-            sentencedivider.corpusfile_to_sentences(para_lang_file),
+            sentencedivider.corpus_file_to_sentences(source_lang_file),
+            sentencedivider.corpus_file_to_sentences(para_lang_file),
         ),
         anchor_word_list=anchor_word_list,
     )
