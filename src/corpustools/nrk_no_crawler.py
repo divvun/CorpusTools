@@ -18,8 +18,8 @@
 #
 """This file contains routines to crawl nrk.no containing saami text."""
 
-
 from collections import defaultdict
+from email.message import Message
 from pathlib import Path
 from pprint import pprint
 from time import sleep
@@ -114,7 +114,22 @@ class NrkNoCrawler(Crawler):
         if "html" not in content_type.lower():
             return None
 
-        orig_page = NrkNoPage(result.url, etree.HTML(result.text), self.corpus_parent)
+        if result.content is None or len(result.content) == 0:
+            print(f"Empty content for {article_id}")
+            return None
+
+        header = Message()
+        header["Content-Type"] = content_type
+
+        charset = header.get_param("charset", header="Content-Type")
+
+        orig_page = NrkNoPage(
+            result.url,
+            etree.HTML(
+                result.content.decode("utf-8") if charset is None else result.text
+            ),
+            self.corpus_parent,
+        )
 
         self.unvisited_links.update(orig_page.links)
 
