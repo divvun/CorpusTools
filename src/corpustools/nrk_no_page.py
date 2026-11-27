@@ -41,7 +41,7 @@ class NrkNoPage:
         # Only look for links on NRK sápmi pages
         self.links: set[str] = (
             {
-                link.get("ec-id", "").replace("pp:", "")
+                link.get("ec-id", "").split(":")[-1]
                 for link in self.tree.findall(".//a[@ec-id]")
                 if link.get("ec-id") is not None and "pp:" in link.get("ec-id", "")
             }
@@ -149,7 +149,7 @@ class NrkNoPage:
         ]
 
         return {
-            parallel_id.replace("pp:", "")
+            parallel_id.split(":")[-1]
             for parallel_id in parellel_ids
             if parallel_id is not None
         }
