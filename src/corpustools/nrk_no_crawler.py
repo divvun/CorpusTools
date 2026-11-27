@@ -197,7 +197,7 @@ class NrkNoCrawler(Crawler):
         Returns:
             A list of parallel pages.
         """
-        pages: list[NrkNoPage|None] = [orig_page]
+        pages: list[NrkNoPage | None] = [orig_page]
         pages.extend([self.crawl_page(link) for link in orig_page.parallel_ids])
 
         # If we only have norwegian, we don't want to save any pages
